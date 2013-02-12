@@ -1,5 +1,6 @@
 package no.group09.arduinoair;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,7 +10,11 @@ import android.widget.TextView;
  
 public class MyFragment extends Fragment{
  
-    int mCurrentPage;
+	private final String TAG = "MyFragment";
+	
+    int currentTab;
+    protected Context ctxt;
+    
  
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -19,8 +24,9 @@ public class MyFragment extends Fragment{
         Bundle data = getArguments();
  
         /** Getting integer data of the key current_page from the bundle */
-        mCurrentPage = data.getInt("current_page", 0);
+        currentTab = data.getInt("current_page", 0);
  
+        
     }
  
     @Override
@@ -32,5 +38,6 @@ public class MyFragment extends Fragment{
         tv.setText("Swipe Horizontally left / right");
         return v;
     }
+    
  
 }
