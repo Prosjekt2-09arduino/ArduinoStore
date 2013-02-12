@@ -49,8 +49,8 @@ public class MyFragment extends Fragment{
         View v = inflater.inflate(R.layout.myfragment_layout, container,false);
         TextView tv = (TextView ) v.findViewById(R.id.tv);
         
-        Intent myIntent = new Intent(v.getContext(), Categories.class);
-        v.getContext().startActivity(myIntent);
+//        Intent myIntent = new Intent(v.getContext(), Categories.class);
+//        v.getContext().startActivity(myIntent);
 
         tv.setText("Swipe Horizontally left / right");
         return v;
