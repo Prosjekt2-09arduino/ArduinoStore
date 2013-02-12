@@ -15,6 +15,7 @@ package no.group09.arduinoair;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -48,6 +49,8 @@ public class MyFragment extends Fragment{
         View v = inflater.inflate(R.layout.myfragment_layout, container,false);
         TextView tv = (TextView ) v.findViewById(R.id.tv);
         
+        Intent myIntent = new Intent(v.getContext().this, Categories.class);
+        Categories.this.startActivity(myIntent);
 
         tv.setText("Swipe Horizontally left / right");
         return v;
