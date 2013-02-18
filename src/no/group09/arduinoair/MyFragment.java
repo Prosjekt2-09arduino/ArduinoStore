@@ -35,7 +35,7 @@ public class MyFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
  
-        /** Getting the arguments to the Bundle object */
+        /** Getting the arguments to the Bundle object. */
         Bundle data = getArguments();
  
         /** Getting integer data of the key current_page from the bundle */

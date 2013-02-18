@@ -40,7 +40,7 @@
     </LinearLayout>
 
     <!-- Title Of Song -->
-
+	<!-- Color of app name in category list -->
     <TextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
         android:text="Rihanna Love the way lie mimimi"
-        android:textColor="#040404"
+        android:textColor="#33b5e5"
         android:textSize="15dip"
         android:textStyle="bold"
         android:typeface="sans" />
@@ -63,7 +63,7 @@
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
         android:text="Just gona stand there and ..."
-        android:textColor="#343434"
+        android:textColor="#33b5e5"
         android:textSize="10dip" />
 
     <!-- Rightend Duration -->
@@ -77,7 +77,7 @@
         android:layout_marginRight="5dip"
         android:gravity="right"
         android:text="5:45"
-        android:textColor="#10bcc9"
+        android:textColor="#33b5e5"
         android:textSize="10dip"
         android:textStyle="bold" />
 
