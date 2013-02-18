@@ -14,6 +14,6 @@ package no.group09.arduinoair;
  * limitations under the License.
  */
 
-public class TopHits extends MyFragment {
+public class TopHits extends MyFragment{
 
 }

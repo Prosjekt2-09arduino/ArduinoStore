@@ -40,8 +40,6 @@ public class MyFragment extends Fragment{
  
         /** Getting integer data of the key current_page from the bundle */
         currentTab = data.getInt("current_page", 0);
- 
-        
     }
  
     @Override

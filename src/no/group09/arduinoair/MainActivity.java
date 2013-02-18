@@ -19,9 +19,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.ToggleButton;
  
 public class MainActivity extends FragmentActivity {
  
+	ToggleButton toggleButton1, toggleButton2;
+	Button btnDisplay;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +48,7 @@ public class MainActivity extends FragmentActivity {
  
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         
         return true;
     }

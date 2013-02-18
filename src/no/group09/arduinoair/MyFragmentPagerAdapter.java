@@ -28,12 +28,12 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
 		//TopHits tab
 		else if(page == 1){
-			fragment = new TopHits();
+			fragment = new All();
 		}
 		
 		//Devices tab
 		else if(page == 2){
-			fragment = new Devices();
+			fragment = new TopHits();
 		}
 
 		Bundle data = new Bundle();
@@ -56,8 +56,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
 		switch(position){
 		case 0: tab = "CATEGORIES"; break;
-		case 1: tab = "TOP HITS"; break;
-		case 2: tab = "DEVICES"; break;
+		case 1: tab = "ALL"; break;
+		case 2: tab = "TOP HITS"; break;
 		default: tab = "";
 		}
 

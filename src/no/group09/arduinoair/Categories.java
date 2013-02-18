@@ -17,6 +17,7 @@ package no.group09.arduinoair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 public class Categories extends MyFragment{
@@ -52,6 +54,7 @@ public class Categories extends MyFragment{
 
 		/** Getting integer data of the key current_page from the bundle */
 		mCurrentPage = data.getInt("current_page", 0);
+		
 	}
 	
 	@Override
@@ -66,9 +69,9 @@ public class Categories extends MyFragment{
 		for (int i = 0; i < 10; i++) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put(KEY_ID, i + "KEY_ID");
-			map.put(APP_NAME, i + "APP_NAME");
-			map.put(DISTRIBUTOR, i + "DISTRIBUTOR");
-			map.put(RATING, i + "RATING");
+			map.put(APP_NAME, "APP " + i);
+			map.put(DISTRIBUTOR, i + " Corporation");
+			map.put(RATING, i + " Stars");
 			songsList.add(map);
 		}
 		
