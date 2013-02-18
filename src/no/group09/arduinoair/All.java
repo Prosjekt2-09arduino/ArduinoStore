@@ -15,5 +15,5 @@ package no.group09.arduinoair;
  */
 
 public class All extends MyFragment {
-
+//
 }
