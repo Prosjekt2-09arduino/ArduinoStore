@@ -15,10 +15,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_settings1"
+        android:id="@+id/hide_incompatible"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_settings1"/>
+    
+        <item
+        android:id="@+id/device_list"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings2"/>
+
     
   <item android:id="@+id/menu_search"
           android:title="@string/menu_search"

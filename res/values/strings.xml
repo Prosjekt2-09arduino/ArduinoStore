@@ -16,8 +16,8 @@
 <resources>
 
     <string name="app_name">µC Software Store</string>
-    <string name="menu_settings1">Settings1</string>
-    <string name="menu_settings2">Settings2</string>
+    <string name="menu_settings1">Hide Incompatible</string>
+    <string name="menu_settings2">Device List</string>
     <string name="menu_settings3">Settings3</string>
     <string name="title_activity_main">Main</string>
     <string name="layout.activity_main">Main</string>
