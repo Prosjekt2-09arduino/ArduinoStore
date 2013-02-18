@@ -22,6 +22,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
  
+        <!-- Fragment indicator -->
+        
         <android.support.v4.view.PagerTabStrip
             android:id="@+id/pager_title_strip"
             android:layout_width="match_parent"
