@@ -1,129 +1,92 @@
 package no.group09.arduinoair;
 
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Toast;
 
-public class Categories extends List  implements OnItemLongClickListener, OnItemClickListener{
+public class Categories extends MyFragment{
 
-	private final String TAG = "Categories";
-
-	protected SharedPreferences prefs = null;
-	private static LayoutInflater mInflater;
+	private int mCurrentPage;
+	private Activity activity;
+	private Fragment fragment;
 	
-	//Adapter for the lists
-	private ListAdapter adapter;
+	ListView list;
+    LazyAdapter adapter;
+    Context ctx;
 	
-	
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
-		Log.d(TAG, "onItemclick");
-	}
-
-	@Override
-	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		
-		Log.d(TAG, "onItemLongClick");
-		
-		return false;
-	}
+	static final String KEY_ID = "id";
+	static final String APP_NAME = "title";
+	static final String DISTRIBUTOR = "artist";
+	static final String RATING = "duration";
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState){
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Intent intent = getIntent();
-		requestWindowFeature(Window.FEATURE_PROGRESS);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.list_element);
-		
-		mInflater = LayoutInflater.from(ctxt);
-		
-		//List of discovered hosts (the adapter)
-		adapter = new ListAdapter(ctxt);
-		
-		//Find the list from the xml
-		ListView list = (ListView) findViewById(R.id.output);
 
-		//Set the custom made adapter to the list
-		list.setAdapter(adapter);
-		list.setItemsCanFocus(false);
+		/** Getting the arguments to the Bundle object */
+		Bundle data = getArguments();
 
-		//If the element in the discovery list is long pressed
-		list.setOnItemLongClickListener(this);
-
-		//If the element in the discovery list is short pressed (normal press)
-		list.setOnItemClickListener(this);
+		/** Getting integer data of the key current_page from the bundle */
+		mCurrentPage = data.getInt("current_page", 0);
 	}
 	
-	   /**
-  * A helpclass to the HostAdapter
-  */
- static class ViewHolder {
-		TextView host;
-		TextView mac;
-		TextView vendor;
-		ImageView logo;
-	}
- 
- 
-	/** A custom made ArrayAdapter to make the elements in the list look like we want */
-	private class ListAdapter extends ArrayAdapter<Void> {
-		public ListAdapter(Context ctxt) {
-			super(ctxt, R.layout.list, R.id.list);
-		}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			ViewHolder holder;
-			if (convertView == null) {
-				convertView = mInflater.inflate(R.layout.list, null);
-				holder = new ViewHolder();
-				holder.host = (TextView) convertView.findViewById(R.id.list);
-				holder.mac = (TextView) convertView.findViewById(R.id.mac);
-				holder.vendor = (TextView) convertView.findViewById(R.id.vendor);
-				holder.logo = (ImageView) convertView.findViewById(R.id.logo);
-				convertView.setTag(holder);
-			} else {
-				holder = (ViewHolder) convertView.getTag();
+		final View v = inflater.inflate(R.layout.main, container,false);
+//		Intent myIntent = new Intent(v.getContext(), something.class);
+		
+		ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
+		
+		//This is all the elements in the list. TODO: change this with SQLLite or something
+		for (int i = 0; i < 10; i++) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put(KEY_ID, i + "KEY_ID");
+			map.put(APP_NAME, i + "APP_NAME");
+			map.put(DISTRIBUTOR, i + "DISTRIBUTOR");
+			map.put(RATING, i + "RATING");
+			songsList.add(map);
+		}
+		
+		list = (ListView)v.findViewById(R.id.list);
+		
+		// Getting adapter by passing xml data ArrayList
+        adapter = new LazyAdapter(v.getContext(), songsList);        
+        list.setAdapter(adapter);
+
+        // Click event for single list row
+        list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Toast.makeText(view.getContext(), "WOW, nice try!", Toast.LENGTH_SHORT).show();
 			}
-//			final HostBean host = hosts.get(position);
-
-			holder.logo.setImageResource(R.drawable.computer);
-
-			holder.host.setText("hahahahaha");
-			
-			holder.vendor.setText("hehehehehe");
-			
-			holder.mac.setText("hohohohoho");
-			
-//			if (!host.hardwareAddress.equals(NetInfo.NOMAC)) {
-//				holder.mac.setText(host.hardwareAddress);
-//				if(host.nicVendor != null){
-//					holder.vendor.setText(host.nicVendor);
-//				} else {
-//					holder.vendor.setText("Tap to connect");
-//				}
-//				holder.mac.setVisibility(View.VISIBLE);
-//				holder.vendor.setVisibility(View.VISIBLE);
-//			} else {
-//				holder.mac.setVisibility(View.GONE);
-//				holder.vendor.setVisibility(View.GONE);
-//			}
-			return convertView;
-		}
+		});	
+		
+		return v;
 	}
 }
