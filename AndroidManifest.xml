@@ -49,14 +49,9 @@
         </activity>
         
 		<activity
-            android:name=".utils.Preferences"
-            android:label="@string/app_name"
-            android:configChanges="keyboard|keyboardHidden|orientation">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.PREFERENCE" />
-            </intent-filter>
-        </activity>
+        android:name=".Preferences"
+        android:label="@string/set_preferences">
+</activity>
     </application>
 
 </manifest>

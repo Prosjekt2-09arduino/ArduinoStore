@@ -32,8 +32,9 @@
     <string name="settings_test">Settingstestings</string>
     
     <!-- Preferences -->
-    <string name="preference_title">Settings</string>
+    <string name="pin_changepin_title">Settings</string>
     <string name="preference_lite">Lite</string>
+    <string name="set_preferences">SETTINGS</string>
     
     
     
