@@ -14,42 +14,77 @@ package no.group09.arduinoair;
  * limitations under the License.
  */
 
+import Utils.Preferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.ToggleButton;
- 
+
 public class MainActivity extends FragmentActivity {
- 
+
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		/** Getting a reference to the ViewPager defined the layout file */
+		ViewPager pager = (ViewPager) findViewById(R.id.pager);
+
+		/** Getting fragment manager */
+		FragmentManager fm = getSupportFragmentManager();
+
+		/** Instantiating FragmentPagerAdapter */
+		MyFragmentPagerAdapter pagerAdapter = new MyFragmentPagerAdapter(fm);
+
+		/** Setting the pagerAdapter to the pager object */
+		pager.setAdapter(pagerAdapter);
+
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+
+		//Start the settings class
+		case R.id.settings:
+			Toast.makeText(getApplicationContext(), "settings pushed", Toast.LENGTH_SHORT).show();
+			startActivity(new Intent(getApplicationContext(), Preferences.class));
+			return true;
+			
+		//Toggle hide incompatible
+		case R.id.hide_incompatible:
+			Toast.makeText(getApplicationContext(), "Incompatible apps hided", Toast.LENGTH_SHORT).show();
+			return true;
+		
+		//Show the device list
+		case R.id.device_list:
+			Toast.makeText(getApplicationContext(), "Device list pusched", Toast.LENGTH_SHORT).show();
+//			startActivity(new Intent(this, DeviceList.class));
+			return true;
+	}
 	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
- 
-        /** Getting a reference to the ViewPager defined the layout file */
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
- 
-        /** Getting fragment manager */
-        FragmentManager fm = getSupportFragmentManager();
- 
-        /** Instantiating FragmentPagerAdapter */
-        MyFragmentPagerAdapter pagerAdapter = new MyFragmentPagerAdapter(fm);
- 
-        /** Setting the pagerAdapter to the pager object */
-        pager.setAdapter(pagerAdapter);
- 
-    }
- 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        
-        return true;
-    }
+	//The item was none of the following
+	return false;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
 }
