@@ -19,6 +19,7 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -33,16 +34,15 @@ import android.widget.Toast;
 public class Categories extends MyFragment{
 
 	private int mCurrentPage;
-//	private Activity activity;
+	private Activity activity;
 //	private Fragment fragment;
 	
-	ListView list;
-    LazyAdapter adapter;
-    Context ctx;
+	private ListView list;
+    private ListAdapterCategory adapter;
 	
 	static final String KEY_ID = "id";
 	static final String APP_NAME = "title";
-	static final String DISTRIBUTOR = "artist";
+	static final String DISTRIBUTOR = "distributor";
 	static final String RATING = "duration";
 	
 	@Override
@@ -61,24 +61,48 @@ public class Categories extends MyFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final View v = inflater.inflate(R.layout.main, container,false);
-//		Intent myIntent = new Intent(v.getContext(), something.class);
+//        activity = (Activity) v.getContext();
+//        SharedPreferences prefs = activity.getSharedPreferences("no.group09.arduinoair", Context.MODE_PRIVATE);
 		
-		ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap<String, String>> category_list = new ArrayList<HashMap<String, String>>();
 		
-		//This is all the elements in the list. TODO: change this with SQLLite or something
-		for (int i = 0; i < 10; i++) {
-			HashMap<String, String> map = new HashMap<String, String>();
-			map.put(KEY_ID, i + "KEY_ID");
-			map.put(APP_NAME, "APP " + i);
-			map.put(DISTRIBUTOR, i + " Corporation");
-			map.put(RATING, i + " Stars");
-			songsList.add(map);
-		}
+		////////////////////////////////////////////////////////////////////////////////////
+		//TODO: change this with SQLLite or something
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put(KEY_ID, "1");
+		map.put(APP_NAME, "Games");
+		map.put(DISTRIBUTOR, "");
+		map.put(RATING, "");
+		category_list.add(map);
+		
+		map = new HashMap<String, String>();
+		map.put(KEY_ID, "2");
+		map.put(APP_NAME, "Utilities");
+		map.put(DISTRIBUTOR, "");
+		map.put(RATING, "");
+		category_list.add(map);
+		
+		map = new HashMap<String, String>();
+		map.put(KEY_ID, "3");
+		map.put(APP_NAME, "Tools");
+		map.put(DISTRIBUTOR, "");
+		map.put(RATING, "");
+		category_list.add(map);
+		
+		map = new HashMap<String, String>();
+		map.put(KEY_ID, "4");
+		map.put(APP_NAME, "Media");
+		map.put(DISTRIBUTOR, "");
+		map.put(RATING, "");
+		category_list.add(map);
+		
+		////////////////////////////////////////////////////////////////////////////////////
 		
 		list = (ListView)v.findViewById(R.id.list);
 		
 		// Getting adapter by passing xml data ArrayList
-        adapter = new LazyAdapter(v.getContext(), songsList);        
+        adapter = new ListAdapterCategory(v.getContext(), category_list);        
         list.setAdapter(adapter);
 
         // Click event for single list row
