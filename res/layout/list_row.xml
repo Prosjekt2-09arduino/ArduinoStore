@@ -47,7 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
-        android:text="Rihanna Love the way lie mimimi"
         android:textColor="#33b5e5"
         android:textSize="15dip"
         android:textStyle="bold"
@@ -62,7 +61,6 @@
         android:layout_below="@id/app_name"
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
-        android:text="Just gona stand there and ..."
         android:textColor="#33b5e5"
         android:textSize="10dip" />
 
@@ -76,9 +74,8 @@
         android:layout_alignTop="@id/app_name"
         android:layout_marginRight="5dip"
         android:gravity="right"
-        android:text="5:45"
         android:textColor="#33b5e5"
-        android:textSize="10dip"
+        android:textSize="20dip"
         android:textStyle="bold" />
 
     <!-- Rightend Arrow -->

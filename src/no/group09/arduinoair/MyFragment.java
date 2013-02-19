@@ -48,8 +48,6 @@ public class MyFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.myfragment_layout, container,false);
         TextView tv = (TextView ) v.findViewById(R.id.tv);
-        activity = (Activity) v.getContext();
-        SharedPreferences prefs = activity.getSharedPreferences("no.group09.arduinoair", Context.MODE_PRIVATE);
         
 //        Intent myIntent = new Intent(v.getContext(), Categories.class);
 //        v.getContext().startActivity(myIntent);
