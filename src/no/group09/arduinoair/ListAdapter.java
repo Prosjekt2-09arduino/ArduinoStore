@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class ListAdapter extends BaseAdapter {
@@ -31,6 +32,7 @@ public class ListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater=null;
+    private RatingBar getRatingBar;
     
     public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
         context = a;
@@ -58,15 +60,17 @@ public class ListAdapter extends BaseAdapter {
         TextView appName = (TextView)vi.findViewById(R.id.app_name);
         TextView distributor = (TextView)vi.findViewById(R.id.distributor);
         TextView rating = (TextView)vi.findViewById(R.id.rating);
+//        getRatingBar = (RatingBar) vi.findViewById(R.id.getRating);;
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image);
         
         HashMap<String, String> listItem = new HashMap<String, String>();
         listItem = data.get(position);
         
         // Setting all values in listview
-        appName.setText(listItem.get(Categories.APP_NAME));
-        distributor.setText(listItem.get(Categories.DISTRIBUTOR));
-        rating.setText(listItem.get(Categories.RATING));
+        appName.setText(listItem.get(All.APP_NAME));
+        distributor.setText(listItem.get(All.DISTRIBUTOR));
+        rating.setText(listItem.get(All.RATING));
+//        getRatingBar.setRating(Float.parseFloat(listItem.get(All.RATING)));
         
         return vi;
     }

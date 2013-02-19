@@ -39,8 +39,8 @@
             android:src="@drawable/rihanna" />
     </LinearLayout>
 
-    <!-- Title Of Song -->
-	<!-- Color of app name in category list -->
+    <!-- Title Of Application -->
+    
     <TextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
         android:textStyle="bold"
         android:typeface="sans" />
 
-    <!-- Artist Name -->
+    <!-- distributor Name -->
 
     <TextView
         android:id="@+id/distributor"
@@ -64,7 +64,7 @@
         android:textColor="#33b5e5"
         android:textSize="10dip" />
 
-    <!-- Rightend Duration -->
+    <!-- Rightend rating -->
 
     <TextView
         android:id="@+id/rating"
@@ -77,9 +77,21 @@
         android:textColor="#33b5e5"
         android:textSize="20dip"
         android:textStyle="bold" />
+    
+	<!-- 
+	 <RatingBar
+        android:id="@+id/getRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/app_name"
+        android:layout_marginRight="5dip"
+        android:gravity="right"
+        android:numStars="5"
+        android:stepSize="1.0" />
+	 -->
 
     <!-- Rightend Arrow -->
-
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"

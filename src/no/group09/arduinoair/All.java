@@ -39,7 +39,7 @@ public class All extends MyFragment {
 	static final String KEY_ID = "id";
 	static final String APP_NAME = "title";
 	static final String DISTRIBUTOR = "distributor";
-	static final String RATING = "duration";
+	static final String RATING = "rating";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
