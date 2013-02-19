@@ -33,8 +33,8 @@ import android.widget.Toast;
 public class Categories extends MyFragment{
 
 	private int mCurrentPage;
-	private Activity activity;
-	private Fragment fragment;
+//	private Activity activity;
+//	private Fragment fragment;
 	
 	ListView list;
     LazyAdapter adapter;

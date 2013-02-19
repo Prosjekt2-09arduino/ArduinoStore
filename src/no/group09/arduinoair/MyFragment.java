@@ -14,8 +14,10 @@ package no.group09.arduinoair;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,9 +29,9 @@ public class MyFragment extends Fragment{
  
 	private final String TAG = "MyFragment";
 	
-    int currentTab;
+    private int currentTab;
     protected Context ctxt;
-    
+    private Activity activity;
  
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class MyFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.myfragment_layout, container,false);
         TextView tv = (TextView ) v.findViewById(R.id.tv);
+        activity = (Activity) v.getContext();
+        SharedPreferences prefs = activity.getSharedPreferences("no.group09.arduinoair", Context.MODE_PRIVATE);
         
 //        Intent myIntent = new Intent(v.getContext(), Categories.class);
 //        v.getContext().startActivity(myIntent);
