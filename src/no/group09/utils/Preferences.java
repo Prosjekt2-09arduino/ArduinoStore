@@ -1,4 +1,4 @@
-package Utils;
+package no.group09.utils;
 
 import no.group09.arduinoair.R;
 import android.os.Bundle;

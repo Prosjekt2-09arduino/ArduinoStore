@@ -14,7 +14,8 @@ package no.group09.arduinoair;
  * limitations under the License.
  */
 
-import Utils.Preferences;
+import no.group09.fragments.MyFragmentPagerAdapter;
+import no.group09.utils.Preferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -64,6 +65,8 @@ public class MainActivity extends FragmentActivity {
 		//Start the settings class
 		case R.id.settings:
 			Toast.makeText(getApplicationContext(), "settings pushed", Toast.LENGTH_SHORT).show();
+			
+			//THIS IS WHERE THE PREFERENCES.JAVA STARTS
 			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
 			this.startActivity(myIntent);
 			return true;

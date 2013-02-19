@@ -20,7 +20,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="4"
+        android:minSdkVersion="8"
         android:targetSdkVersion="16" />
 
     <application
@@ -47,11 +47,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        
-		<activity
-        android:name=".Preferences"
-        android:label="@string/set_preferences">
-</activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package no.group09.arduinoair;
+package no.group09.fragments;
 
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,10 @@ package no.group09.arduinoair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import no.group09.arduinoair.R;
+import no.group09.arduinoair.R.id;
+import no.group09.arduinoair.R.layout;
 
 import android.app.Activity;
 import android.content.Context;

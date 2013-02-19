@@ -1,7 +1,11 @@
-package no.group09.arduinoair;
+package no.group09.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import no.group09.arduinoair.R;
+import no.group09.arduinoair.R.id;
+import no.group09.arduinoair.R.layout;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -28,16 +31,16 @@ import android.widget.AdapterView.OnItemClickListener;
  * limitations under the License.
  */
 
-public class TopHits extends MyFragment{
+public class All extends MyFragment {
 
 	private int mCurrentPage;
 	private Activity activity;
 //	private Fragment fragment;
 	
-	private RatingBar getRatingBar;
-	
 	private ListView list;
     private ListAdapter adapter;
+	
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,18 +66,10 @@ public class TopHits extends MyFragment{
 		//TODO: change this with SQLLite or something
 
 		HashMap<String, String> map = new HashMap<String, String>();
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "3");
-		map.put(ListAdapter.APP_NAME, "Where is my phonebook?");
-		map.put(ListAdapter.DISTRIBUTOR, "Telemor");
-		map.put(ListAdapter.RATING, "*****");
-		category_list.add(map);
-	
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "7");
-		map.put(ListAdapter.APP_NAME, "The coolest app");
-		map.put(ListAdapter.DISTRIBUTOR, "Appelapp");
-		map.put(ListAdapter.RATING, "*****");
+		map.put(ListAdapter.KEY_ID, "1");
+		map.put(ListAdapter.APP_NAME, "Something Cool");
+		map.put(ListAdapter.DISTRIBUTOR, "Miskrosoft Corporation");
+		map.put(ListAdapter.RATING, "***");
 		category_list.add(map);
 		
 		map = new HashMap<String, String>();
@@ -85,16 +80,10 @@ public class TopHits extends MyFragment{
 		category_list.add(map);
 		
 		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "5");
-		map.put(ListAdapter.APP_NAME, "Earth Control");
-		map.put(ListAdapter.DISTRIBUTOR, "Obama");
-		map.put(ListAdapter.RATING, "****");
-		category_list.add(map);
-
-		map.put(ListAdapter.KEY_ID, "1");
-		map.put(ListAdapter.APP_NAME, "Something Cool");
-		map.put(ListAdapter.DISTRIBUTOR, "Miskrosoft Corporation");
-		map.put(ListAdapter.RATING, "***");
+		map.put(ListAdapter.KEY_ID, "3");
+		map.put(ListAdapter.APP_NAME, "Where is my phonebook?");
+		map.put(ListAdapter.DISTRIBUTOR, "Telemor");
+		map.put(ListAdapter.RATING, "*****");
 		category_list.add(map);
 		
 		map = new HashMap<String, String>();
@@ -105,12 +94,25 @@ public class TopHits extends MyFragment{
 		category_list.add(map);
 		
 		map = new HashMap<String, String>();
+		map.put(ListAdapter.KEY_ID, "5");
+		map.put(ListAdapter.APP_NAME, "Earth Control");
+		map.put(ListAdapter.DISTRIBUTOR, "Obama");
+		map.put(ListAdapter.RATING, "****");
+		category_list.add(map);
+		
+		map = new HashMap<String, String>();
 		map.put(ListAdapter.KEY_ID, "6");
 		map.put(ListAdapter.APP_NAME, "Where is my house? Im drunk!");
 		map.put(ListAdapter.DISTRIBUTOR, "Alcohol AS");
 		map.put(ListAdapter.RATING, "*");
 		category_list.add(map);
 		
+		map = new HashMap<String, String>();
+		map.put(ListAdapter.KEY_ID, "7");
+		map.put(ListAdapter.APP_NAME, "The coolest app");
+		map.put(ListAdapter.DISTRIBUTOR, "Appelapp");
+		map.put(ListAdapter.RATING, "*****");
+		category_list.add(map);
 		////////////////////////////////////////////////////////////////////////////////////
 		
 		list = (ListView)v.findViewById(R.id.list);
