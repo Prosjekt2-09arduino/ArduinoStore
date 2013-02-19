@@ -40,11 +40,6 @@ public class Categories extends MyFragment{
 	private ListView list;
     private ListAdapterCategory adapter;
 	
-	static final String KEY_ID = "id";
-	static final String APP_NAME = "title";
-	static final String DISTRIBUTOR = "distributor";
-	static final String RATING = "duration";
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,31 +65,31 @@ public class Categories extends MyFragment{
 		//TODO: change this with SQLLite or something
 
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put(KEY_ID, "1");
-		map.put(APP_NAME, "Games");
-		map.put(DISTRIBUTOR, "");
-		map.put(RATING, "");
+		map.put(ListAdapterCategory.KEY_ID, "1");
+		map.put(ListAdapterCategory.APP_NAME, "Games");
+		map.put(ListAdapterCategory.DISTRIBUTOR, "");
+		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 		
 		map = new HashMap<String, String>();
-		map.put(KEY_ID, "2");
-		map.put(APP_NAME, "Utilities");
-		map.put(DISTRIBUTOR, "");
-		map.put(RATING, "");
+		map.put(ListAdapterCategory.KEY_ID, "2");
+		map.put(ListAdapterCategory.APP_NAME, "Utilities");
+		map.put(ListAdapterCategory.DISTRIBUTOR, "");
+		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 		
 		map = new HashMap<String, String>();
-		map.put(KEY_ID, "3");
-		map.put(APP_NAME, "Tools");
-		map.put(DISTRIBUTOR, "");
-		map.put(RATING, "");
+		map.put(ListAdapterCategory.KEY_ID, "3");
+		map.put(ListAdapterCategory.APP_NAME, "Tools");
+		map.put(ListAdapterCategory.DISTRIBUTOR, "");
+		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 		
 		map = new HashMap<String, String>();
-		map.put(KEY_ID, "4");
-		map.put(APP_NAME, "Media");
-		map.put(DISTRIBUTOR, "");
-		map.put(RATING, "");
+		map.put(ListAdapterCategory.KEY_ID, "4");
+		map.put(ListAdapterCategory.APP_NAME, "Media");
+		map.put(ListAdapterCategory.DISTRIBUTOR, "");
+		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 		
 		////////////////////////////////////////////////////////////////////////////////////

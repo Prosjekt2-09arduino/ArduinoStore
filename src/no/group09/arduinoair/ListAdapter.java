@@ -34,6 +34,11 @@ public class ListAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
     private RatingBar getRatingBar;
     
+	protected static final String KEY_ID = "id";
+	protected static final String APP_NAME = "title";
+	protected static final String DISTRIBUTOR = "distributor";
+	protected static final String RATING = "rating";
+    
     public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
         context = a;
         data = d;
@@ -67,9 +72,9 @@ public class ListAdapter extends BaseAdapter {
         listItem = data.get(position);
         
         // Setting all values in listview
-        appName.setText(listItem.get(All.APP_NAME));
-        distributor.setText(listItem.get(All.DISTRIBUTOR));
-        rating.setText(listItem.get(All.RATING));
+        appName.setText(listItem.get(APP_NAME));
+        distributor.setText(listItem.get(DISTRIBUTOR));
+        rating.setText(listItem.get(RATING));
 //        getRatingBar.setRating(Float.parseFloat(listItem.get(All.RATING)));
         
         return vi;

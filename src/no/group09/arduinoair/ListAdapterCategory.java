@@ -32,6 +32,11 @@ public class ListAdapterCategory extends BaseAdapter {
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater=null;
     
+	protected static final String KEY_ID = "id";
+	protected static final String APP_NAME = "title";
+	protected static final String DISTRIBUTOR = "distributor";
+	protected static final String RATING = "rating";
+    
     public ListAdapterCategory(Context a, ArrayList<HashMap<String, String>> d) {
         context = a;
         data = d;
@@ -62,7 +67,7 @@ public class ListAdapterCategory extends BaseAdapter {
         listItem = data.get(position);
         
         // Setting all values in listview
-        appName.setText(listItem.get(Categories.APP_NAME));
+        appName.setText(listItem.get(APP_NAME));
         
         return vi;
     }
