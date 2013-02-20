@@ -29,7 +29,6 @@ public class Devices extends Activity{
 	private BluetoothDeviceAdapter adapter;
 	private static final int REQUEST_ENABLE_BT = 1;
 	private BluetoothAdapter btAdapter; 
-	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
 	ArrayList<HashMap<String, String>> category_list;
 
 	@Override
@@ -93,15 +92,21 @@ public class Devices extends Activity{
 		// List paired devices
 		// Emulator doesn't support Bluetooth and will return null
 		if(btAdapter==null) { 
+			
 			Log.d(TAG, "\nBluetooth NOT supported. Aborting.");
 			return;
+			
 		} else {
+			
 			if (btAdapter.isEnabled()) {
+				
 				Log.d(TAG, "\nBluetooth is enabled...");
 
 				// Starting the device discovery
 				btAdapter.startDiscovery();
+				
 			} else {
+				
 				Intent enableBtIntent = new Intent(btAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 			}
@@ -114,9 +119,7 @@ public class Devices extends Activity{
 			String action = intent.getAction();
 			if(BluetoothDevice.ACTION_FOUND.equals(action)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				Log.d(TAG, "\n  Device: " + device.getName() + ", " + device);
-				btDeviceList.add(device);
-				
+
 				//Adding found device
 				HashMap<String, String> map = new HashMap<String, String>();
 				map = new HashMap<String, String>();
@@ -143,18 +146,12 @@ public class Devices extends Activity{
 //								BluetoothDevice device = itr.next();
 //								Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
 //							
-//								HashMap<String, String> map = new HashMap<String, String>();
-//								map = new HashMap<String, String>();
-//								map.put("element", device.getName() + ", " + device);
-//								category_list.add(map);
-//								
 //								adapter.notifyDataSetChanged();
 ////								if(!device.fetchUuidsWithSdp()) {
 ////									Log.d(TAG, "\nSDP Failed for " + device.getName());
 ////								}
 //
 //							}
-//							
 //						}
 //					}
 //				}
