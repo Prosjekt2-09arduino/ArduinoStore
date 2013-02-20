@@ -47,6 +47,16 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        
+        <activity
+        android:name="no.group09.utils.Devices"
+        android:label="@string/bluetooth_devices_tittle"
+        android:parentActivityName="no.group09.arduinoair.MainActivity" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="no.group09.arduinoair.MainActivity" />
+    </activity>
     </application>
-
+	<uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 </manifest>

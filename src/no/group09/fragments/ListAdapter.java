@@ -36,7 +36,6 @@ public class ListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater=null;
-    private RatingBar getRatingBar;
     
 	protected static final String KEY_ID = "id";
 	protected static final String APP_NAME = "title";

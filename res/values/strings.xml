@@ -15,7 +15,7 @@
 -->
 <resources>
 
-    <string name="app_name">µC Software Store</string>
+   	<string name="app_name">µC Software Store</string>
     
     <string name="menu_settings1">Hide Incompatible</string>
     <string name="menu_settings2">Device List</string>
@@ -35,7 +35,7 @@
     <string name="pin_changepin_title">Settings</string>
     <string name="preference_lite">Lite</string>
     <string name="set_preferences">SETTINGS</string>
-    
-    
+
+    <string name="bluetooth_devices_tittle">Devices</string>
     
 </resources>

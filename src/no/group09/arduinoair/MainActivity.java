@@ -15,6 +15,7 @@ package no.group09.arduinoair;
  */
 
 import no.group09.fragments.MyFragmentPagerAdapter;
+import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,13 +63,12 @@ public class MainActivity extends FragmentActivity {
 		
 		switch (item.getItemId()) {
 
-		//Start the settings class
+		//Start the settings class/
 		case R.id.settings:
 			Toast.makeText(getApplicationContext(), "settings pushed", Toast.LENGTH_SHORT).show();
-			
 			//THIS IS WHERE THE PREFERENCES.JAVA STARTS
-			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
-			this.startActivity(myIntent);
+//			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
+//			this.startActivity(myIntent);
 			return true;
 			
 		//Toggle hide incompatible
@@ -78,8 +78,9 @@ public class MainActivity extends FragmentActivity {
 		
 		//Show the device list
 		case R.id.device_list:
-			Toast.makeText(getApplicationContext(), "Device list pusched", Toast.LENGTH_SHORT).show();
-//			startActivity(new Intent(this, DeviceList.class));
+//			Toast.makeText(getApplicationContext(), "Device list pusched", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
+			startActivity(intent);
 			return true;
 	}
 	
