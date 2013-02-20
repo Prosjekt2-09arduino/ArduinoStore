@@ -74,8 +74,8 @@ public class MainActivity extends FragmentActivity {
 		case R.id.settings:
 			Toast.makeText(getApplicationContext(), "settings pushed", Toast.LENGTH_SHORT).show();
 			//THIS IS WHERE THE PREFERENCES.JAVA STARTS
-//			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
-//			this.startActivity(myIntent);
+			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
+			this.startActivity(myIntent);
 			return true;
 			
 		//Toggle hide incompatible
