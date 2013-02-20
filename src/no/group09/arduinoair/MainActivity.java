@@ -18,6 +18,7 @@ import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.Preferences;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -31,6 +32,8 @@ public class MainActivity extends FragmentActivity {
 
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
+	//Name of the preference file
+	public static final String PREFS_NAME = "PreferenceFile";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,10 @@ public class MainActivity extends FragmentActivity {
 
 		/** Setting the pagerAdapter to the pager object */
 		pager.setAdapter(pagerAdapter);
+		
+		//Initializing the settings for the application
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
 
 	}
 

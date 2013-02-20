@@ -28,14 +28,10 @@
     <string name="search_label">Search Label</string>
     <string name="menu_search">Menu Search</string>
     
-    
-    <string name="settings_test">Settingstestings</string>
-    
     <!-- Preferences -->
-    <string name="pin_changepin_title">Settings</string>
-    <string name="preference_lite">Lite</string>
-    <string name="set_preferences">SETTINGS</string>
-    
+    <string name="test_settings">SETTINGS</string>
+    <string name="test_settings_summary">Dette er en test av settings</string>
+    <string name="preferences_title">SETTINGS_TITLE</string>
     
     
 </resources>
