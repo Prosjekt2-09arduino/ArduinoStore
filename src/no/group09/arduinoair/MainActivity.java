@@ -55,8 +55,6 @@ public class MainActivity extends FragmentActivity {
 		
 		//Initializing the settings for the application
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-
 	}
 
 	@Override
@@ -70,10 +68,9 @@ public class MainActivity extends FragmentActivity {
 		
 		switch (item.getItemId()) {
 
-		//Start the settings class/
+		//Start the preferences class
 		case R.id.settings:
-			Toast.makeText(getApplicationContext(), "settings pushed", Toast.LENGTH_SHORT).show();
-			//THIS IS WHERE THE PREFERENCES.JAVA STARTS
+			//Create an intent to start the preferences activity
 			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
 			this.startActivity(myIntent);
 			return true;

@@ -28,12 +28,13 @@
     <string name="search_label">Search Label</string>
     <string name="menu_search">Menu Search</string>
     
-    <!-- Preferences -->
-
+    
+    <!-- Bluetooth -->
     <string name="bluetooth_devices_tittle">Devices</string>
     
-    <string name="test_settings">SETTINGS</string>
-    <string name="test_settings_summary">Dette er en test av settings</string>
-    <string name="preferences_title">SETTINGS_TITLE</string>
+    <!-- Preferences screen -->
+    <string name="test_settings">Hide incompatible</string>
+    <string name="test_settings_summary">Hide applications that is incompatible with your Arduino device</string>
+    <string name="preferences_title">Settings</string>
     
 </resources>
