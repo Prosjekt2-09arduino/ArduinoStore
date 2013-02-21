@@ -30,17 +30,12 @@
     <string name="search_label">Search Label</string>
     <string name="menu_search">Menu Search</string>
     
-<<<<<<< HEAD
-    
     <!-- Bluetooth -->
-=======
-    <!-- BT Device List -->
     
     <string name="devices_header">Click on a device to select it:</string>
     
     <!-- Preferences -->
 
->>>>>>> bluetooth_scanner#30
     <string name="bluetooth_devices_tittle">Devices</string>
     
     <!-- Preferences screen -->
