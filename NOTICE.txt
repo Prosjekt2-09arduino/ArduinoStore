@@ -1,0 +1,10 @@
+﻿UbiCollab ArduinoStore
+Copyright 2013 UbiCollab.org
+
+This product includes software developed at
+UbiCollab.org (http://www.ubicollab.org/).
+
+This product includes software developed by SINTEF in 
+the SOCIETIES project. See http://www.ict-societies.eu/
+
+<<<Replace this file with credits to others' work that you use in your project>>>
