@@ -111,6 +111,20 @@ public class Devices extends Activity{
 		}
 		unregisterReceiver(ActionFoundReceiver);
 	}
+	
+	public void onResume() {
+		super.onResume();
+		
+		//Clear the list of BT devices
+		device_list.clear();
+		
+		//Notify the adapter that the list is now empty
+		adapter.notifyDataSetChanged();
+		
+		//Scan for new BT devices
+		checkBTState();
+	}
+	
 	/**
 	 * Checks the current BT state
 	 */
