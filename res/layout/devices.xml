@@ -19,7 +19,7 @@
             android:textColor="#FFF" />
 
         <ProgressBar
-            android:id="@+id/progressBar1"
+            android:id="@+id/progbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0" />
