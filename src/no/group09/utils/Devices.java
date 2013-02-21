@@ -54,7 +54,11 @@ public class Devices extends Activity{
 
 		category_list = new ArrayList<HashMap<String, String>>();
 
+<<<<<<< HEAD
 //		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+=======
+		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+>>>>>>> bluetooth_scanner#30
 		tv = (ListView) findViewById(R.id.bluetooth_devices_list);
 
 		// Getting adapter by passing xml data ArrayList

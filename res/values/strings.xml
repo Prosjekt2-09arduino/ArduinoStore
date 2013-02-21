@@ -17,6 +17,8 @@
 
    	<string name="app_name">µC Software Store</string>
     
+   	<!-- ActionBar menu items -->
+   	
     <string name="menu_settings1">Hide Incompatible</string>
     <string name="menu_settings2">Device List</string>
     <string name="menu_settings3">Settings</string>
@@ -28,8 +30,17 @@
     <string name="search_label">Search Label</string>
     <string name="menu_search">Menu Search</string>
     
+<<<<<<< HEAD
     
     <!-- Bluetooth -->
+=======
+    <!-- BT Device List -->
+    
+    <string name="devices_header">Click on a device to select it:</string>
+    
+    <!-- Preferences -->
+
+>>>>>>> bluetooth_scanner#30
     <string name="bluetooth_devices_tittle">Devices</string>
     
     <!-- Preferences screen -->
