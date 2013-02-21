@@ -16,10 +16,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.view.View.OnClickListener;
 
 /**
  * This class searches for the BT devices in range and put them in a list
@@ -33,6 +35,7 @@ public class Devices extends Activity{
 	private BluetoothAdapter btAdapter; 
 	private ArrayList<HashMap<String, String>> category_list;
 	private IntentFilter filter;
+	private Button refresh;
 
 	private ProgressBar progressBar;
 	private ArrayList<HashMap<String, String>> device_list;
@@ -42,9 +45,6 @@ public class Devices extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		//Setup the window
-//		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		
 		//Set the xml layout
 		setContentView(R.layout.devices);	
 
@@ -89,6 +89,26 @@ public class Devices extends Activity{
 				Toast.makeText(view.getContext(), "You clicked on: " + adapter.getName(position), Toast.LENGTH_SHORT).show();
 			}
 		});	
+		
+		//Add refresh button to UI
+		refresh = (Button) findViewById(R.id.refresh);
+		refresh.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				//Clear the list of BT devices
+				device_list.clear();
+				
+				//Notify the adapter that the list is now empty
+				adapter.notifyDataSetChanged();
+				
+				//Scan for new BT devices
+				checkBTState();
+			}
+		});
+		
+		refresh.setVisibility(View.GONE);
 
 		//Check the BT state
 		checkBTState();
@@ -138,8 +158,8 @@ public class Devices extends Activity{
 			if (btAdapter.isEnabled()) {
 
 				//Show the progress bar
-//				setProgressBarIndeterminateVisibility(true);
 				progressBar.setVisibility(View.VISIBLE);
+				refresh.setVisibility(View.GONE);
 				
 				// Starting the device discovery
 				btAdapter.startDiscovery();
@@ -176,8 +196,8 @@ public class Devices extends Activity{
 			else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
 				
 				//Hide the progress bar
-//				setProgressBarIndeterminateVisibility(false);
 				progressBar.setVisibility(View.GONE);
+				refresh.setVisibility(View.VISIBLE);
 			}
 
 				//			} else {

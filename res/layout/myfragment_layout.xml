@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="#272727"
-    android:textColor="#33b5e5"
+    android:background="@color/gray"
+    android:textColor="@color/blue"
 >
 </TextView>

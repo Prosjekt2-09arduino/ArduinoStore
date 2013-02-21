@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
-        android:textColor="#33b5e5"
+        android:textColor="@color/blue"
         android:textSize="15dip"
         android:textStyle="bold"
         android:typeface="sans" />
@@ -63,7 +63,7 @@
         android:layout_below="@id/app_name"
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
-        android:textColor="#33b5e5"
+        android:textColor="@color/blue"
         android:textSize="10dip" />
 
     <!-- Rightend Duration -->
@@ -76,7 +76,7 @@
         android:layout_alignTop="@id/app_name"
         android:layout_marginRight="5dip"
         android:gravity="right"
-        android:textColor="#33b5e5"
+        android:textColor="@color/blue"
         android:textSize="10dip"
         android:textStyle="bold" />
 

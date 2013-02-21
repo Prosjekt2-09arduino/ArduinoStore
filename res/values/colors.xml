@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#33b5e5</color>
+    <color name="gray">#272727</color>
+    <color name="onClick">#7A7F82</color>
+</resources>

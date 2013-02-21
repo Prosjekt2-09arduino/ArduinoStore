@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
-        android:textColor="#33b5e5"
+        android:textColor="@color/blue"
         android:textSize="15dip"
         android:textStyle="bold"
         android:typeface="sans" />
