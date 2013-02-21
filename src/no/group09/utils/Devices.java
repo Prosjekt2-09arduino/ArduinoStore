@@ -5,7 +5,6 @@ import java.util.HashMap;
 import no.group09.arduinoair.R;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -15,6 +14,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,14 +37,19 @@ public class Devices extends Activity{
 	private ProgressBar progressBar;
 	private ArrayList<HashMap<String, String>> device_list;
 	private boolean alreadyChecked = false;
-	private ProgressBar progBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		//Setup the window
+//		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
 		//Set the xml layout
 		setContentView(R.layout.devices);	
+
+		//progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+		progressBar = (ProgressBar) findViewById(R.id.progbar);
 
 		//Register the BroadcastReceiver
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -60,11 +65,6 @@ public class Devices extends Activity{
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 
 		category_list = new ArrayList<HashMap<String, String>>();
-
-		//		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-		progressBar = (ProgressBar) findViewById(R.id.progbar);
-
-		progressBar.setVisibility(View.VISIBLE);
 
 		// Getting adapter by passing xml data ArrayList
 		adapter = new BluetoothDeviceAdapter(getBaseContext(), category_list);        
@@ -123,6 +123,10 @@ public class Devices extends Activity{
 			//Check if the BT is turned on
 			if (btAdapter.isEnabled()) {
 
+				//Show the progress bar
+//				setProgressBarIndeterminateVisibility(true);
+				progressBar.setVisibility(View.VISIBLE);
+				
 				// Starting the device discovery
 				btAdapter.startDiscovery();
 			}
@@ -142,94 +146,55 @@ public class Devices extends Activity{
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			//			String action = intent.getAction();
-			//			if(BluetoothDevice.ACTION_FOUND.equals(action)) {
-			//				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-			//				
-			//				//Adding found device
-			//				HashMap<String, String> map = new HashMap<String, String>();
-			//				map = new HashMap<String, String>();
-			//				map.put("name", device.getName());
-			//				map.put("mac", device.getAddress());
-			//				device_list.add(map);
-			//
-			//				adapter.notifyDataSetChanged();
+			String action = intent.getAction();
+			if(BluetoothDevice.ACTION_FOUND.equals(action)) {
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-			final Intent fIntent = intent;
+				//Adding found device
+				HashMap<String, String> map = new HashMap<String, String>();
+				map = new HashMap<String, String>();
+				map.put("name", device.getName());
+				map.put("mac", device.getAddress());
+				device_list.add(map);
 
-			progressBar.setVisibility(View.VISIBLE);
+				adapter.notifyDataSetChanged();
+			}
+			else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+				
+				//Hide the progress bar
+//				setProgressBarIndeterminateVisibility(false);
+				progressBar.setVisibility(View.GONE);
+			}
 
-			new AsyncTask<Void,Void,Void>(){
+				//			} else {
+				//				if(BluetoothDevice.ACTION_UUID.equals(action)) {
+				//					BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				//					Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
+				//					for (int i=0; i<uuidExtra.length; i++) {
+				//						Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
+				//					}
+				//				} else {
+				//					if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+				//						Log.d(TAG, "\nDiscovery Started...");
+				//					} else {
+				//						if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+				//							Log.d(TAG, "\nDiscovery Finished");
+				//							Iterator<BluetoothDevice> itr = btDeviceList.iterator();
+				//							while (itr.hasNext()) {
+				//								// Get Services for paired devices
+				//								BluetoothDevice device = itr.next();
+				//								Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
+				//							
+				//								adapter.notifyDataSetChanged();
+				////								if(!device.fetchUuidsWithSdp()) {
+				////									Log.d(TAG, "\nSDP Failed for " + device.getName());
+				////								}
+				//
+				//							}
+				//						}
+				//					}
+				//				}
 
-				//The variables you need to set go here
-
-				@Override
-				protected void onPreExecute(){
-
-					progressBar.setVisibility(View.VISIBLE);
-				}
-
-				@Override
-				protected Void doInBackground(final Void... params){
-
-					// Do your loading here. Don't touch any views from here, and then return null
-
-					progressBar.setVisibility(View.VISIBLE);
-
-					String action = fIntent.getAction();
-					if(BluetoothDevice.ACTION_FOUND.equals(action)) {
-						BluetoothDevice device = fIntent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
-						//Adding found device
-						HashMap<String, String> map = new HashMap<String, String>();
-						map = new HashMap<String, String>();
-						map.put("name", device.getName());
-						map.put("mac", device.getAddress());
-						device_list.add(map);
-					}
-
-					return null;
-				}
-
-				@Override
-				protected void onPostExecute(final Void result){
-
-					// Update your views here
-
-					adapter.notifyDataSetChanged();
-					progressBar.setVisibility(View.GONE);
-				}
-			}.execute();
-
-			//			} else {
-			//				if(BluetoothDevice.ACTION_UUID.equals(action)) {
-			//					BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-			//					Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
-			//					for (int i=0; i<uuidExtra.length; i++) {
-			//						Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
-			//					}
-			//				} else {
-			//					if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-			//						Log.d(TAG, "\nDiscovery Started...");
-			//					} else {
-			//						if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-			//							Log.d(TAG, "\nDiscovery Finished");
-			//							Iterator<BluetoothDevice> itr = btDeviceList.iterator();
-			//							while (itr.hasNext()) {
-			//								// Get Services for paired devices
-			//								BluetoothDevice device = itr.next();
-			//								Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
-			//							
-			//								adapter.notifyDataSetChanged();
-			////								if(!device.fetchUuidsWithSdp()) {
-			////									Log.d(TAG, "\nSDP Failed for " + device.getName());
-			////								}
-			//
-			//							}
-			//						}
-			//					}
-			//				}
-
-		};
+		}
 	};
 }
