@@ -2,7 +2,6 @@ package no.group09.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import no.group09.arduinoair.R;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import android.app.Activity;
@@ -15,8 +14,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -24,30 +21,40 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * This class searches for the BT devices in range and put them in a list
+ */
 public class Devices extends Activity{
 
-	private String TAG = "DEVICES";
-
+	private static final String TAG = "DEVICES";
+	private static final int REQUEST_ENABLE_BT = 1;
 	private ListView tv;
 	private BluetoothDeviceAdapter adapter;
-	private static final int REQUEST_ENABLE_BT = 1;
 	private BluetoothAdapter btAdapter; 
 	private ArrayList<HashMap<String, String>> category_list;
 	private IntentFilter filter;
 
 	private ProgressBar progressBar;
+	private ArrayList<HashMap<String, String>> device_list;
+	private boolean alreadyChecked = false;
+	private ProgressBar progBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.devices);
+
+		//Set the xml layout
+		setContentView(R.layout.devices);	
 
 		//Register the BroadcastReceiver
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		filter.addAction(BluetoothDevice.ACTION_UUID);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-		registerReceiver(ActionFoundReceiver, filter); // Don't forget to unregister during onDestroy
+
+		//Registrer the BT receiver with the requested filters
+		//Don't forget to unregister during onDestroy
+		registerReceiver(ActionFoundReceiver, filter);
 
 		// Getting the Bluetooth adapter
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -59,16 +66,27 @@ public class Devices extends Activity{
 
 		// Getting adapter by passing xml data ArrayList
 		adapter = new BluetoothDeviceAdapter(getBaseContext(), category_list);        
+		//List of devices
+		device_list = new ArrayList<HashMap<String, String>>();
+
+		//Get the xml to how the list is structured
+		tv = (ListView) findViewById(R.id.bluetooth_devices_list);
+
+		//Get the adapter for the device list
+		adapter = new BluetoothDeviceAdapter(getBaseContext(), device_list);        
+
+		//Set the adapter
 		tv.setAdapter(adapter);
 
-		// Click event for single list row/
+		//Click event for single list row
 		tv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(view.getContext(), "You hit the button", Toast.LENGTH_SHORT).show();
+				Toast.makeText(view.getContext(), "You clicked on: " + adapter.getName(position), Toast.LENGTH_SHORT).show();
 			}
 		});	
+		
 //		progressBar.setVisibility(View.VISIBLE);
 //		new AsyncTask<Void,Void,Void>(){
 //
@@ -93,9 +111,9 @@ public class Devices extends Activity{
 //				progressBar.setVisibility(View.GONE);
 //			}
 //		}.execute();
-		
-		checkBTState();
 
+		//Check the BT state
+		checkBTState();
 	}
 
 	/* This routine is called when an activity completes.*/
@@ -115,30 +133,29 @@ public class Devices extends Activity{
 		}
 		unregisterReceiver(ActionFoundReceiver);
 	}
-
+	/**
+	 * Checks the current BT state
+	 */
 	private void checkBTState() {
-		// Check for Bluetooth support and then check to make sure it is turned on
-		// If it isn't request to turn it on
-		// List paired devices
-		// Emulator doesn't support Bluetooth and will return null
-		if(btAdapter==null) { 
 
-			Log.d(TAG, "\nBluetooth NOT supported. Aborting.");
-			return;
+		//Check if the Android support bluetooth
+		if(btAdapter==null) return;
+		else {
 
-		} else {
-
+			//Check if the BT is turned on
 			if (btAdapter.isEnabled()) {
-
-				Log.d(TAG, "\nBluetooth is enabled...");
 
 				// Starting the device discovery
 				btAdapter.startDiscovery();
-
-			} else {
-
-				Intent enableBtIntent = new Intent(btAdapter.ACTION_REQUEST_ENABLE);
+			}
+			
+			//If the BT is not turned on, request the user to turn it on
+			else if (!btAdapter.isEnabled() && !alreadyChecked){
+				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
+				//The user have already turned it on or off: don't request again
+				alreadyChecked = true;
 			}
 		}
 	}
@@ -154,8 +171,9 @@ public class Devices extends Activity{
 				//Adding found device
 				HashMap<String, String> map = new HashMap<String, String>();
 				map = new HashMap<String, String>();
-				map.put("element", device.getName() + ", " + device);
-				category_list.add(map);
+				map.put("name", device.getName());
+				map.put("mac", device.getAddress());
+				device_list.add(map);
 
 				adapter.notifyDataSetChanged();
 				//			} else {
@@ -189,4 +207,30 @@ public class Devices extends Activity{
 			}
 		}
 	};
+	
+//	class Load extends AsyncTask<String, String, String> {
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            
+//            progBar = (ProgressBar) findViewById(R.id.progressBar);
+//            progBar.setVisibility(View.VISIBLE);
+//            
+//        }
+//        @Override
+//        protected String doInBackground(String... aurl) {
+//        	
+//            //do something while spinning circling show (dont update UI)
+//        	
+//            return null;
+//        }
+//        @Override
+//        protected void onPostExecute(String unused) {
+//            super.onPostExecute(unused);
+//            
+//            //update UI and stop the progressbar
+//            
+//            progBar.setVisibility(View.GONE);
+//        }
+//    }
 }
