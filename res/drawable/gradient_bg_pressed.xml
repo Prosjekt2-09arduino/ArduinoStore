@@ -19,11 +19,12 @@
  * under the License.
 -->
 
-<resources>
-    <color name="blue">#33b5e5</color>
-    <color name="gray">#272727</color>
-    <color name="onClick">#7A7F82</color>
-    <color name="selected1">#70A667</color>
-    <color name="selected2">#5E8A57</color>
-    <color name="selected3">#51754B</color>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+  <!-- Gradient BgColor for listrow Selected -->
+  <gradient
+      android:startColor="@color/onClick"
+      android:centerColor="@color/onClick"
+      android:endColor="@color/onClick"
+      android:angle="270" />
+</shape>
