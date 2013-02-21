@@ -77,7 +77,7 @@ public class Categories extends MyFragment{
 		
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "2");
-		map.put(ListAdapterCategory.APP_NAME, "Utilities");
+		map.put(ListAdapterCategory.APP_NAME, "Medical");
 		map.put(ListAdapterCategory.DISTRIBUTOR, "");
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
