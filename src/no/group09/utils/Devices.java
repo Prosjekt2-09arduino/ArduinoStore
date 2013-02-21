@@ -5,7 +5,6 @@ import java.util.HashMap;
 import no.group09.arduinoair.R;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -15,11 +14,14 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.view.View.OnClickListener;
 
 /**
  * This class searches for the BT devices in range and put them in a list
@@ -33,11 +35,11 @@ public class Devices extends Activity{
 	private BluetoothAdapter btAdapter; 
 	private ArrayList<HashMap<String, String>> category_list;
 	private IntentFilter filter;
+	private Button refresh;
 
 	private ProgressBar progressBar;
 	private ArrayList<HashMap<String, String>> device_list;
 	private boolean alreadyChecked = false;
-	private ProgressBar progBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,9 @@ public class Devices extends Activity{
 
 		//Set the xml layout
 		setContentView(R.layout.devices);	
+
+		//progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+		progressBar = (ProgressBar) findViewById(R.id.progbar);
 
 		//Register the BroadcastReceiver
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -61,11 +66,9 @@ public class Devices extends Activity{
 
 		category_list = new ArrayList<HashMap<String, String>>();
 
-//		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-		tv = (ListView) findViewById(R.id.bluetooth_devices_list);
-
 		// Getting adapter by passing xml data ArrayList
 		adapter = new BluetoothDeviceAdapter(getBaseContext(), category_list);        
+
 		//List of devices
 		device_list = new ArrayList<HashMap<String, String>>();
 
@@ -87,30 +90,25 @@ public class Devices extends Activity{
 			}
 		});	
 		
-//		progressBar.setVisibility(View.VISIBLE);
-//		new AsyncTask<Void,Void,Void>(){
-//
-//			//The variables you need to set go here
-//
-//			@Override
-//			protected Void doInBackground(final Void... params){
-//				// Do your loading here. Don't touch any views from here, and then return null
-//				progressBar.setVisibility(View.VISIBLE);
-//				checkBTState();
-//				return null;
-//			}
-//
-//
-//			@Override
-//			protected void onPostExecute(final Void result){
-//
-//				// Update your views here
-//				
-//				
-//				adapter.notifyDataSetChanged();
-//				progressBar.setVisibility(View.GONE);
-//			}
-//		}.execute();
+		//Add refresh button to UI
+		refresh = (Button) findViewById(R.id.refresh);
+		refresh.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				//Clear the list of BT devices
+				device_list.clear();
+				
+				//Notify the adapter that the list is now empty
+				adapter.notifyDataSetChanged();
+				
+				//Scan for new BT devices
+				checkBTState();
+			}
+		});
+		
+		refresh.setVisibility(View.GONE);
 
 		//Check the BT state
 		checkBTState();
@@ -133,6 +131,20 @@ public class Devices extends Activity{
 		}
 		unregisterReceiver(ActionFoundReceiver);
 	}
+	
+	public void onResume() {
+		super.onResume();
+		
+		//Clear the list of BT devices
+		device_list.clear();
+		
+		//Notify the adapter that the list is now empty
+		adapter.notifyDataSetChanged();
+		
+		//Scan for new BT devices
+		checkBTState();
+	}
+	
 	/**
 	 * Checks the current BT state
 	 */
@@ -145,10 +157,14 @@ public class Devices extends Activity{
 			//Check if the BT is turned on
 			if (btAdapter.isEnabled()) {
 
+				//Show the progress bar
+				progressBar.setVisibility(View.VISIBLE);
+				refresh.setVisibility(View.GONE);
+				
 				// Starting the device discovery
 				btAdapter.startDiscovery();
 			}
-			
+
 			//If the BT is not turned on, request the user to turn it on
 			else if (!btAdapter.isEnabled() && !alreadyChecked){
 				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -176,6 +192,14 @@ public class Devices extends Activity{
 				device_list.add(map);
 
 				adapter.notifyDataSetChanged();
+			}
+			else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+				
+				//Hide the progress bar
+				progressBar.setVisibility(View.GONE);
+				refresh.setVisibility(View.VISIBLE);
+			}
+
 				//			} else {
 				//				if(BluetoothDevice.ACTION_UUID.equals(action)) {
 				//					BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -204,33 +228,7 @@ public class Devices extends Activity{
 				//						}
 				//					}
 				//				}
-			}
+
 		}
 	};
-	
-//	class Load extends AsyncTask<String, String, String> {
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            
-//            progBar = (ProgressBar) findViewById(R.id.progressBar);
-//            progBar.setVisibility(View.VISIBLE);
-//            
-//        }
-//        @Override
-//        protected String doInBackground(String... aurl) {
-//        	
-//            //do something while spinning circling show (dont update UI)
-//        	
-//            return null;
-//        }
-//        @Override
-//        protected void onPostExecute(String unused) {
-//            super.onPostExecute(unused);
-//            
-//            //update UI and stop the progressbar
-//            
-//            progBar.setVisibility(View.GONE);
-//        }
-//    }
 }

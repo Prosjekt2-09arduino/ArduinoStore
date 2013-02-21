@@ -28,6 +28,7 @@ import no.group09.arduinoair.R.layout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,22 @@ public class ListAdapterCategory extends BaseAdapter {
         
         // Setting all values in listview
         appName.setText(listItem.get(APP_NAME));
+        
+        if(listItem.get(APP_NAME).equals("Games")){
+        	thumb_image.setImageResource(R.drawable.games);
+        }
+        
+        else if(listItem.get(APP_NAME).equals("Medical")){
+        	thumb_image.setImageResource(R.drawable.medical);
+        }
+        
+        else if(listItem.get(APP_NAME).equals("Tools")){
+        	thumb_image.setImageResource(R.drawable.tools);
+        }
+        
+        else if(listItem.get(APP_NAME).equals("Media")){
+        	thumb_image.setImageResource(R.drawable.media);
+        }
         
         return vi;
     }
