@@ -1,26 +1,27 @@
 package no.group09.utils;
 
 /*
-* Licensed to UbiCollab.org under one or more contributor
-* license agreements.  See the NOTICE file distributed 
-* with this work for additional information regarding
-* copyright ownership. UbiCollab.org licenses this file
-* to you under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance
-* with the License. You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+ * Licensed to UbiCollab.org under one or more contributor
+ * license agreements.  See the NOTICE file distributed 
+ * with this work for additional information regarding
+ * copyright ownership. UbiCollab.org licenses this file
+ * to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import no.group09.arduinoair.R;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import android.app.Activity;
@@ -30,10 +31,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -59,6 +60,8 @@ public class Devices extends Activity{
 	private ProgressBar progressBar;
 	private ArrayList<HashMap<String, String>> device_list;
 	private boolean alreadyChecked = false;
+
+	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,25 +111,25 @@ public class Devices extends Activity{
 				Toast.makeText(view.getContext(), "You clicked on: " + adapter.getName(position), Toast.LENGTH_SHORT).show();
 			}
 		});	
-		
+
 		//Add refresh button to UI
 		refresh = (Button) findViewById(R.id.refresh);
 		refresh.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
+
 				//Clear the list of BT devices
 				device_list.clear();
-				
+
 				//Notify the adapter that the list is now empty
 				adapter.notifyDataSetChanged();
-				
+
 				//Scan for new BT devices
 				checkBTState();
 			}
 		});
-		
+
 		refresh.setVisibility(View.GONE);
 
 		//Check the BT state
@@ -150,20 +153,20 @@ public class Devices extends Activity{
 		}
 		unregisterReceiver(ActionFoundReceiver);
 	}
-	
+
 	public void onResume() {
 		super.onResume();
-		
+
 		//Clear the list of BT devices
 		device_list.clear();
-		
+
 		//Notify the adapter that the list is now empty
 		adapter.notifyDataSetChanged();
-		
+
 		//Scan for new BT devices
 		checkBTState();
 	}
-	
+
 	/**
 	 * Checks the current BT state
 	 */
@@ -179,7 +182,7 @@ public class Devices extends Activity{
 				//Show the progress bar
 				progressBar.setVisibility(View.VISIBLE);
 				refresh.setVisibility(View.GONE);
-				
+
 				// Starting the device discovery
 				btAdapter.startDiscovery();
 			}
@@ -200,7 +203,14 @@ public class Devices extends Activity{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if(BluetoothDevice.ACTION_FOUND.equals(action)) {
+	
+			//If discovery started
+			if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+				Log.d(TAG, "\nDiscovery Started...");
+			}
+
+			//If a device is found
+			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
 				//Adding found device
@@ -210,44 +220,40 @@ public class Devices extends Activity{
 				map.put("mac", device.getAddress());
 				device_list.add(map);
 
+				btDeviceList.add(device);	//FIXME: debugging
+				
 				adapter.notifyDataSetChanged();
 			}
-			else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-				
+			
+			//If it received a UUID parcel
+			if(BluetoothDevice.ACTION_UUID.equals(action)) {
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
+
+				for (int i=0; i<uuidExtra.length; i++) {
+					Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
+				}
+			}
+			
+			//If discovery finished
+			if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
 				refresh.setVisibility(View.VISIBLE);
+				
+				Iterator<BluetoothDevice> itr = btDeviceList.iterator();
+
+				while (itr.hasNext()) {
+
+					// Get Services for paired devices
+					BluetoothDevice device = itr.next();
+					Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
+
+				}
+
+				Log.d(TAG, "\nDiscovery Finished");
 			}
-
-				//			} else {
-				//				if(BluetoothDevice.ACTION_UUID.equals(action)) {
-				//					BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				//					Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
-				//					for (int i=0; i<uuidExtra.length; i++) {
-				//						Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
-				//					}
-				//				} else {
-				//					if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-				//						Log.d(TAG, "\nDiscovery Started...");
-				//					} else {
-				//						if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-				//							Log.d(TAG, "\nDiscovery Finished");
-				//							Iterator<BluetoothDevice> itr = btDeviceList.iterator();
-				//							while (itr.hasNext()) {
-				//								// Get Services for paired devices
-				//								BluetoothDevice device = itr.next();
-				//								Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
-				//							
-				//								adapter.notifyDataSetChanged();
-				////								if(!device.fetchUuidsWithSdp()) {
-				////									Log.d(TAG, "\nSDP Failed for " + device.getName());
-				////								}
-				//
-				//							}
-				//						}
-				//					}
-				//				}
-
 		}
 	};
 }
