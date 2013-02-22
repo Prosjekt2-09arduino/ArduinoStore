@@ -23,11 +23,13 @@ import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -35,7 +37,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends FragmentActivity {
-
+	
+	private String TAG = "MainActivity";
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
 	//Name of the preference file
@@ -82,7 +85,26 @@ public class MainActivity extends FragmentActivity {
 			
 		//Toggle hide incompatible
 		case R.id.hide_incompatible:
-			Toast.makeText(getApplicationContext(), "Incompatible apps hided", Toast.LENGTH_SHORT).show();
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
+			
+			/* Kan hende det kan vaere lurt aa endre paa dette saa det ser litt
+			 * penere ut. Kan hende jeg maa legge til noen lyttere ogsaa.
+			 */
+			if (hideIncompatible == true) {
+				Log.d(TAG, "Hide incompatible is true");
+				Log.d(TAG, "Changing to false");
+				sharedPref.edit().putBoolean("hide_incompatible", false).commit();
+				Log.d(TAG, "The value of 'hide incompatible' in settings should now be false");
+			}
+			else {
+
+				Log.d(TAG, "Changing to true");
+				sharedPref.edit().putBoolean("hide_incompatible", true).commit();
+				Log.d(TAG, "The value of 'hide incompatible' in settings should now be true");
+			}
+			
+//			sharedPref.edit().commit();
 			return true;
 		
 		//Show the device list
