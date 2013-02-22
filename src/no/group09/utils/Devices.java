@@ -272,6 +272,7 @@ public class Devices extends Activity{
 					map = new HashMap<String, String>();
 					map.put("name", device.getName());
 					map.put("mac", device.getAddress());
+					map.put("pager", device.getBluetoothClass().toString());
 					device_list.add(map);
 
 					btDeviceList.add(device);	//FIXME: debugging
