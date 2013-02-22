@@ -205,7 +205,7 @@ public class Devices extends Activity{
 		
         try {
         	
-        	String mac = "";
+        	String mac = "";	//FIXME: get mac from preferences
         	
         	con = new BluetoothConnection(mac, (Activity)getBaseContext(), getConnectionListener());
 			con.connect();		
