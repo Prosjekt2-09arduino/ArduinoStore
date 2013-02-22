@@ -21,8 +21,8 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
-        android:key="test_settings"
-        android:title="@string/test_settings"
-        android:summary="@string/test_settings_summary"
-        android:defaultValue="true"/>
+        android:key="hide_incompatible"
+        android:title="@string/hide_incompatible"
+        android:summary="@string/hide_incompatible_summary"
+        android:defaultValue="false"/>
 </PreferenceScreen>

@@ -20,15 +20,19 @@ package no.group09.utils;
 */
 
 import no.group09.arduinoair.R;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.widget.TextView;
+import android.preference.PreferenceScreen;
+import android.util.Log;
 
-public class Preferences extends PreferenceActivity {
-
-	TextView l;
-
-
+public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener{
+	
+	private String TAG = "Preferences.java";
+	private PreferenceScreen ps = null;
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +43,20 @@ public class Preferences extends PreferenceActivity {
 		 */
 		addPreferencesFromResource(R.xml.preferences);
 		
-//	
-//		setContentView(R.layout.preferences);
-//		
-//		l = (TextView)findViewById(R.id.pin_tv);
-//		
+		ps = getPreferenceScreen();
+		ps.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+			
+	}
+
+	/**
+	 * Method called when changes are made in the shared preferences file. Can
+	 * be used to tell other instances of changes made.
+	 */
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (key.equals("hide_incompatible")) {
+			Log.d(TAG, "'onSharedPreferenceChanged' in Preferences.java has been called");
+		}
+
 	}
 }

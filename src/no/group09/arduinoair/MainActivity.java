@@ -23,11 +23,14 @@ import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -35,11 +38,14 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends FragmentActivity {
-
+	
+	private String TAG = "MainActivity";
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
+	//Preferences object, used to update the preferences file
+	Preferences preferences = new Preferences();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +76,6 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
 		switch (item.getItemId()) {
 
 		//Start the preferences class
@@ -82,7 +87,25 @@ public class MainActivity extends FragmentActivity {
 			
 		//Toggle hide incompatible
 		case R.id.hide_incompatible:
-			Toast.makeText(getApplicationContext(), "Incompatible apps hided", Toast.LENGTH_SHORT).show();
+			//SharedPreferences object used to change the global preferences in the application
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+			
+			Editor edit = sharedPref.edit();
+			//Fetches the current value of the 'hide incompatible' option in the preference file
+			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
+			
+			if (hideIncompatible == true) {
+				Log.d(TAG, "The 'hide incompatible' settings option were true. Changing to false");
+				//Changes the value and commits the changes
+				edit.putBoolean("hide_incompatible", false);
+				edit.commit();
+			}
+			else {
+				Log.d(TAG, "The 'hide incompatible' settings option were false. Changing to true");
+				//Changes the value and commits the changes
+				edit.putBoolean("hide_incompatible", true);
+				edit.commit();
+			}
 			return true;
 		
 		//Show the device list
