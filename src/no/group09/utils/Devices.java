@@ -22,7 +22,13 @@ package no.group09.utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.TimeoutException;
+
 import no.group09.arduinoair.R;
+import no.group09.connection.BluetoothConnection;
+import no.group09.connection.ConnectionListener;
+import no.group09.connection.ConnectionMetadata;
+import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -36,6 +42,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -49,6 +56,7 @@ import android.view.View.OnClickListener;
 public class Devices extends Activity{
 
 	private static final String TAG = "DEVICES";
+	private static final boolean LIST_NON_ARDUINO_DEVICES = true;
 	private static final int REQUEST_ENABLE_BT = 1;
 	private ListView tv;
 	private BluetoothDeviceAdapter adapter;
@@ -56,12 +64,13 @@ public class Devices extends Activity{
 	private ArrayList<HashMap<String, String>> category_list;
 	private IntentFilter filter;
 	private Button refresh;
-
 	private ProgressBar progressBar;
 	private ArrayList<HashMap<String, String>> device_list;
 	private boolean alreadyChecked = false;
-
 	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
+
+	private BluetoothConnection con;
+	private static final int CUSTOM_REQUEST_QR_SCANNER = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +117,34 @@ public class Devices extends Activity{
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(view.getContext(), "You clicked on: " + adapter.getName(position), Toast.LENGTH_SHORT).show();
+//				Toast.makeText(view.getContext(), "You clicked on: " + adapter.getName(position), Toast.LENGTH_SHORT).show();
+				
+		        // Handle successful scan
+		        try {
+		        	con = new BluetoothConnection(adapter.getMacAddress(position), (Activity)view.getContext(), getConnectionListener());
+					con.connect();		
+					Toast.makeText(view.getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+					
+				} catch (Exception e) {
+					Toast.makeText(view.getContext(), "ERROR", Toast.LENGTH_SHORT).show();
+					Log.d(TAG, e.getMessage());
+		        }
 			}
 		});	
+		
+		tv.setOnItemLongClickListener(new OnItemLongClickListener() {
+			
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
+				try{
+					con.print("HAHAHA");
+				}
+				catch(Exception e){
+					Log.d(TAG, "Could not send message");
+				}
+				return false;
+			}
+		});
 
 		//Add refresh button to UI
 		refresh = (Button) findViewById(R.id.refresh);
@@ -152,6 +186,9 @@ public class Devices extends Activity{
 			btAdapter.cancelDiscovery();
 		}
 		unregisterReceiver(ActionFoundReceiver);
+
+		//Shut down the BT connection
+		if(con != null) con.disconnect();
 	}
 
 	public void onResume() {
@@ -203,7 +240,7 @@ public class Devices extends Activity{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-	
+
 			//If discovery started
 			if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
 				Log.d(TAG, "\nDiscovery Started...");
@@ -213,18 +250,32 @@ public class Devices extends Activity{
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-				//Adding found device
-				HashMap<String, String> map = new HashMap<String, String>();
-				map = new HashMap<String, String>();
-				map.put("name", device.getName());
-				map.put("mac", device.getAddress());
-				device_list.add(map);
 
-				btDeviceList.add(device);	//FIXME: debugging
-				
-				adapter.notifyDataSetChanged();
+				if((device.getBluetoothClass().toString()).equals("708") || LIST_NON_ARDUINO_DEVICES){
+
+
+					//Adding found device
+					HashMap<String, String> map = new HashMap<String, String>();
+					map = new HashMap<String, String>();
+					map.put("name", device.getName());
+					map.put("mac", device.getAddress());
+					device_list.add(map);
+
+					btDeviceList.add(device);	//FIXME: debugging
+
+					adapter.notifyDataSetChanged();
+				}
+
+				//				Log.d(TAG, device.getName());
+				//				Log.d(TAG, device.getBluetoothClass().getClass().getCanonicalName());
+				//				Log.d(TAG, device.getBluetoothClass().getClass().getName());
+				//				Log.d(TAG, device.getBluetoothClass().getClass().getSimpleName());
+				//				Log.d(TAG, "major: " + String.valueOf(device.getBluetoothClass().getMajorDeviceClass()));
+				//				Log.d(TAG, "device: " + String.valueOf(device.getBluetoothClass().getDeviceClass()));
+				//				Log.d(TAG, device.getBluetoothClass().toString());
+
 			}
-			
+
 			//If it received a UUID parcel
 			if(BluetoothDevice.ACTION_UUID.equals(action)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -234,14 +285,14 @@ public class Devices extends Activity{
 					Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
 				}
 			}
-			
+
 			//If discovery finished
 			if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
 				refresh.setVisibility(View.VISIBLE);
-				
+
 				Iterator<BluetoothDevice> itr = btDeviceList.iterator();
 
 				while (itr.hasNext()) {
@@ -256,4 +307,57 @@ public class Devices extends Activity{
 			}
 		}
 	};
+
+	private ConnectionListener getConnectionListener() {
+		return new ConnectionListener() {
+			public void onConnect(BluetoothConnection bluetoothConnection) {
+				Log.d(TAG, "Connected to: " + con.toString());
+
+				//Add a button for every service found
+				ConnectionMetadata meta = con.getConnectionData();
+				for(String service : meta.getServicesSupported()) {
+					Integer pins[] = meta.getServicePins(service);
+
+					//Pin controlled button
+					if(pins.length > 0) {
+						if(service.equals(DefaultServices.SERVICE_LED_LAMP.name()))  for(int pin : pins) Log.d(TAG, "LED pin: " + pin);
+						if(service.equals(DefaultServices.SERVICE_VIBRATION.name()))  for(int pin : pins) Log.d(TAG, "VIBRATION pin " + pin);
+						if(service.equals(DefaultServices.SERVICE_SPEAKER.name())) Log.d(TAG, "SPEAKER");
+					}
+
+					//LCD print screen
+					else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())) Log.d(TAG, "LCD");
+				}
+
+			}
+
+			@Override
+			public void onConnecting(BluetoothConnection bluetoothConnection) {
+				Log.d(TAG, "Connecting to BT");
+			}
+
+			@Override
+			public void onDisconnect(BluetoothConnection bluetoothConnection) {
+				Log.d(TAG, "Disconnected from BT");
+			}
+		};
+
+	};
+	   
+	    private class LCDButton extends Button implements View.OnClickListener {
+	    	int timesClicked;
+	    	
+			public LCDButton(Context context) {
+				super(context);
+				setOnClickListener(this);
+				setText("Print \"Hello World\"");
+			}
+
+			public void onClick(View v) {
+				try {
+					con.print("Hello World! (" + timesClicked++ + ")", false);
+				} catch (TimeoutException e) {}
+			}
+	    	
+	    }
 }
