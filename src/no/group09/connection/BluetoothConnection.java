@@ -348,7 +348,7 @@ public class BluetoothConnection extends Protocol {
 
 		//Make sure we are connected before sending data
 		if( connectionState == ConnectionState.STATE_DISCONNECTED ){
-			throw new IOException("Trying to send data while Bluetooth is not connected!");
+			Log.d(TAG, "Trying to send data while Bluetooth is not connected!");
 		}
 
 		//Send the data
