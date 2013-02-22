@@ -137,7 +137,7 @@ public class Devices extends Activity{
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				try{
-					con.print("HAHAHA");
+					con.print("HAHAHA", false);
 				}
 				catch(Exception e){
 					Log.d(TAG, "Could not send message");
@@ -201,7 +201,21 @@ public class Devices extends Activity{
 		adapter.notifyDataSetChanged();
 
 		//Scan for new BT devices
-		checkBTState();
+//		checkBTState();
+		
+        try {
+        	
+        	String mac = "";
+        	
+        	con = new BluetoothConnection(mac, (Activity)getBaseContext(), getConnectionListener());
+			con.connect();		
+			
+			Toast.makeText(getBaseContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+			
+		} catch (Exception e) {
+			Toast.makeText(getBaseContext(), "ERROR", Toast.LENGTH_SHORT).show();
+			Log.d(TAG, e.getMessage());
+        }
 	}
 
 	/**
