@@ -37,8 +37,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,6 +58,8 @@ import android.view.View.OnClickListener;
  */
 public class Devices extends Activity{
 
+	SharedPreferences sharedPref = null;
+	
 	private static final String TAG = "DEVICES";
 	private static final boolean LIST_NON_ARDUINO_DEVICES = true;
 	private static final int REQUEST_ENABLE_BT = 1;
@@ -74,11 +79,15 @@ public class Devices extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 
 		//Set the xml layout
 		setContentView(R.layout.devices);	
 
+		//Fetching the shared preferences object used to write the preference file
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		
 		//progressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		progressBar = (ProgressBar) findViewById(R.id.progbar);
 
@@ -88,7 +97,7 @@ public class Devices extends Activity{
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
-		//Registrer the BT receiver with the requested filters
+		//Registers the BT receiver with the requested filters
 		//Don't forget to unregister during onDestroy
 		registerReceiver(ActionFoundReceiver, filter);
 
@@ -112,28 +121,40 @@ public class Devices extends Activity{
 		//Set the adapter
 		tv.setAdapter(adapter);
 
+
+
 		//Click event for single list row
 		tv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//				Toast.makeText(view.getContext(), "You clicked on: " + adapter.getName(position), Toast.LENGTH_SHORT).show();
-				
-		        // Handle successful scan
-		        try {
-		        	con = new BluetoothConnection(adapter.getMacAddress(position), (Activity)view.getContext(), getConnectionListener());
-					con.connect();		
-					Toast.makeText(view.getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+				//				Toast.makeText(view.getContext(), "You clicked on: " + adapter.getName(position), Toast.LENGTH_SHORT).show();
+
+				// Handle successful scan
+				try {
+					con = new BluetoothConnection(adapter.getMacAddress(position), (Activity)view.getContext(), getConnectionListener());
+					con.connect();
 					
+					String lastConnectedDevice = "\nDevice name: " + adapter.getName(position)
+							+ "MAC Address: " + adapter.getMacAddress(position);
+					
+					Editor edit = sharedPref.edit();
+					
+					//Saves the Mac address
+					edit.putString("conn_device_dialog", lastConnectedDevice);
+					edit.commit();
+					Log.d(TAG, "The information about the last connected device was written to shared preferences");
+					Toast.makeText(view.getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+
 				} catch (Exception e) {
 					Toast.makeText(view.getContext(), "ERROR", Toast.LENGTH_SHORT).show();
 					Log.d(TAG, e.getMessage());
-		        }
+				}
 			}
 		});	
-		
+
 		tv.setOnItemLongClickListener(new OnItemLongClickListener() {
-			
+
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				try{
@@ -343,21 +364,21 @@ public class Devices extends Activity{
 		};
 
 	};
-	   
-	    private class LCDButton extends Button implements View.OnClickListener {
-	    	int timesClicked;
-	    	
-			public LCDButton(Context context) {
-				super(context);
-				setOnClickListener(this);
-				setText("Print \"Hello World\"");
-			}
 
-			public void onClick(View v) {
-				try {
-					con.print("Hello World! (" + timesClicked++ + ")", false);
-				} catch (TimeoutException e) {}
-			}
-	    	
-	    }
+	private class LCDButton extends Button implements View.OnClickListener {
+		int timesClicked;
+
+		public LCDButton(Context context) {
+			super(context);
+			setOnClickListener(this);
+			setText("Print \"Hello World\"");
+		}
+
+		public void onClick(View v) {
+			try {
+				con.print("Hello World! (" + timesClicked++ + ")", false);
+			} catch (TimeoutException e) {}
+		}
+
+	}
 }

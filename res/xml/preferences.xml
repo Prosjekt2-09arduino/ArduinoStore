@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- 
+<!--
  * Licensed to UbiCollab.org under one or more contributor
  * license agreements.  See the NOTICE file distributed 
  * with this work for additional information regarding
@@ -19,10 +18,24 @@
  * under the License.
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="hide_incompatible"
-        android:title="@string/hide_incompatible"
-        android:summary="@string/hide_incompatible_summary"
-        android:defaultValue="false"/>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/hide_incomatible_pref_group_title">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="hide_incompatible"
+            android:summary="@string/hide_incompatible_summary"
+            android:title="@string/hide_incompatible" />
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/conn_device_pref_group_title">
+        <no.group09.utils.OptionDialogPreference
+            android:key="conn_device_dialog"
+            android:title="@string/connected_device" 
+            android:summary="@string/conn_device_summary"
+            android:dialogMessage="Device name: "
+            android:positiveButtonText="Forget"
+            android:negativeButtonText="Cancel"/>
+    </PreferenceCategory>
 </PreferenceScreen>

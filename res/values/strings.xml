@@ -34,16 +34,18 @@
     <string name="search_label">Search Label</string>
     <string name="menu_search">Menu Search</string>
     
-    <!-- Bluetooth -->
+    <!-- Bluetooth devices screen -->
     <string name="devices_header">Click on a device to select it:</string>
     <string name="refresh">Refresh</string>
-    
-    <!-- Preferences -->
     <string name="bluetooth_devices_tittle">Devices</string>
     
     <!-- Preferences screen -->
     <string name="preferences_title">Settings</string>
     <string name="hide_incompatible">Hide incompatible</string>
     <string name="hide_incompatible_summary">Hide applications that is incompatible with your Arduino device</string>
+    <string name="hide_incomatible_pref_group_title">Hide/show incompatible devices</string>
+    <string name="conn_device_pref_group_title">Connections</string>
+    <string name="connected_device">Connected device</string>
+    <string name="conn_device_summary">Click to see the last connected device</string>
     
 </resources>

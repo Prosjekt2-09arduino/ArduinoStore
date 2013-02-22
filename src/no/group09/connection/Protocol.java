@@ -156,7 +156,7 @@ public abstract class Protocol implements Runnable {
 
 			//Timeout?
 			if (System.currentTimeMillis() > timeout) 
-				Log.d(TAG, "handshakeConnection() has timed out (did not recieve all data)");
+//				Log.d(TAG, "handshakeConnection() has timed out (did not recieve all data)");
 
 			//Wait 10 ms for a resonse
 			try { Thread.sleep(10); } catch (InterruptedException ex) {}				
@@ -275,7 +275,7 @@ public abstract class Protocol implements Runnable {
 		while (waitingForAck != null) {
 			if (System.currentTimeMillis() > time) {
 				waitingForAck = null;
-				Log.d(TAG, "Timeout (remote device used too long time to respond)");
+//				Log.d(TAG, "Timeout (remote device used too long time to respond)");
 			}
 			try { 
 				Thread.sleep(10); 

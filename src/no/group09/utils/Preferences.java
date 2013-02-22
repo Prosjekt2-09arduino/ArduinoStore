@@ -21,10 +21,13 @@ package no.group09.utils;
 
 import no.group09.arduinoair.R;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
@@ -45,7 +48,12 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		
 		ps = getPreferenceScreen();
 		ps.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-			
+		
+//		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+//		DialogPreference dp = (DialogPreference) ps.findPreference("conn_device_dialog");
+//		
+//		dp.setDialogMessage(sharedPref.getString("conn_device_dialog", "No connected device"));
+		
 	}
 
 	/**
@@ -56,6 +64,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("hide_incompatible")) {
 			Log.d(TAG, "'onSharedPreferenceChanged' in Preferences.java has been called");
+		}
+		else if (key.equals("conn_device_dialog")) {
+			Log.d(TAG, "hajkldsfhajklsdfhajkhdfladkjsfh");
 		}
 
 	}

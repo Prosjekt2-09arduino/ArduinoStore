@@ -89,25 +89,24 @@ public class MainActivity extends FragmentActivity {
 		case R.id.hide_incompatible:
 			//SharedPreferences object used to change the global preferences in the application
 			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-			
 			Editor edit = sharedPref.edit();
 			//Fetches the current value of the 'hide incompatible' option in the preference file
 			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
 			
 			if (hideIncompatible == true) {
-				Log.d(TAG, "The 'hide incompatible' settings option were true. Changing to false");
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", false);
 				edit.commit();
+				Log.d(TAG, "The 'hide incompatible' settings option were true. Changing to false");
 			}
 			else {
-				Log.d(TAG, "The 'hide incompatible' settings option were false. Changing to true");
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", true);
 				edit.commit();
+				Log.d(TAG, "The 'hide incompatible' settings option were false. Changing to true");
 			}
 			return true;
-		
+			
 		//Show the device list
 		case R.id.device_list:
 //			Toast.makeText(getApplicationContext(), "Device list pusched", Toast.LENGTH_SHORT).show();
