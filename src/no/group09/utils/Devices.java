@@ -39,6 +39,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -121,8 +122,6 @@ public class Devices extends Activity{
 		//Set the adapter
 		tv.setAdapter(adapter);
 
-
-
 		//Click event for single list row
 		tv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -132,16 +131,18 @@ public class Devices extends Activity{
 
 				// Handle successful scan
 				try {
-					con = new BluetoothConnection(adapter.getMacAddress(position), (Activity)view.getContext(), getConnectionListener());
+					con = new BluetoothConnection(adapter.getMacAddress(position), 
+							(Activity)view.getContext(), getConnectionListener());
 					con.connect();
 					
-					String lastConnectedDevice = "\nDevice name: " + adapter.getName(position)
-							+ "MAC Address: " + adapter.getMacAddress(position);
+					String lastConnectedDevice = "Device name: " + adapter.getName(position)
+							+ "\nMAC Address: " + adapter.getMacAddress(position);
 					
 					Editor edit = sharedPref.edit();
 					
-					//Saves the Mac address
-					edit.putString("conn_device_dialog", lastConnectedDevice);
+					//Saves the information about the last connected device to sharedPreferences
+					edit.putString("connected_device_dialog", lastConnectedDevice);
+					
 					edit.commit();
 					Log.d(TAG, "The information about the last connected device was written to shared preferences");
 					Toast.makeText(view.getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();

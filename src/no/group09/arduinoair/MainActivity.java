@@ -44,8 +44,7 @@ public class MainActivity extends FragmentActivity {
 	Button btnDisplay;
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
-	//Preferences object, used to update the preferences file
-	Preferences preferences = new Preferences();
+	private SharedPreferences sharedPref = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +65,8 @@ public class MainActivity extends FragmentActivity {
 		
 		//Initializing the settings for the application
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class MainActivity extends FragmentActivity {
 		//Toggle hide incompatible
 		case R.id.hide_incompatible:
 			//SharedPreferences object used to change the global preferences in the application
-			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+			
 			Editor edit = sharedPref.edit();
 			//Fetches the current value of the 'hide incompatible' option in the preference file
 			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);

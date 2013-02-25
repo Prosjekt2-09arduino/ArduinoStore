@@ -30,12 +30,9 @@
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/conn_device_pref_group_title">
-        <no.group09.utils.OptionDialogPreference
-            android:key="conn_device_dialog"
-            android:title="@string/connected_device" 
-            android:summary="@string/conn_device_summary"
-            android:dialogMessage="Device name: "
-            android:positiveButtonText="Forget"
-            android:negativeButtonText="Cancel"/>
+        <Preference
+            android:key="connected_device_dialog"
+            android:title="@string/connected_device"
+            android:summary="@string/conn_device_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>
