@@ -145,6 +145,7 @@ public abstract class Protocol implements Runnable {
 			waitingForAck = OpCode.DEVICE_INFO;
 			tempAckProcessor = OpCode.DEVICE_INFO;
 			sendBytes(newInstruction.getInstructionBytes());
+			Log.d(TAG, "Metadatarequest sucessfully SENT");
 			
 		} catch (IOException ex) {
 			Log.d(TAG, "Failed to send metadata request: " + ex);
@@ -165,8 +166,6 @@ public abstract class Protocol implements Runnable {
 			//Wait 10 ms for a resonse
 			try { Thread.sleep(10); } catch (InterruptedException ex) {}				
 		}
-
-		Log.d(TAG, "handshakeConnection successfully connected!");
 
 		//Build a string from the byte array
         String response = new String( currentCommand.getContent() );
