@@ -90,4 +90,8 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 	public String getMacAddress(int id){
 		return data.get(id).get("mac");
 	}
+	
+	public String getPager(int id){
+		return data.get(id).get("pager");
+	}
 }

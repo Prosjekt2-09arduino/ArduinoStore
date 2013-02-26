@@ -145,6 +145,8 @@ public abstract class Protocol implements Runnable {
 			waitingForAck = OpCode.DEVICE_INFO;
 			tempAckProcessor = OpCode.DEVICE_INFO;
 			sendBytes(newInstruction.getInstructionBytes());
+			Log.d(TAG, "Metadatarequest sucessfully SENT");
+			
 		} catch (IOException ex) {
 			Log.d(TAG, "Failed to send metadata request: " + ex);
 		}
@@ -152,6 +154,9 @@ public abstract class Protocol implements Runnable {
 
 		//Wait until we get a response or a timeout
 		long timeout = System.currentTimeMillis() + TIMEOUT;
+		
+		Log.d(TAG, "trying handshakeConnection()");
+		
 		while (waitingForAck != null) {
 
 			//Timeout?
@@ -278,7 +283,7 @@ public abstract class Protocol implements Runnable {
 //				Log.d(TAG, "Timeout (remote device used too long time to respond)");
 			}
 			try { 
-				Thread.sleep(10); 
+				Thread.sleep(1000); 
 			} 
 			catch (InterruptedException ex) 
 			{ 
@@ -472,7 +477,7 @@ public abstract class Protocol implements Runnable {
 				try {
 					sendBytes(newInstruction.getInstructionBytes());
 				} catch (IOException ex) {
-					System.out.println("Send fail");
+					Log.d(TAG, "Send fail");
 				}
 
 				long time = System.currentTimeMillis();

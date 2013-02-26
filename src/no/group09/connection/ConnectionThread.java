@@ -99,7 +99,7 @@ class ConnectionThread extends Thread {
 			try { 
 				wait(250); 
 			}catch (Exception e) {
-				Log.d(TAG, "error waiting for respond");
+//				Log.d(TAG, "error waiting for respond");
 			}
 		}
 

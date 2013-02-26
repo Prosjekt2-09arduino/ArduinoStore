@@ -76,7 +76,6 @@ public class Devices extends Activity{
 	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
 
 	private BluetoothConnection con;
-	private static final int CUSTOM_REQUEST_QR_SCANNER = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +158,7 @@ public class Devices extends Activity{
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				try{
-					con.print("HAHAHA");
+					con.print("HAHAHA", false);
 				}
 				catch(Exception e){
 					Log.d(TAG, "Could not send message");
@@ -223,7 +222,21 @@ public class Devices extends Activity{
 		adapter.notifyDataSetChanged();
 
 		//Scan for new BT devices
-		checkBTState();
+//		checkBTState();
+		
+        try {
+        	
+        	String mac = "";	//FIXME: get mac from preferences
+        	
+        	con = new BluetoothConnection(mac, (Activity)getBaseContext(), getConnectionListener());
+			con.connect();		
+			
+			Toast.makeText(getBaseContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+			
+		} catch (Exception e) {
+			Toast.makeText(getBaseContext(), "ERROR", Toast.LENGTH_SHORT).show();
+			Log.d(TAG, e.getMessage());
+        }
 	}
 
 	/**
@@ -272,7 +285,7 @@ public class Devices extends Activity{
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-
+				//If the bluetooth class is named 708 that we made as a 'standard' for recognizing arduinos
 				if((device.getBluetoothClass().toString()).equals("708") || LIST_NON_ARDUINO_DEVICES){
 
 
@@ -281,6 +294,7 @@ public class Devices extends Activity{
 					map = new HashMap<String, String>();
 					map.put("name", device.getName());
 					map.put("mac", device.getAddress());
+					map.put("pager", device.getBluetoothClass().toString());
 					device_list.add(map);
 
 					btDeviceList.add(device);	//FIXME: debugging
@@ -299,14 +313,14 @@ public class Devices extends Activity{
 			}
 
 			//If it received a UUID parcel
-			if(BluetoothDevice.ACTION_UUID.equals(action)) {
-				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
-
-				for (int i=0; i<uuidExtra.length; i++) {
-					Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
-				}
-			}
+//			if(BluetoothDevice.ACTION_UUID.equals(action)) {	TODO: uncomment these lines
+//				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+//				Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
+//
+//				for (int i=0; i<uuidExtra.length; i++) {
+//					Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
+//				}
+//			}
 
 			//If discovery finished
 			if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -315,15 +329,15 @@ public class Devices extends Activity{
 				progressBar.setVisibility(View.GONE);
 				refresh.setVisibility(View.VISIBLE);
 
-				Iterator<BluetoothDevice> itr = btDeviceList.iterator();
-
-				while (itr.hasNext()) {
-
-					// Get Services for paired devices
-					BluetoothDevice device = itr.next();
-					Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
-
-				}
+//				Iterator<BluetoothDevice> itr = btDeviceList.iterator(); TODO: incomment these lines
+//
+//				while (itr.hasNext()) {
+//
+//					// Get Services for paired devices
+//					BluetoothDevice device = itr.next();
+//					Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
+//
+//				}
 
 				Log.d(TAG, "\nDiscovery Finished");
 			}
