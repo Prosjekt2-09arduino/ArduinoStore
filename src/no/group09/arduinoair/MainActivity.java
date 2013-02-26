@@ -88,22 +88,22 @@ public class MainActivity extends FragmentActivity {
 			
 		//Toggle hide incompatible
 		case R.id.hide_incompatible:
-			//SharedPreferences object used to change the global preferences in the application
 			
 			Editor edit = sharedPref.edit();
 			//Fetches the current value of the 'hide incompatible' option in the preference file
 			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
-			
 			if (hideIncompatible == true) {
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", false);
 				edit.commit();
+				Toast.makeText(this, "Showing all applications", Toast.LENGTH_SHORT).show();
 				Log.d(TAG, "The 'hide incompatible' settings option were true. Changing to false");
 			}
 			else {
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", true);
 				edit.commit();
+				Toast.makeText(this, "Showing only applications compatible with your device", Toast.LENGTH_SHORT).show();
 				Log.d(TAG, "The 'hide incompatible' settings option were false. Changing to true");
 			}
 			return true;
