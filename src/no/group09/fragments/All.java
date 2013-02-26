@@ -65,7 +65,7 @@ public class All extends MyFragment {
 //        activity = (Activity) v.getContext();
 //        SharedPreferences prefs = activity.getSharedPreferences("no.group09.arduinoair", Context.MODE_PRIVATE);
 		
-		ArrayList<HashMap<String, String>> category_list = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
 		
 		////////////////////////////////////////////////////////////////////////////////////
 		//TODO: change this with SQLLite or something
@@ -75,55 +75,55 @@ public class All extends MyFragment {
 		map.put(ListAdapter.APP_NAME, "Something Cool");
 		map.put(ListAdapter.DISTRIBUTOR, "Miskrosoft Corporation");
 		map.put(ListAdapter.RATING, "***");
-		category_list.add(map);
+		application_list.add(map);
 		
 		map = new HashMap<String, String>();
 		map.put(ListAdapter.KEY_ID, "2");
 		map.put(ListAdapter.APP_NAME, "House Sofa App");
 		map.put(ListAdapter.DISTRIBUTOR, "Appfel AS");
 		map.put(ListAdapter.RATING, "****");
-		category_list.add(map);
+		application_list.add(map);
 		
 		map = new HashMap<String, String>();
 		map.put(ListAdapter.KEY_ID, "3");
 		map.put(ListAdapter.APP_NAME, "Where is my phonebook?");
 		map.put(ListAdapter.DISTRIBUTOR, "Telemor");
 		map.put(ListAdapter.RATING, "*****");
-		category_list.add(map);
+		application_list.add(map);
 		
 		map = new HashMap<String, String>();
 		map.put(ListAdapter.KEY_ID, "4");
 		map.put(ListAdapter.APP_NAME, "Phonebook 2000");
 		map.put(ListAdapter.DISTRIBUTOR, "Nextcom");
 		map.put(ListAdapter.RATING, "**");
-		category_list.add(map);
+		application_list.add(map);
 		
 		map = new HashMap<String, String>();
 		map.put(ListAdapter.KEY_ID, "5");
 		map.put(ListAdapter.APP_NAME, "Earth Control");
 		map.put(ListAdapter.DISTRIBUTOR, "Obama");
 		map.put(ListAdapter.RATING, "****");
-		category_list.add(map);
+		application_list.add(map);
 		
 		map = new HashMap<String, String>();
 		map.put(ListAdapter.KEY_ID, "6");
 		map.put(ListAdapter.APP_NAME, "Where is my house? Im drunk!");
 		map.put(ListAdapter.DISTRIBUTOR, "Alcohol AS");
 		map.put(ListAdapter.RATING, "*");
-		category_list.add(map);
+		application_list.add(map);
 		
 		map = new HashMap<String, String>();
 		map.put(ListAdapter.KEY_ID, "7");
 		map.put(ListAdapter.APP_NAME, "The coolest app");
 		map.put(ListAdapter.DISTRIBUTOR, "Appelapp");
 		map.put(ListAdapter.RATING, "*****");
-		category_list.add(map);
+		application_list.add(map);
 		////////////////////////////////////////////////////////////////////////////////////
 		
 		list = (ListView)v.findViewById(R.id.list);
 		
 		// Getting adapter by passing xml data ArrayList
-        adapter = new ListAdapter(v.getContext(), category_list);        
+        adapter = new ListAdapter(v.getContext(), application_list);        
         list.setAdapter(adapter);
 
         // Click event for single list row
