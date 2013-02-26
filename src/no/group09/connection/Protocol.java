@@ -145,7 +145,7 @@ public abstract class Protocol implements Runnable {
 			waitingForAck = OpCode.DEVICE_INFO;
 			tempAckProcessor = OpCode.DEVICE_INFO;
 			sendBytes(newInstruction.getInstructionBytes());
-			Log.d(TAG, "Metadatarequest sucessfully SENT");
+			Log.d(TAG, "Metadatarequest sucessfully SENT: " + newInstruction.getInstructionBytes());
 			
 		} catch (IOException ex) {
 			Log.d(TAG, "Failed to send metadata request: " + ex);
