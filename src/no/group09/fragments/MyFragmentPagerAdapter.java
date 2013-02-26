@@ -71,7 +71,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 	@Override
 	public CharSequence getPageTitle(int position) {
 
-		CharSequence tab = "";
+		CharSequence tab = "";	//TODO: maybe make this protected and static
 
 		switch(position){
 		case 0: tab = "CATEGORIES"; break;
