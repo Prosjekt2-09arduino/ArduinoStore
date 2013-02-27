@@ -69,6 +69,16 @@
                 android:value="no.group09.arduinoair.MainActivity" />
    		
         </activity>
+        <activity
+            android:name="no.group09.utils.AddDeviceScreen"
+            android:label="@string/add_device_screen_title"
+            android:parentActivityName="no.group09.arduinoair.MainActivity" >
+        	
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="no.group09.arduinoair.MainActivity" />
+   		
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.BLUETOOTH" />

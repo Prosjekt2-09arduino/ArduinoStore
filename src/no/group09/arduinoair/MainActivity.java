@@ -20,6 +20,7 @@ package no.group09.arduinoair;
  */
 
 import no.group09.fragments.MyFragmentPagerAdapter;
+import no.group09.utils.AddDeviceScreen;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.content.Intent;
@@ -124,6 +125,9 @@ public class MainActivity extends FragmentActivity {
 			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
 			startActivity(intent);
 			return true;
+			
+		case R.id.add_device:
+			startActivity(new Intent(this, AddDeviceScreen.class));
 	}
 	
 	//The item was none of the following
