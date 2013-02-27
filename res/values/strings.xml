@@ -49,6 +49,7 @@
     <string name="conn_device_summary">Click to see the last connected device</string>
     
     <!--  App view screen  -->
+    <string name="app_view_title">App</string>
     <string name="install_button">Install</string>
 	<string name="item_name">AppName</string>    
     <string name="developer_name">MyDeveloper</string>
