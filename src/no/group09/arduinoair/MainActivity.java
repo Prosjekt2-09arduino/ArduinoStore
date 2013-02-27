@@ -20,6 +20,7 @@ package no.group09.arduinoair;
  */
 
 import no.group09.database.DatabaseHandler;
+import no.group09.database.Db;
 import no.group09.database.Save;
 import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
@@ -44,17 +45,17 @@ import android.widget.ToggleButton;
 
 
 public class MainActivity extends FragmentActivity {
-	
+
 	private String TAG = "MainActivity";
 
 	DatabaseHandler database = null;
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
 	Save save;
-	
+
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
-	
+
 	private SharedPreferences sharedPref = null;
 
 	@Override
@@ -73,22 +74,32 @@ public class MainActivity extends FragmentActivity {
 
 		/** Setting the pagerAdapter to the pager object */
 		pager.setAdapter(pagerAdapter);
-		
+
 		//Initializing the settings for the application
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-		
+
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		
+
 		/** Create the database if it does not excist, or copy it into the application */
 		save = new Save(getBaseContext());
 		save.open();
-		save.insertApp(new App("test", "haha", 1));
+
+		save.insertApp(new App("test", "haha", 1));	//FIXME: add support for icons
+		save.insertApp(new App("lol", "asd", 2));	//FIXME: add support for icons
+		save.insertApp(new App("troll", "ddddd", 3));	//FIXME: add support for icons
+		save.insertApp(new App("jada", "hassha", 4));	//FIXME: add support for icons
+		save.insertApp(new App("nilsh", "aaaa", 2));	//FIXME: add support for icons
+		save.insertApp(new App("hsihd", "abc", 1));	//FIXME: add support for icons
+		save.insertApp(new App("cool", "acbdw", 1));	//FIXME: add support for icons
+		
+		//This clears the database
+//		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
 	}
-	
+
 	@Override
 	public void onPause(){
 		super.onPause();
-//		save.close();
+		//		save.close();
 	}
 
 	@Override
@@ -107,20 +118,20 @@ public class MainActivity extends FragmentActivity {
 			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
 			this.startActivity(myIntent);
 			return true;
-			
-		//Toggle hide incompatible
+
+			//Toggle hide incompatible
 		case R.id.hide_incompatible:
-			
+
 			/*
 			 * TODO: If time: check if it is possible to change the text in action
 			 * overflow according to the value 'hide incompatible' in Preferences.
 			 */
-			
+
 			//Prepare to edit the setting
 			Editor edit = sharedPref.edit();
 			//Fetches the current value of the 'hide incompatible' option in the preference file
 			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
-			
+
 			if (hideIncompatible == true) {
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", false);
@@ -139,32 +150,32 @@ public class MainActivity extends FragmentActivity {
 				//Used for debugging
 				Log.d(TAG, "The 'hide incompatible' settings option were false. Changing to true");
 			}
-			
+
 			return true;
-		//Show the device list
+			//Show the device list
 		case R.id.device_list:
 			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
 			startActivity(intent);
 			return true;
-			
+
 		case R.id.add_device:
 			startActivity(new Intent(this, AddDeviceScreen.class));
 			return true;
-			
-		//This is just for testing purposes. Remove when done.
-		//TODO: Remove when done testing the application view.
+
+			//This is just for testing purposes. Remove when done.
+			//TODO: Remove when done testing the application view.
 		case R.id.application_view:
 			startActivity(new Intent(this, AppView.class));
 			return true;
+		}
+
+		//The item was none of the following
+		return false;
 	}
-	
-	//The item was none of the following
-	return false;
-	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
-//		save.open();
+		//		save.open();
 	}
 }

@@ -7,30 +7,44 @@ public class App {
 	private String description = "";
 	private int developerID;
 	private byte[] icon;
-	
-	public App(int ID, String name, String description, int developerID, byte[] icon){
+
+	/** This is used when we fetch the objects from the database */ 
+	App(int ID, String name, String description, int developerID, byte[] icon){	//TODO: use this instead
 		this.ID = ID;
 		this.name = name;
 		this.description = description;
 		this.developerID = developerID;
 		this.icon = icon;
 	}
-	
-	public App(String name, String description, int developerID /*, byte[] icon*/){
+
+	/** This is used when we create new samples (not from db) */
+	public App(String name, String description, int developerID){
 		this.name = name;
 		this.description = description;
 		this.developerID = developerID;
-//		this.icon = icon;
 	}
-	
+
+	/**
+	 * @deprecated this is temporary, fix and use with byte[]
+	 * @param name
+	 * @param description
+	 * @param developerID
+	 */
+	public App(int ID, String name, String description, int developerID){
+		this.ID = ID;
+		this.name = name;
+		this.description = description;
+		this.developerID = developerID;
+	}
+
 	public int getID(){
 		return ID;
 	}
-	
+
 	public void setID(int id){
 		this.ID = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

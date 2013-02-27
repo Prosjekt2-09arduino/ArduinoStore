@@ -21,20 +21,13 @@ package no.group09.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import no.group09.arduinoair.R;
-import no.group09.arduinoair.R.id;
-import no.group09.arduinoair.R.layout;
-
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class ListAdapter extends BaseAdapter {
@@ -86,7 +79,7 @@ public class ListAdapter extends BaseAdapter {
         appName.setText(listItem.get(APP_NAME));
         distributor.setText(listItem.get(DISTRIBUTOR));
         rating.setText(listItem.get(RATING));
-//        thumb_image.setImageBitmap(new Bitmap().)
+//        thumb_image.setImageBitmap(Save.converteStringToBitmap(listItem.get(IMAGE)));
 //        getRatingBar.setRating(Float.parseFloat(listItem.get(All.RATING)));
         
         return vi;
