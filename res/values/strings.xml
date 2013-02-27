@@ -26,6 +26,9 @@
     <string name="menu_settings1">Toggle hide incompatible</string>
     <string name="menu_settings2">Device List</string>
     <string name="menu_settings3">Settings</string>
+    <string name="menu_settings4">Add device</string>
+    <!-- This is just for testing purposes. Remove when done. -->
+    <string name="menu_settings5">Application view</string>
     
     <string name="title_activity_main">Main</string>
     <string name="layout.activity_main">Main</string>
@@ -36,8 +39,18 @@
     
     <!-- Bluetooth devices screen -->
     <string name="devices_header">Click on a device to select it:</string>
+    <string name="explanatory_text1">If you do not see your device in the screen,
+        click Add device to add a device manually, or Browse shop to browse without
+        connecting a device.</string>
     <string name="refresh">Refresh</string>
+    <string name="add_device_button_text">Add device</string>
+    <string name="browse_shop_button_text">Browse shop</string>
     <string name="bluetooth_devices_tittle">Devices</string>
+    <string name="connect_with_qr_button_text">Connect with QR code</string>
+    <string name="input_serial_button">Input serial</string>
+    <string name="explanatory_qr_text">Requires INSERT NAME OF QR READER. Click to 
+        connect with your bluetooth device by scanning its QR code</string>
+    <string name="explanatory_input_serial">Click to input the serial key of your bluetooth device</string>
     
     <!-- Preferences screen -->
     <string name="preferences_title">Settings</string>
@@ -47,5 +60,23 @@
     <string name="conn_device_pref_group_title">Connections</string>
     <string name="connected_device">Connected device</string>
     <string name="conn_device_summary">Click to see the last connected device</string>
+    
+    <!-- Add device screen -->
+    <string name="add_device_screen_title">Add device</string>
+
+    <!--  App view screen  -->
+    <string name="app_view_title">Application</string>
+    <string name="install_button">Install</string>
+	<string name="item_name">AppName</string>    
+    <string name="developer_name">MyDeveloper</string>
+    <string name="item_description">Description: This describes this amazing, life changing app.</string>
+    <string name="images">Images:</string>
+    <string name="required_hw">Required Hardware:</string>
+    <string name="required_hw_filler">Du trenger arduino</string>
+    <string name="reviews_header">Reviews:</string>
+    <string name="review_button">Add Review</string>
+    <string name="item_profile_pic">Profile picture of item</string>
+    <string name="item_picture">Pictures describing item</string>
+    <string name="comments_field">Show reviews here!</string>
     
 </resources>
