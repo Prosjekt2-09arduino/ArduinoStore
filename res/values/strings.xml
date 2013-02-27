@@ -27,6 +27,8 @@
     <string name="menu_settings2">Device List</string>
     <string name="menu_settings3">Settings</string>
     <string name="menu_settings4">Add device</string>
+    <!-- This is just for testing purposes. Remove when done. -->
+    <string name="menu_settings5">Application view</string>
     
     <string name="title_activity_main">Main</string>
     <string name="layout.activity_main">Main</string>
@@ -63,7 +65,7 @@
     <string name="add_device_screen_title">Add device</string>
 
     <!--  App view screen  -->
-    <string name="app_view_title">App</string>
+    <string name="app_view_title">Application</string>
     <string name="install_button">Install</string>
 	<string name="item_name">AppName</string>    
     <string name="developer_name">MyDeveloper</string>
@@ -76,6 +78,5 @@
     <string name="item_profile_pic">Profile picture of item</string>
     <string name="item_picture">Pictures describing item</string>
     <string name="comments_field">Text input for comments</string>
-
     
 </resources>

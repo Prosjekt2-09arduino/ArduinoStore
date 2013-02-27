@@ -153,6 +153,7 @@ public class Devices extends Activity{
 			}
 		});	
 
+		//What does this do?
 		tv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override

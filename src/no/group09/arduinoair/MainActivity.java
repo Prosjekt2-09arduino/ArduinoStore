@@ -21,6 +21,7 @@ package no.group09.arduinoair;
 
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.AddDeviceScreen;
+import no.group09.utils.AppView;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.content.Intent;
@@ -128,6 +129,13 @@ public class MainActivity extends FragmentActivity {
 			
 		case R.id.add_device:
 			startActivity(new Intent(this, AddDeviceScreen.class));
+			return true;
+			
+		//This is just for testing purposes. Remove when done.
+		//TODO: Remove when done testing the application view.
+		case R.id.application_view:
+			startActivity(new Intent(this, AppView.class));
+			return true;
 	}
 	
 	//The item was none of the following
