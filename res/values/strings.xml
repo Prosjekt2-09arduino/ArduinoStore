@@ -61,5 +61,21 @@
     
     <!-- Add device screen -->
     <string name="add_device_screen_title">Add device</string>
+
+    <!--  App view screen  -->
+    <string name="app_view_title">App</string>
+    <string name="install_button">Install</string>
+	<string name="item_name">AppName</string>    
+    <string name="developer_name">MyDeveloper</string>
+    <string name="item_description">Description: This describes this amazing, life changing app.</string>
+    <string name="images">Images:</string>
+    <string name="required_hw">Required Hardware:</string>
+    <string name="required_hw_filler">Du trenger arduino</string>
+    <string name="reviews_header">Reviews:</string>
+    <string name="review_button">Add Review</string>
+    <string name="item_profile_pic">Profile picture of item</string>
+    <string name="item_picture">Pictures describing item</string>
+    <string name="comments_field">Text input for comments</string>
+
     
 </resources>
