@@ -89,6 +89,28 @@ public class Devices extends Activity{
 		//Fetching the shared preferences object used to write the preference file
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
+		
+		
+		
+		
+		
+		
+		//TODO: Finish this!
+		
+		//Check if there is an active bluetooth connection. If so; set the title accordingly
+		/*
+		if (con.isConnected()) {
+			this.setTitle(sharedPref.getString("connected_device_name", "No device found"));
+		} else this.setTitle("No connected device");
+		*/
+		
+		
+		
+		
+		
+		
+		
+		
 		//progressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		progressBar = (ProgressBar) findViewById(R.id.progbar);
 
@@ -135,13 +157,18 @@ public class Devices extends Activity{
 							(Activity)view.getContext(), getConnectionListener());
 					con.connect();
 					
+					
 					String lastConnectedDevice = "Device name: " + adapter.getName(position)
 							+ "\nMAC Address: " + adapter.getMacAddress(position);
 					
 					Editor edit = sharedPref.edit();
 					
-					//Saves the information about the last connected device to sharedPreferences
+					//Saves the full information about the last connected device to sharedPreferences
 					edit.putString("connected_device_dialog", lastConnectedDevice);
+					
+					//Save the name of the BT device as a separate setting. Used
+					//to show the name of last connected device in title bar.
+					edit.putString("connected_device_name", adapter.getName(position));
 					
 					edit.commit();
 					Log.d(TAG, "The information about the last connected device was written to shared preferences");
