@@ -12,6 +12,6 @@ public class AppView extends Activity {
 		super.onCreate(savedInstanceState);
 
 		//Set the xml layout
-		setContentView(R.layout.app_view);		
+		setContentView(R.layout.app_view);
 	}
 }
