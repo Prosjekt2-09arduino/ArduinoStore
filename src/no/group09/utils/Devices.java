@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.TimeoutException;
 
+import no.group09.arduinoair.MainActivity;
 import no.group09.arduinoair.R;
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.ConnectionListener;
@@ -70,6 +71,7 @@ public class Devices extends Activity{
 	private ArrayList<HashMap<String, String>> category_list;
 	private IntentFilter filter;
 	private Button refresh;
+	private Button addDeviceButton, browseShowButton;
 	private ProgressBar progressBar;
 	private ArrayList<HashMap<String, String>> device_list;
 	private boolean alreadyChecked = false;
@@ -187,9 +189,32 @@ public class Devices extends Activity{
 		});
 
 		refresh.setVisibility(View.GONE);
-
+		
 		//Check the BT state
 		checkBTState();
+		
+		
+		//Add the button that opens the 'Add device' screen
+		addDeviceButton = (Button) findViewById(R.id.add_device_button);
+		addDeviceButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(getBaseContext(), AddDeviceScreen.class));
+			}
+		});
+		
+		
+		//Add the button that takes you directly to the shop.
+		//TODO: Check if this is done right since the shop is our main actvity
+		browseShowButton = (Button) findViewById(R.id.browse_shop_button);
+		browseShowButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(getBaseContext(), MainActivity.class));
+			}
+		});
 	}
 
 	/* This routine is called when an activity completes.*/
