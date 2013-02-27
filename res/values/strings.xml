@@ -61,6 +61,6 @@
     <string name="review_button">Add Review</string>
     <string name="item_profile_pic">Profile picture of item</string>
     <string name="item_picture">Pictures describing item</string>
-    <string name="comments_field">Text input for comments</string>
+    <string name="comments_field">Show reviews here!</string>
     
 </resources>

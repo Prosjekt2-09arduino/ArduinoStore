@@ -63,12 +63,10 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="none"
             android:text="@string/item_description" />
 
         <TextView
@@ -134,16 +132,11 @@
             android:text="@string/required_hw"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="none"
-            android:text="@string/required_hw_filler" >
-
-            <requestFocus />
-        </EditText>
+            android:text="@string/required_hw_filler" />
 
         <Button
             android:id="@+id/button2"
@@ -151,11 +144,10 @@
             android:layout_height="wrap_content"
             android:text="@string/review_button" />
 
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="none" />
+            android:text="@string/comments_field" />
 
     </LinearLayout>
