@@ -59,7 +59,8 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/blue"
                 android:text="@string/install_button"
-                android:textColorHint="@color/blue" />
+                android:textColorHint="@color/blue" 
+                 android:onClick="installClicked" />
 
         </LinearLayout>
 
@@ -79,7 +80,7 @@
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView1"
             android:layout_width="match_parent"
-            android:layout_height="73dp" >
+            android:layout_height="wrap_content" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -142,12 +143,15 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/review_button" />
+            android:text="@string/review_button" 
+            android:onClick="reviewClicked"/>
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/comments_field" />
+
+       
 
     </LinearLayout>
