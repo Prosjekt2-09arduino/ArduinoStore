@@ -83,7 +83,6 @@ public class Devices extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-
 		//Set the xml layout
 		setContentView(R.layout.devices);	
 
