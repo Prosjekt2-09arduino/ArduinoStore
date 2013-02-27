@@ -155,7 +155,7 @@ public class Devices extends Activity{
 			}
 		});	
 
-		//What does this do?
+		//What does this do? TODO: Answer.
 		tv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
