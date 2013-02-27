@@ -57,76 +57,7 @@ public class All extends MyFragment {
 
 		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
 
-		////////////////////////////////////////////////////////////////////////////////////
-
-		//		HashMap<String, String> map = new HashMap<String, String>();
-		//		map.put(ListAdapter.KEY_ID, "1");
-		//		map.put(ListAdapter.APP_NAME, "Something Cool");
-		//		map.put(ListAdapter.DISTRIBUTOR, "Miskrosoft Corporation");
-		//		map.put(ListAdapter.RATING, "***");
-		//		application_list.add(map);
-		//		
-		//		map = new HashMap<String, String>();
-		//		map.put(ListAdapter.KEY_ID, "2");
-		//		map.put(ListAdapter.APP_NAME, "House Sofa App");
-		//		map.put(ListAdapter.DISTRIBUTOR, "Appfel AS");
-		//		map.put(ListAdapter.RATING, "****");
-		//		application_list.add(map);
-		//		
-		//		map = new HashMap<String, String>();
-		//		map.put(ListAdapter.KEY_ID, "3");
-		//		map.put(ListAdapter.APP_NAME, "Where is my phonebook?");
-		//		map.put(ListAdapter.DISTRIBUTOR, "Telemor");
-		//		map.put(ListAdapter.RATING, "*****");
-		//		application_list.add(map);
-		//		
-		//		map = new HashMap<String, String>();
-		//		map.put(ListAdapter.KEY_ID, "4");
-		//		map.put(ListAdapter.APP_NAME, "Phonebook 2000");
-		//		map.put(ListAdapter.DISTRIBUTOR, "Nextcom");
-		//		map.put(ListAdapter.RATING, "**");
-		//		application_list.add(map);
-		//		
-		//		map = new HashMap<String, String>();
-		//		map.put(ListAdapter.KEY_ID, "5");
-		//		map.put(ListAdapter.APP_NAME, "Earth Control");
-		//		map.put(ListAdapter.DISTRIBUTOR, "Obama");
-		//		map.put(ListAdapter.RATING, "****");
-		//		application_list.add(map);
-		//		
-		//		map = new HashMap<String, String>();
-		//		map.put(ListAdapter.KEY_ID, "6");
-		//		map.put(ListAdapter.APP_NAME, "Where is my house? Im drunk!");
-		//		map.put(ListAdapter.DISTRIBUTOR, "Alcohol AS");
-		//		map.put(ListAdapter.RATING, "*");
-		//		application_list.add(map);
-		//		
-		//		map = new HashMap<String, String>();
-		//		map.put(ListAdapter.KEY_ID, "7");
-		//		map.put(ListAdapter.APP_NAME, "The coolest app");
-		//		map.put(ListAdapter.DISTRIBUTOR, "Appelapp");
-		//		map.put(ListAdapter.RATING, "*****");
-		//		application_list.add(map);
-
-		//???????????????????????????????????????????????????????????????????????????
-		//TODO: use this when using 1 sample from db
-//		Save save = new Save(v.getContext());
-//		save.open();
-//		App app = save.getApp("test");
-//
-//		HashMap<String, String >map = new HashMap<String, String>();
-//		map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-//		map.put(ListAdapter.APP_NAME, app.getName());
-//		map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
-//		map.put(ListAdapter.RATING, app.getDescription());
-////		map.put(ListAdapter.IMAGE, Save.convertBitmapToString(	FIXME: add icon support
-////				Save.convertByteArrayToBitmap(app.getIcon())));
-//		application_list.add(map);
-		//??????????????????????????????????????????????????????????????????????????????
-		
-		
-		////////////////////////////////////////////////////////////////////////////////////
-		
+		//This adds elements from the database to the listview
 		Save save = new Save(v.getContext());
 		save.open();
 		for(App app : save.getAllApps()){
