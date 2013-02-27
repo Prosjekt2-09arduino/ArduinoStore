@@ -27,7 +27,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="32dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:padding="6dip">
 
         <TextView
             android:id="@+id/top_text_devices_screen"
@@ -56,7 +57,7 @@
     <ListView
         android:id="@+id/bluetooth_devices_list"
         android:layout_width="fill_parent"
-        android:layout_height="195dp"
+        android:layout_height="290dp"
         android:layout_marginTop="15dp"
         android:choiceMode="singleChoice"
         android:divider="#b5b5b5"
@@ -65,9 +66,10 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="32dp"
-        android:orientation="horizontal" >
-        
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="6dip" >
+
         <TextView
             android:id="@+id/explanatory_text_devices_screen_1"
             android:layout_width="0dp"
@@ -75,59 +77,27 @@
             android:layout_weight="1"
             android:text="@string/explanatory_text1"
             android:textColor="#FFF" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:padding="6dip" >
 
         <Button
-            android:id="@+id/connect_with_qr_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/connect_with_qr_button_text"/>
-        
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/explanatory_qr_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/explanatory_qr"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+            android:id="@+id/add_device_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/add_device_button_text" />
 
         <Button
-            android:id="@+id/scan_serial_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/input_serial_button" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/explanatory_input_serial_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/explanatory_input_serial"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:id="@+id/browse_shop_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/browse_shop_button_text" />
 
     </LinearLayout>
 
