@@ -23,13 +23,16 @@ void* ComputerSerial::placeHolder(uint8_t flag, uint8_t content[], word contentS
 	return NULL;
 }
 
+// Start serial connection
 ComputerSerial::ComputerSerial(int baud)
 {
 	//Initialize with baudrate if requested
 	if(baud != 0) begin(baud);
 }
 
-void ComputerSerial::begin(int baud){
+// Attach OPCODES to functions
+void ComputerSerial::begin(int baud)
+{
 	Serial.begin(baud);
 
 	for (int i = 0; i < NUM_OPCODES; ++i)
@@ -38,46 +41,53 @@ void ComputerSerial::begin(int baud){
 	}
 }
 
-void ComputerSerial::commandHandler(word size, uint8_t opcode, uint8_t flag, uint8_t content[]) {
+void ComputerSerial::commandHandler(word size, uint8_t opcode, uint8_t flag, uint8_t content[])
+{
 	switch (opcode) {
 		case OPCODE_PING:
-		ping();
-		break;
+			ping();
+			break;
 		case OPCODE_TEXT:
-		text(size, flag, content);
-		break;
+			text(size, flag, content);
+			break;
 		case OPCODE_SENSOR:
-		sensor(flag);
-		break;
+			sensor(flag);
+			break;
 		case OPCODE_DATA:
-		data(size, flag, content);
-		break;
+			data(size, flag, content);
+			break;
 		case OPCODE_PIN_R:
-		pinRead(flag);
-		break;
+			pinRead(flag);
+			break;
 		case OPCODE_PIN_W:
-		pinWrite(flag, content[0]);
-		break;
+			pinWrite(flag, content[0]);
+			break;
 		case OPCODE_DEVICE_INFO:
-		getDeviceInfo();
-		break;
+			getDeviceInfo();
+			break;
+		case OPCODE_SPEAKER:
+			speaker(size, flag, content);
+			break;
 		case OPCODE_RESET:
-		break;
+			break;
 		default:
-		break;
+			break;
 	}
 }
 
+// Set the name of the device
 void ComputerSerial::setDeviceName(const String &name)
 {
 	deviceName = name;
 }
 
+// Set the device version
 void ComputerSerial::setDeviceVersion(const String &version)
 {
 	deviceVersion = version;
 }
 
+// Add a device service
 void ComputerSerial::addDeviceService(const char service[], const char pin[])
 {
 	//Is the first element in the JSon array? If not we need to add a comma seperator
@@ -100,6 +110,7 @@ void ComputerSerial::addDeviceService(const char service[], const char pin[])
 
 }
 
+// Add device download link
 void ComputerSerial::addDeviceDownloadLink(const char link[], const char platform[])
 {
 	//Is the first element in the JSon array? If not we need to add a comma seperator
@@ -115,7 +126,9 @@ void ComputerSerial::addDeviceDownloadLink(const char link[], const char platfor
 	// sample: {"platform":"link"}
 }
 
-void ComputerSerial::getDeviceInfo(){
+// Get device info
+void ComputerSerial::getDeviceInfo()
+{
 	//Build the device info JSON object
 	String deviceInfo;
 
@@ -183,7 +196,8 @@ void ComputerSerial::text(word size, uint8_t flag, uint8_t content[])
 	ack(OPCODE_TEXT);
 }
 
-void ComputerSerial::sensor(uint8_t number) {
+void ComputerSerial::sensor(uint8_t number)
+{
 	// Send value of sensor(number)
 	uint8_t content[] = {};
 	int *status = (int*)functions[OPCODE_SENSOR](number, content, 0);
@@ -196,12 +210,20 @@ void ComputerSerial::sensor(uint8_t number) {
 	free(status);
 }
 
-void ComputerSerial::data(word size, uint8_t flag, uint8_t content[]) {
+void ComputerSerial::data(word size, uint8_t flag, uint8_t content[])
+{
 	functions[OPCODE_DATA](flag, content, size);
 	ack(OPCODE_DATA);
 }
 
-void ComputerSerial::pinRead(uint8_t pin) {
+void ComputerSerial::speaker(word size, uint8_t flag, uint8_t content[])
+{
+	functions[OPCODE_SPEAKER](flag, content, size);
+	ack(OPCODE_SPEAKER);
+}
+
+void ComputerSerial::pinRead(uint8_t pin)
+{
 	// Send pin(pin) value
 	pinMode(pin, INPUT);
 	int value = digitalRead(pin);
@@ -209,14 +231,16 @@ void ComputerSerial::pinRead(uint8_t pin) {
 	ack(OPCODE_PIN_R, content, 1);
 }
 
-void ComputerSerial::pinWrite(uint8_t pin, uint8_t value) {
+void ComputerSerial::pinWrite(uint8_t pin, uint8_t value)
+{
 	// Set value of pin(pin)
 	pinMode(pin, OUTPUT);
 	digitalWrite(pin, value ? HIGH : LOW);
 	ack(OPCODE_PIN_W);
 }
 
-void ComputerSerial::reset() {
+void ComputerSerial::reset()
+{
 	// Reset arduino
 }
 
@@ -226,7 +250,8 @@ void ComputerSerial::attachFunction(uint8_t opcode,
 	functions[opcode] = handler;
 }
 
-void ComputerSerial::serialEvent() {
+void ComputerSerial::serialEvent()
+{
 	static int state = STATE_START;
 	static long time = 0;
 	static word size = 0;
@@ -235,13 +260,13 @@ void ComputerSerial::serialEvent() {
 	static uint8_t *content = NULL;
 	static uint8_t content_counter = 0;
 
-	//Check if there is a timeout
+	// Check if there is a timeout
 	if (millis() > time && state != STATE_START) {
 		state = STATE_START;
 	}
 	time = millis() + TIMEOUT;
 
-	//Recieved new data?
+	// Recieved new data?
 	while(Serial.available())
 	{
 		switch (state)
@@ -253,17 +278,19 @@ void ComputerSerial::serialEvent() {
 					if(content != NULL) free(content);
 				}
 			break;
-
+			
+			// Get first byte of size of payload
 			case STATE_SIZE_HIGH:
 				size = Serial.read() << 8;    //get high byte
 				state = STATE_SIZE_LOW;
 			break;
-
+			
+			// Get second byte of size of payload
 			case STATE_SIZE_LOW:
 				size |= Serial.read() & 0xFF; //get low byte
 				state = STATE_OPCODE;
-
-					//Try to allocate memory for the payload
+				
+				//Try to allocate memory for the payload
 				content = (uint8_t*)malloc(size);
 				if(content == NULL) state = STATE_START;
 			break;
@@ -277,7 +304,8 @@ void ComputerSerial::serialEvent() {
 				flag = Serial.read();
 				state = STATE_CONTENT;
 			break;
-
+			
+			// Content of message
 			case STATE_CONTENT:
 				content[content_counter] = Serial.read();
 				content_counter++;
@@ -296,6 +324,7 @@ void ComputerSerial::serialEvent() {
 	}
 }
 
-unsigned int ComputerSerial::getBytesReceived(){
+unsigned int ComputerSerial::getBytesReceived()
+{
 	return bytesReceived;
 }
