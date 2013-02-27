@@ -24,6 +24,8 @@ import java.util.HashMap;
 import no.group09.arduinoair.R;
 import no.group09.arduinoair.R.id;
 import no.group09.arduinoair.R.layout;
+import no.group09.database.Save;
+import no.group09.database.objects.App;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -70,54 +72,67 @@ public class All extends MyFragment {
 		////////////////////////////////////////////////////////////////////////////////////
 		//TODO: change this with SQLLite or something
 
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "1");
-		map.put(ListAdapter.APP_NAME, "Something Cool");
-		map.put(ListAdapter.DISTRIBUTOR, "Miskrosoft Corporation");
-		map.put(ListAdapter.RATING, "***");
+//		HashMap<String, String> map = new HashMap<String, String>();
+//		map.put(ListAdapter.KEY_ID, "1");
+//		map.put(ListAdapter.APP_NAME, "Something Cool");
+//		map.put(ListAdapter.DISTRIBUTOR, "Miskrosoft Corporation");
+//		map.put(ListAdapter.RATING, "***");
+//		application_list.add(map);
+//		
+//		map = new HashMap<String, String>();
+//		map.put(ListAdapter.KEY_ID, "2");
+//		map.put(ListAdapter.APP_NAME, "House Sofa App");
+//		map.put(ListAdapter.DISTRIBUTOR, "Appfel AS");
+//		map.put(ListAdapter.RATING, "****");
+//		application_list.add(map);
+//		
+//		map = new HashMap<String, String>();
+//		map.put(ListAdapter.KEY_ID, "3");
+//		map.put(ListAdapter.APP_NAME, "Where is my phonebook?");
+//		map.put(ListAdapter.DISTRIBUTOR, "Telemor");
+//		map.put(ListAdapter.RATING, "*****");
+//		application_list.add(map);
+//		
+//		map = new HashMap<String, String>();
+//		map.put(ListAdapter.KEY_ID, "4");
+//		map.put(ListAdapter.APP_NAME, "Phonebook 2000");
+//		map.put(ListAdapter.DISTRIBUTOR, "Nextcom");
+//		map.put(ListAdapter.RATING, "**");
+//		application_list.add(map);
+//		
+//		map = new HashMap<String, String>();
+//		map.put(ListAdapter.KEY_ID, "5");
+//		map.put(ListAdapter.APP_NAME, "Earth Control");
+//		map.put(ListAdapter.DISTRIBUTOR, "Obama");
+//		map.put(ListAdapter.RATING, "****");
+//		application_list.add(map);
+//		
+//		map = new HashMap<String, String>();
+//		map.put(ListAdapter.KEY_ID, "6");
+//		map.put(ListAdapter.APP_NAME, "Where is my house? Im drunk!");
+//		map.put(ListAdapter.DISTRIBUTOR, "Alcohol AS");
+//		map.put(ListAdapter.RATING, "*");
+//		application_list.add(map);
+//		
+//		map = new HashMap<String, String>();
+//		map.put(ListAdapter.KEY_ID, "7");
+//		map.put(ListAdapter.APP_NAME, "The coolest app");
+//		map.put(ListAdapter.DISTRIBUTOR, "Appelapp");
+//		map.put(ListAdapter.RATING, "*****");
+//		application_list.add(map);
+		
+		Save save = new Save(v.getContext());
+		save.open();
+		App app = save.getApp("test");
+		
+		HashMap<String, String >map = new HashMap<String, String>();
+		map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+		map.put(ListAdapter.APP_NAME, app.getName());
+		map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+		map.put(ListAdapter.RATING, app.getDescription());
+//		map.put(ListAdapter.IMAGE, app.getIcon());
 		application_list.add(map);
 		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "2");
-		map.put(ListAdapter.APP_NAME, "House Sofa App");
-		map.put(ListAdapter.DISTRIBUTOR, "Appfel AS");
-		map.put(ListAdapter.RATING, "****");
-		application_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "3");
-		map.put(ListAdapter.APP_NAME, "Where is my phonebook?");
-		map.put(ListAdapter.DISTRIBUTOR, "Telemor");
-		map.put(ListAdapter.RATING, "*****");
-		application_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "4");
-		map.put(ListAdapter.APP_NAME, "Phonebook 2000");
-		map.put(ListAdapter.DISTRIBUTOR, "Nextcom");
-		map.put(ListAdapter.RATING, "**");
-		application_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "5");
-		map.put(ListAdapter.APP_NAME, "Earth Control");
-		map.put(ListAdapter.DISTRIBUTOR, "Obama");
-		map.put(ListAdapter.RATING, "****");
-		application_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "6");
-		map.put(ListAdapter.APP_NAME, "Where is my house? Im drunk!");
-		map.put(ListAdapter.DISTRIBUTOR, "Alcohol AS");
-		map.put(ListAdapter.RATING, "*");
-		application_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "7");
-		map.put(ListAdapter.APP_NAME, "The coolest app");
-		map.put(ListAdapter.DISTRIBUTOR, "Appelapp");
-		map.put(ListAdapter.RATING, "*****");
-		application_list.add(map);
 		////////////////////////////////////////////////////////////////////////////////////
 		
 		list = (ListView)v.findViewById(R.id.list);

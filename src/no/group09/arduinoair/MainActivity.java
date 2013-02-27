@@ -19,6 +19,9 @@ package no.group09.arduinoair;
  * under the License.
  */
 
+import no.group09.database.DatabaseHandler;
+import no.group09.database.Save;
+import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.AddDeviceScreen;
 import no.group09.utils.AppView;
@@ -39,13 +42,19 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+
 public class MainActivity extends FragmentActivity {
 	
 	private String TAG = "MainActivity";
+
+	DatabaseHandler database = null;
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
+	Save save;
+	
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
+	
 	private SharedPreferences sharedPref = null;
 
 	@Override
@@ -69,6 +78,17 @@ public class MainActivity extends FragmentActivity {
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		/** Create the database if it does not excist, or copy it into the application */
+		save = new Save(getBaseContext());
+		save.open();
+		save.insertApp(new App("test", "haha", 1));
+	}
+	
+	@Override
+	public void onPause(){
+		super.onPause();
+//		save.close();
 	}
 
 	@Override
@@ -145,5 +165,6 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+//		save.open();
 	}
 }
