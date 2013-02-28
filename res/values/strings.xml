@@ -21,6 +21,7 @@
 <resources>
 
    	<string name="app_name">µC Software Store</string>
+   	<string name="not_implemented">Not Implemented</string>
     
    	<!-- ActionBar menu items -->
     <string name="menu_settings1">Toggle hide incompatible</string>

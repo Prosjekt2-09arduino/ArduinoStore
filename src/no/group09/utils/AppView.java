@@ -34,16 +34,16 @@ public class AppView extends Activity {
 	public void installClicked(View view){
 
 		//		creates an alertdialog builder
-		//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		//	if no device connected, create popup with that message
 		//		if( no device connected)
-		//		builder.setMessage("Cannot install app, no device connected").setPositiveButton("Ok",new DialogInterface.OnClickListener() {
-		//
-		//					@Override
-		//			public void onClick(DialogInterface dialog, int which) {
-		//			}
-		//		});
-		//		builder.create();
+		builder.setMessage("Cannot install app, no device connected").setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+		builder.create();
 		//		else
 		//		builder.setMessage("Press install to install this app to " + DEVICENAME).setPositiveButton("Install", new DialogInterface.OnClickListener(){
 		//			@Override
