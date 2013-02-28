@@ -44,7 +44,6 @@ public class AppView extends Activity {
 			}
 		});
 		builder.create();
-		builder.show();
 		//		else
 		//		builder.setMessage("Press install to install this app to " + DEVICENAME).setPositiveButton("Install", new DialogInterface.OnClickListener(){
 		//			@Override
@@ -58,12 +57,18 @@ public class AppView extends Activity {
 		//			}
 		//		});
 		//		builder.create();
+		
+		builder.show();
+
 	}
-	//	public void installingDialog(){
-	//		creates an alertdialog builder
-	//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	//		TODO: create progressbar, or cancel after feedback from device
-	//		builder.setTitle("Installing to " + DEVICENAME).setMessage("\nDO NOT MOVE AWAY FROM THE DEVICE!!");
-	//	}
+		public void installingDialog(){
+			InstallingDialog popup = new InstallingDialog();
+			
+			
+//			creates an alertdialog builder
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//			TODO: create progressbar, or cancel after feedback from device
+//			builder.setTitle("Installing to " + DEVICENAME).setMessage("\nDO NOT MOVE AWAY FROM THE DEVICE!!");
+		}
 }
 

@@ -80,4 +80,8 @@
     <string name="item_picture">Pictures describing item</string>
     <string name="comments_field">Show reviews here!</string>
     
+    <!-- Install Dialog -->
+    <string name="install_dialog_topic">Installing app</string>
+    <string name="install_dialog_warning">DO NOT DISCONNECT OR MOVE AWAY FROM THE DEVICE!</string>
+    
 </resources>

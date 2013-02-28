@@ -84,12 +84,23 @@
             android:name="no.group09.utils.AppView"
             android:label="@string/app_view_title"
             android:parentActivityName="no.group09.arduinoair.MainActivity" >
-             
-            <meta-data
+        <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="no.group09.arduinoair.MainActivity" />
    		
         </activity>
+        <!-- test for custom dialog -->     
+		<activity
+			android:theme="@android:style/Theme.Dialog"
+            android:name="no.group09.utils.InstallDialog"
+            android:label="@string/bluetooth_devices_tittle"
+            android:parentActivityName="no.group09.arduinoair.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="no.group09.arduinoair.MainActivity" />
+        </activity>
+            
+            
     </application>
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
