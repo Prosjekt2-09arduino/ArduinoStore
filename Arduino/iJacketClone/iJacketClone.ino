@@ -53,7 +53,7 @@ void* text(byte flag, byte content[], word contentSize)
 
 }
 
-// 
+// Parse the data
 void* data(byte flag, byte data[], word dataSize)
 {
 	// TODO: Parser
@@ -86,7 +86,7 @@ void* speaker(byte flag, byte data[], word dataSize)
 void setup()
 {
 	//Initialize computer serial class
-	comp.begin(57600);   
+	comp.begin(9600);   
 	comp.setDeviceName("uCSS");
 	comp.setDeviceVersion("v0.1a");
 

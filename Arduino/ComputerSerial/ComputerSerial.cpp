@@ -183,12 +183,14 @@ void ComputerSerial::ack(uint8_t opcode, uint8_t content[], word contentSize)
 	}
 }
 
+// Send ping signal back to device
 void ComputerSerial::ping()
 {
 	// Send ping response
 	ack(OPCODE_PING);
 }
 
+// Send text to lcd
 void ComputerSerial::text(word size, uint8_t flag, uint8_t content[])
 {
 	// Print content on display(flag)
@@ -196,6 +198,7 @@ void ComputerSerial::text(word size, uint8_t flag, uint8_t content[])
 	ack(OPCODE_TEXT);
 }
 
+// Read value from sensor
 void ComputerSerial::sensor(uint8_t number)
 {
 	// Send value of sensor(number)
@@ -210,18 +213,21 @@ void ComputerSerial::sensor(uint8_t number)
 	free(status);
 }
 
+// Send data to parser
 void ComputerSerial::data(word size, uint8_t flag, uint8_t content[])
 {
 	functions[OPCODE_DATA](flag, content, size);
 	ack(OPCODE_DATA);
 }
 
+// Send data to speaker
 void ComputerSerial::speaker(word size, uint8_t flag, uint8_t content[])
 {
 	functions[OPCODE_SPEAKER](flag, content, size);
 	ack(OPCODE_SPEAKER);
 }
 
+// Read pin
 void ComputerSerial::pinRead(uint8_t pin)
 {
 	// Send pin(pin) value
@@ -231,6 +237,7 @@ void ComputerSerial::pinRead(uint8_t pin)
 	ack(OPCODE_PIN_R, content, 1);
 }
 
+// Write to pin (HIGH / LOW)
 void ComputerSerial::pinWrite(uint8_t pin, uint8_t value)
 {
 	// Set value of pin(pin)
@@ -239,17 +246,20 @@ void ComputerSerial::pinWrite(uint8_t pin, uint8_t value)
 	ack(OPCODE_PIN_W);
 }
 
+// Reset arduino
 void ComputerSerial::reset()
 {
-	// Reset arduino
+	
 }
 
+// Attach OPCODE to function
 void ComputerSerial::attachFunction(uint8_t opcode,
 	void* (*handler)(uint8_t flag, uint8_t content[], word contentSize))
 {
 	functions[opcode] = handler;
 }
 
+// Read serial input
 void ComputerSerial::serialEvent()
 {
 	static int state = STATE_START;
@@ -294,12 +304,12 @@ void ComputerSerial::serialEvent()
 				content = (uint8_t*)malloc(size);
 				if(content == NULL) state = STATE_START;
 			break;
-
+			
 			case STATE_OPCODE:
 				opcode = Serial.read();
 				state = STATE_FLAG;
 			break;
-
+			
 			case STATE_FLAG:
 				flag = Serial.read();
 				state = STATE_CONTENT;
