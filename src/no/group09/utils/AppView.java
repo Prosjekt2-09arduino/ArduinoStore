@@ -23,13 +23,13 @@ public class AppView extends Activity {
 
 	}
 	//	method for handling click of the review button
-	//	public void reviewClicked(View view){
-	//		
-	//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	//		
-	//		builder.setTitle("Review the app").setItem()
-	//
-	//	}
+	public void reviewClicked(View view){
+		//		
+		//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		//		
+		//		builder.setTitle("Review the app").setItem()
+		//
+	}
 	//	method for handling the click of the install button
 	public void installClicked(View view){
 
@@ -44,6 +44,7 @@ public class AppView extends Activity {
 			}
 		});
 		builder.create();
+		builder.show();
 		//		else
 		//		builder.setMessage("Press install to install this app to " + DEVICENAME).setPositiveButton("Install", new DialogInterface.OnClickListener(){
 		//			@Override
