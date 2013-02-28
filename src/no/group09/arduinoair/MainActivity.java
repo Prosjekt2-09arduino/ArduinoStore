@@ -84,14 +84,25 @@ public class MainActivity extends FragmentActivity {
 		save = new Save(getBaseContext());
 		save.open();
 
-		save.insertApp(new App("test", "haha", 1));	//FIXME: add support for icons
-		save.insertApp(new App("lol", "asd", 2));	//FIXME: add support for icons
-		save.insertApp(new App("troll", "ddddd", 3));	//FIXME: add support for icons
-		save.insertApp(new App("jada", "hassha", 4));	//FIXME: add support for icons
-		save.insertApp(new App("nilsh", "aaaa", 2));	//FIXME: add support for icons
-		save.insertApp(new App("hsihd", "abc", 1));	//FIXME: add support for icons
-		save.insertApp(new App("cool", "acbdw", 1));	//FIXME: add support for icons
-		
+//		save.insertApp(new App("Game1", "haha", 1, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game2", "asd", 2, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game3", "ddddd", 3, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game4", "hassha", 4, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game5", "aaaa", 2, "Games"));	//FIXME: add support for icons
+//		
+//		save.insertApp(new App("Medical1", "abc", 1, "Medical"));	//FIXME: add support for icons
+//		save.insertApp(new App("Medical2", "acbdw", 3, "Medical"));	//FIXME: add support for icons
+//		save.insertApp(new App("Medical3", "acbdw", 5, "Medical"));	//FIXME: add support for icons
+//		
+//		save.insertApp(new App("Tool1", "ac43w", 8, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool2", "aaaadw", 3, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool3", "awew", 1, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool4", "w", 1, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool5", "sssbdw", 1, "Tools"));	//FIXME: add support for icons
+//		
+//		save.insertApp(new App("Player", "ow", 7, "Media"));	//FIXME: add support for icons
+//		save.insertApp(new App("MusicP", "adddw", 6, "Media"));	//FIXME: add support for icons
+////		
 		//This clears the database
 //		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
 	}

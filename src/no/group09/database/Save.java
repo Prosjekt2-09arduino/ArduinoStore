@@ -51,7 +51,7 @@ public class Save {
 		Cursor tempCursor = null;
 
 		//app(appid, name, description, developerid, icon) 
-		String[] app = new String[] {Constants.APP_ID, Constants.APP_NAME, Constants.APP_DESCRIPTION, Constants.APP_DEVELOPERID};  
+		String[] app = new String[] {Constants.APP_ID, Constants.APP_NAME, Constants.APP_DESCRIPTION, Constants.APP_DEVELOPERID, Constants.APP_CATEGORY};  
 		tempCursor = db.query(true, Constants.APP_TABLE, app, null, null, null, null, null, null); 
 		if (tempCursor != null){
 			tempCursor.moveToFirst();  
@@ -149,7 +149,8 @@ public class Save {
 					cursor.getInt(0),
 					cursor.getString(1),
 					cursor.getString(2),
-					cursor.getInt(3)));
+					cursor.getInt(3),
+					cursor.getString(4)));
 			cursor.moveToNext();
 		}
 		
@@ -171,7 +172,8 @@ public class Save {
 						c.getInt(0),
 						c.getString(1),
 						c.getString(2),
-						c.getInt(3) /*,
+						c.getInt(3),
+						c.getString(4)/*,
 						c.getBlob(4)*/);
 			}
 		}
@@ -204,6 +206,7 @@ public class Save {
 				insertStmt.bindString(1, app.getName());
 				insertStmt.bindString(2, app.getDescription());
 				insertStmt.bindString(3, String.valueOf(app.getDeveloperID()));
+				insertStmt.bindString(4, app.getCategory());
 //				insertStmt.bindBlob(4, app.getIcon());	//FIXME: add icon support
 				insertStmt.executeInsert();
 			}

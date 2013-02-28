@@ -3,7 +3,7 @@ package no.group09.database;
 public class Constants {
 
     protected final static String SELECT_APP = "select * from app where name=?";
-    protected final static String INSERT_APP = "insert or replace into app (name, description, developerid) values (?, ?, ?)";
+    protected final static String INSERT_APP = "insert or replace into app (name, description, developerid, category) values (?, ?, ?, ?)";
 //    protected final static String INSERT_APP = "insert or replace into app (name, description, developerid, icon) values (?, ?, ?, ?)";
     protected final static String DELETE_APP = "delete from app where name=?";
 	
@@ -13,6 +13,7 @@ public class Constants {
 	protected final static String APP_NAME="name"; 
 	protected final static String APP_DESCRIPTION="description"; 
 	protected final static String APP_DEVELOPERID="developerid"; 
+	protected final static String APP_CATEGORY="category"; 
 //	protected final static String APP_ICON="icon"; 
 	
 	/** version(versionid, appid, version, fileURL, filesize) */
@@ -74,7 +75,8 @@ public class Constants {
 					"appid integer primary key autoincrement, " +
 					"name varchar(160), " +
 					"description varchar(200), " +
-					"developerid int(10))";
+					"developerid int(10)," +
+					"category varchar(200))";
 	
 	
 //	/**	Database app creation sql statement */

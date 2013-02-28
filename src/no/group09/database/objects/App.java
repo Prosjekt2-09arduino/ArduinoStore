@@ -7,6 +7,8 @@ public class App {
 	private String description = "";
 	private int developerID;
 	private byte[] icon;
+	private String category = "";
+
 
 	/** This is used when we fetch the objects from the database */ 
 	App(int ID, String name, String description, int developerID, byte[] icon){	//TODO: use this instead
@@ -18,10 +20,11 @@ public class App {
 	}
 
 	/** This is used when we create new samples (not from db) */
-	public App(String name, String description, int developerID){
+	public App(String name, String description, int developerID, String category){
 		this.name = name;
 		this.description = description;
 		this.developerID = developerID;
+		this.category = category;
 	}
 
 	/**
@@ -30,11 +33,20 @@ public class App {
 	 * @param description
 	 * @param developerID
 	 */
-	public App(int ID, String name, String description, int developerID){
+	public App(int ID, String name, String description, int developerID, String category){
 		this.ID = ID;
 		this.name = name;
 		this.description = description;
 		this.developerID = developerID;
+		this.category = category;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public int getID(){
