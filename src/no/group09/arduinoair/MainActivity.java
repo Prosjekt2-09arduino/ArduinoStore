@@ -102,7 +102,7 @@ public class MainActivity extends FragmentActivity {
 //		
 //		save.insertApp(new App("Player", "ow", 7, "Media"));	//FIXME: add support for icons
 //		save.insertApp(new App("MusicP", "adddw", 6, "Media"));	//FIXME: add support for icons
-////		
+//		
 		//This clears the database
 //		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
 	}
