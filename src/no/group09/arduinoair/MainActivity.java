@@ -19,8 +19,6 @@ package no.group09.arduinoair;
  * under the License.
  */
 
-import no.group09.database.DatabaseHandler;
-import no.group09.database.Db;
 import no.group09.database.Save;
 import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
@@ -39,19 +37,16 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 
 public class MainActivity extends FragmentActivity {
 
 	private String TAG = "MainActivity";
 
-	DatabaseHandler database = null;
-	ToggleButton toggleButton1, toggleButton2;
-	Button btnDisplay;
-	Save save;
+	public static MyFragmentPagerAdapter pagerAdapter;
+	public static ViewPager pager;
+	private Save save;
 
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
@@ -64,14 +59,14 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		/** Getting a reference to the ViewPager defined the layout file */
-		ViewPager pager = (ViewPager) findViewById(R.id.pager);
+		pager = (ViewPager) findViewById(R.id.pager);
 
 		/** Getting fragment manager */
 		FragmentManager fm = getSupportFragmentManager();
 
 		/** Instantiating FragmentPagerAdapter */
-		MyFragmentPagerAdapter pagerAdapter = new MyFragmentPagerAdapter(fm);
-
+		pagerAdapter = new MyFragmentPagerAdapter(fm);
+		
 		/** Setting the pagerAdapter to the pager object */
 		pager.setAdapter(pagerAdapter);
 
@@ -84,24 +79,24 @@ public class MainActivity extends FragmentActivity {
 		save = new Save(getBaseContext());
 		save.open();
 
-//		save.insertApp(new App("Game1", "haha", 1, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game2", "asd", 2, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game3", "ddddd", 3, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game4", "hassha", 4, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game5", "aaaa", 2, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game1", 3, 1, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game2", 4, 2, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game3", 2, 3, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game4", 4, 4, "Games"));	//FIXME: add support for icons
+//		save.insertApp(new App("Game5", 1, 2, "Games"));	//FIXME: add support for icons
 //		
-//		save.insertApp(new App("Medical1", "abc", 1, "Medical"));	//FIXME: add support for icons
-//		save.insertApp(new App("Medical2", "acbdw", 3, "Medical"));	//FIXME: add support for icons
-//		save.insertApp(new App("Medical3", "acbdw", 5, "Medical"));	//FIXME: add support for icons
+//		save.insertApp(new App("Medical1", 1, 1, "Medical"));	//FIXME: add support for icons
+//		save.insertApp(new App("Medical2", 1, 3, "Medical"));	//FIXME: add support for icons
+//		save.insertApp(new App("Medical3", 4, 5, "Medical"));	//FIXME: add support for icons
 //		
-//		save.insertApp(new App("Tool1", "ac43w", 8, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool2", "aaaadw", 3, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool3", "awew", 1, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool4", "w", 1, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool5", "sssbdw", 1, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool1", 5, 8, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool2", 5, 3, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool3", 2, 1, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool4", 3, 1, "Tools"));	//FIXME: add support for icons
+//		save.insertApp(new App("Tool5", 4, 1, "Tools"));	//FIXME: add support for icons
 //		
-//		save.insertApp(new App("Player", "ow", 7, "Media"));	//FIXME: add support for icons
-//		save.insertApp(new App("MusicP", "adddw", 6, "Media"));	//FIXME: add support for icons
+//		save.insertApp(new App("Player", 4, 7, "Media"));	//FIXME: add support for icons
+//		save.insertApp(new App("MusicP", 2, 6, "Media"));	//FIXME: add support for icons
 //		
 		//This clears the database
 //		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
