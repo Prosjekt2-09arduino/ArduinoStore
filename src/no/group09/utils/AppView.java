@@ -21,6 +21,7 @@ public class AppView extends Activity {
 		setContentView(R.layout.app_view);	
 
 
+		setContentView(R.layout.app_view);
 	}
 	//	method for handling click of the review button
 	public void reviewClicked(View view){
