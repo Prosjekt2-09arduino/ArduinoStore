@@ -4,25 +4,25 @@ public class App {
 
 	private int ID;
 	private String name = "";
-	private String description = "";
+	private int rating;
 	private int developerID;
 	private byte[] icon;
 	private String category = "";
 
 
 	/** This is used when we fetch the objects from the database */ 
-	App(int ID, String name, String description, int developerID, byte[] icon){	//TODO: use this instead
+	App(int ID, String name, int rating, int developerID, byte[] icon){	//TODO: use this instead
 		this.ID = ID;
 		this.name = name;
-		this.description = description;
+		this.rating = rating;
 		this.developerID = developerID;
 		this.icon = icon;
 	}
 
 	/** This is used when we create new samples (not from db) */
-	public App(String name, String description, int developerID, String category){
+	public App(String name, int rating, int developerID, String category){
 		this.name = name;
-		this.description = description;
+		this.rating = rating;
 		this.developerID = developerID;
 		this.category = category;
 	}
@@ -33,10 +33,10 @@ public class App {
 	 * @param description
 	 * @param developerID
 	 */
-	public App(int ID, String name, String description, int developerID, String category){
+	public App(int ID, String name, int rating, int developerID, String category){
 		this.ID = ID;
 		this.name = name;
-		this.description = description;
+		this.rating = rating;
 		this.developerID = developerID;
 		this.category = category;
 	}
@@ -65,12 +65,12 @@ public class App {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+	public int getRating() {
+		return rating;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 
 	public int getDeveloperID() {

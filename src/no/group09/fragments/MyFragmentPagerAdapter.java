@@ -26,13 +26,29 @@ import android.support.v4.app.FragmentPagerAdapter;
  
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
  
-	final int PAGE_COUNT = 3;
+	private final int PAGE_COUNT = 3;
+	
+	/** This is how we make the second tab unique for the chosen category 
+	 * (Switch database content in relation to enum type on page 1) */
+	public Page page1 = Page.ALL;
+	
+	/** This is how we make the third tab unique for the chosen category 
+	 * (Switch database content in relation to enum type on page 2) */
+	public Page page2 = Page.TOPHITS;
+	
+	/** The second tab. This is needed for editing the content on selected category */
+	public All all;
+	
+	/** The third tab. This is needed for editing the content on selected category */
+	public TopHits topHits;
+	
+	public Categories categories;
 
 	/** Constructor of the class */
 	public MyFragmentPagerAdapter(FragmentManager fm) {
 		super(fm);
 	}
-
+	
 	/** This method will be invoked when a page is requested to create */
 	@Override
 	public Fragment getItem(int page) {
@@ -40,28 +56,27 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 		//Temporary
 		Fragment fragment = null;
 
-		//Categories tab
-		if(page == 0){
-			fragment = new Categories();
-		}
-
-		//TopHits tab
-		else if(page == 1){
-			fragment = new All();
+		switch(page){
+		case 0: fragment = new Categories(); 
+				categories = (Categories) fragment;
+				break;
+		
+		case 1: fragment = new All(); 
+				all = (All) fragment; 
+				break;
+				
+		case 2: fragment = new TopHits(); 
+				topHits = (TopHits) fragment;
+				break;
 		}
 		
-		//Devices tab
-		else if(page == 2){
-			fragment = new TopHits();
-		}
-
 		Bundle data = new Bundle();
-		data.putInt("current_page", page+1);
+		data.putInt("current_page", page + 1);
 		fragment.setArguments(data);
 
 		return fragment;
 	}
-
+	
 	/** Returns the number of pages */
 	@Override
 	public int getCount() {
@@ -71,15 +86,35 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 	@Override
 	public CharSequence getPageTitle(int position) {
 
-		CharSequence tab = "";	//TODO: maybe make this protected and static
+		CharSequence tab = "";
 
 		switch(position){
 		case 0: tab = "CATEGORIES"; break;
-		case 1: tab = "ALL"; break;
-		case 2: tab = "TOP HITS"; break;
+		case 1: tab = getTitleForPage1(); break;
+		case 2: tab = getTitleForPage2(); break;
 		default: tab = "";
 		}
-
+		
 		return tab;
+	}
+	
+	/** Returns the title for the second tab*/
+	private String getTitleForPage1(){
+		switch(page1){
+		case ALL : return "ALL APPS";
+		case GAMES_ALL : return "ALL GAMES";
+		case MEDICAL_ALL : return "ALL MEDICAL";
+		case TOOLS_ALL : return "ALL TOOLS";
+		case MEDIA_ALL : return "ALL MEDIA";
+		default: return "ALL";
+		}
+	}
+	
+	/** Returns the title for the third tab */
+	private String getTitleForPage2(){
+		switch(page2){
+		case TOPHITS : return "TOP HITS";
+		default : return "MOST POPULAR";
+		}
 	}
 }
