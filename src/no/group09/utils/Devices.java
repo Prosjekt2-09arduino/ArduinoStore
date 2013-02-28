@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.TimeoutException;
 
+import no.group09.arduinoair.ConnectionHolder;
 import no.group09.arduinoair.MainActivity;
 import no.group09.arduinoair.R;
 import no.group09.connection.BluetoothConnection;
@@ -45,6 +46,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -82,13 +84,20 @@ public class Devices extends Activity{
 	private boolean alreadyChecked = false;
 	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
 	private BluetoothConnection con;
+	private ConnectionHolder ch;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		//Set the xml layout
 		setContentView(R.layout.devices);
+		
+//		Bundle bundle = this.getIntent().getExtras();
+//		if (bundle != null) {
+//			ch = (ConnectionHolder) bundle.getSerializable(MainActivity.CONNECTION_HOLDER);
+//		}
+		
+		ch = MainActivity.getConnectionHolder();
 		
 		//Fetching the shared preferences object used to write the preference file
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -139,8 +148,25 @@ public class Devices extends Activity{
 				try {
 					con = new BluetoothConnection(adapter.getMacAddress(position), 
 							(Activity)view.getContext(), getConnectionListener());
+					
+					
+					ch.setConnection(con);
+					
+//					progressDialog.setMessage("Connecting...");
+//					progressDialog.setCancelable(false);
+//					progressDialog.show();
+//					
 					con.connect();
-
+					
+//					int count = 0;
+//					while(!con.isConnected() && count < 10) {
+//						Thread.currentThread().sleep(1000);
+//						count++;
+//					}
+					
+//					progressDialog.dismiss();
+					
+					Log.d(TAG, "Check if the device is connected: " + con.isConnected());
 					
 					String lastConnectedDevice = "Device name: " + adapter.getName(position)
 							+ "\nMAC Address: " + adapter.getMacAddress(position);
@@ -156,7 +182,7 @@ public class Devices extends Activity{
 
 					edit.commit();
 					Log.d(TAG, "The information about the last connected device was written to shared preferences");
-
+					Log.d(TAG, "Minneadresse fra Devices: " + MainActivity.getConnectionHolder().getConnection().toString());
 					
 					//Working on making a progress bar visible when the device is trying
 					//to connect. Do not remove!
@@ -258,6 +284,12 @@ public class Devices extends Activity{
 			checkBTState();
 		}
 	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		unregisterReceiver(ActionFoundReceiver);
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -265,10 +297,10 @@ public class Devices extends Activity{
 		if (btAdapter != null) {
 			btAdapter.cancelDiscovery();
 		}
-		unregisterReceiver(ActionFoundReceiver);
+//		unregisterReceiver(ActionFoundReceiver);
 
 		//Shut down the BT connection
-		if(con != null) con.disconnect();
+//		if(con != null) con.disconnect();
 	}
 
 	public void onResume() {
@@ -330,7 +362,7 @@ public class Devices extends Activity{
 		}
 	}
 
-	private final BroadcastReceiver ActionFoundReceiver = new BroadcastReceiver(){
+	private final BroadcastReceiver ActionFoundReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {

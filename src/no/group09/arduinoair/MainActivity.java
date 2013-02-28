@@ -19,6 +19,7 @@ package no.group09.arduinoair;
  * under the License.
  */
 
+import no.group09.connection.BluetoothConnection;
 import no.group09.database.DatabaseHandler;
 import no.group09.database.Db;
 import no.group09.database.Save;
@@ -52,6 +53,9 @@ public class MainActivity extends FragmentActivity {
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
 	Save save;
+	
+	private static ConnectionHolder connectionHolder;
+	public static final String CONNECTION_HOLDER = "connection_holder";
 
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
@@ -61,6 +65,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_main);
 
 		/** Getting a reference to the ViewPager defined the layout file */
@@ -84,6 +89,10 @@ public class MainActivity extends FragmentActivity {
 		save = new Save(getBaseContext());
 		save.open();
 
+		connectionHolder = new ConnectionHolder();
+		
+		
+		
 //		save.insertApp(new App("Game1", "haha", 1, "Games"));	//FIXME: add support for icons
 //		save.insertApp(new App("Game2", "asd", 2, "Games"));	//FIXME: add support for icons
 //		save.insertApp(new App("Game3", "ddddd", 3, "Games"));	//FIXME: add support for icons
@@ -112,6 +121,10 @@ public class MainActivity extends FragmentActivity {
 		super.onPause();
 		//		save.close();
 	}
+	
+	public static ConnectionHolder getConnectionHolder() {
+		return connectionHolder;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,7 +150,12 @@ public class MainActivity extends FragmentActivity {
 			 * TODO: If time: check if it is possible to change the text in action
 			 * overflow according to the value 'hide incompatible' in Preferences.
 			 */
-
+			
+			
+			//For testing purposes
+//			Log.d(TAG, "Connection: " + connectionHolder.getConnection());
+			Log.d(TAG, "Minneadresse fra MainAactivity: " + connectionHolder.getConnection().toString());
+			Log.d(TAG, "Isconnected: " + connectionHolder.getConnection().isConnected());
 			//Prepare to edit the setting
 			Editor edit = sharedPref.edit();
 			//Fetches the current value of the 'hide incompatible' option in the preference file
@@ -166,6 +184,11 @@ public class MainActivity extends FragmentActivity {
 			//Show the device list
 		case R.id.device_list:
 			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
+//			Intent intent = new Intent();
+//			Bundle bundle = new Bundle();
+//			bundle.putSerializable(CONNECTION_HOLDER, connectionHolder);
+//			intent.putExtras(bundle);
+//			intent.setClass(this, Devices.class);
 			startActivity(intent);
 			return true;
 
