@@ -26,21 +26,23 @@ void* ComputerSerial::placeHolder(uint8_t flag, uint8_t content[], word contentS
 // Start serial connection
 ComputerSerial::ComputerSerial(int baud)
 {
-	//Initialize with baudrate if requested
+	// Initialize with baudrate if requested
 	if(baud != 0) begin(baud);
 }
 
-// Attach OPCODES to functions
+// Start serial communication and attach OPCODES to functions
 void ComputerSerial::begin(int baud)
 {
 	Serial.begin(baud);
-
+	
+	// Attach OPCODES
 	for (int i = 0; i < NUM_OPCODES; ++i)
 	{
 		attachFunction(i, &ComputerSerial::placeHolder);
 	}
 }
 
+// 
 void ComputerSerial::commandHandler(word size, uint8_t opcode, uint8_t flag, uint8_t content[])
 {
 	switch (opcode) {
@@ -69,7 +71,7 @@ void ComputerSerial::commandHandler(word size, uint8_t opcode, uint8_t flag, uin
 			speaker(size, flag, content);
 			break;
 		case OPCODE_RESET:
-			reset(size, flag, content);
+			reset();
 			break;
 		default:
 			break;
@@ -168,6 +170,7 @@ void ComputerSerial::getDeviceInfo()
 	}
 }
 
+// Communication protocol
 void ComputerSerial::ack(uint8_t opcode, uint8_t content[], word contentSize)
 {
 	//Packet header
@@ -248,7 +251,7 @@ void ComputerSerial::pinWrite(uint8_t pin, uint8_t value)
 }
 
 // Set BT module to 115200 baudrate and reset arduino
-void ComputerSerial::reset(word size, uint8_t flag, uint8_t content[])
+void ComputerSerial::reset()
 {
 	// Write byte 255 to EEPROM
 	// This is used to check if the arduino is in programming mode
@@ -307,6 +310,7 @@ void ComputerSerial::serialEvent()
 	{
 		switch (state)
 		{
+			// Get start byte
 			case STATE_START:
 				if (Serial.read() == START_BYTE)
 				{
@@ -331,11 +335,13 @@ void ComputerSerial::serialEvent()
 				if(content == NULL) state = STATE_START;
 			break;
 			
+			// Get OPCODE function
 			case STATE_OPCODE:
 				opcode = Serial.read();
 				state = STATE_FLAG;
 			break;
 			
+			// Get flag
 			case STATE_FLAG:
 				flag = Serial.read();
 				state = STATE_CONTENT;
@@ -347,6 +353,7 @@ void ComputerSerial::serialEvent()
 				content_counter++;
 				if (content_counter >= size)
 				{
+					// Find out what kind of OPCODE this is
 					commandHandler(size, opcode, flag, content);
 					content_counter = 0;
 					state = STATE_START;

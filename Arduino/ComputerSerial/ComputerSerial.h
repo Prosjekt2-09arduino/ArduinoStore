@@ -35,7 +35,7 @@ class ComputerSerial
 	void speaker(word size, uint8_t flag, uint8_t content[]);
 	void pinRead(uint8_t pin);
 	void pinWrite(uint8_t pin, uint8_t value);
-	void reset(word size, uint8_t flag, uint8_t content[]);
+	void reset();
 
 	unsigned int bytesReceived;
 
