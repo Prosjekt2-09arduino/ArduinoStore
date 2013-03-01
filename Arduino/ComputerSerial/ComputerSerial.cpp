@@ -15,8 +15,8 @@
 */
 
 #include <Arduino.h>
-
-#include "ComputerSerial.h"
+#include <EEPROM.h>
+#include <ComputerSerial.h>
 
 void* ComputerSerial::placeHolder(uint8_t flag, uint8_t content[], word contentSize)
 {
@@ -69,6 +69,7 @@ void ComputerSerial::commandHandler(word size, uint8_t opcode, uint8_t flag, uin
 			speaker(size, flag, content);
 			break;
 		case OPCODE_RESET:
+			reset(size, flag, content);
 			break;
 		default:
 			break;
@@ -246,10 +247,35 @@ void ComputerSerial::pinWrite(uint8_t pin, uint8_t value)
 	ack(OPCODE_PIN_W);
 }
 
-// Reset arduino
-void ComputerSerial::reset()
+// Set BT module to 115200 baudrate and reset arduino
+void ComputerSerial::reset(word size, uint8_t flag, uint8_t content[])
 {
+	// Write byte 255 to EEPROM
+	// This is used to check if the arduino is in programming mode
+	EEPROM.write(0,255);
 	
+	// Set BT baudrate to 115200, only 4 numbers
+	atMode(1152);
+	
+	// Restart device
+	digitalWrite(4,LOW);
+}
+
+// Access prorgamming mode on BT
+// Baud should be only the first 4 characters
+void ComputerSerial::atMode(int baud)
+{
+	// Enter command mode on BT
+	Serial.print("$$$");
+	
+	// IMPORTANT DELAY!
+	delay(50);
+	
+	// Temporaily change baudrate, no parity
+	Serial.print("U,");
+	Serial.print(baud);
+	Serial.println(",N");
+	delay(50);
 }
 
 // Attach OPCODE to function

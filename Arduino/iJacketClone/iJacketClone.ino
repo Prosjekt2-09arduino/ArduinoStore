@@ -1,10 +1,12 @@
 #include <ComputerSerial.h>
 #include <LiquidCrystal.h>
+#include <EEPROM.h>
 
 //Constants
 static const int PIN_LED = 2;
 static const int PIN_SOUND = 3;
-// static const int PIN_VIBRATION = 4;
+static const int RESET_PIN = 4;
+// static const int PIN_VIBRATION = 5;
 static const int PIN_DEBUG_LED = 13;
 
 static const int PIN_SCREEN_A = 7;
@@ -83,10 +85,28 @@ void* speaker(byte flag, byte data[], word dataSize)
 	noTone(PIN_SOUND);
 }
 
+// Reset
+void* reset(byte flag, byte data[], word dataSize)
+{
+}
+
 void setup()
 {
 	//Initialize computer serial class
-	comp.begin(9600);   
+	comp.begin(9600);
+	
+	// If programming mode is enabled, restart device
+	pinMode(4,OUTPUT);
+	if(EEPROM.read(0) == 255)
+	{
+		delay(400);
+		digitalWrite(4, LOW);
+	}
+	else
+	{
+		digitalWrite(4, HIGH);
+	}
+	
 	comp.setDeviceName("uCSS");
 	comp.setDeviceVersion("v0.1a");
 
@@ -99,17 +119,21 @@ void setup()
 	comp.addDeviceService("DATA", "");
 	comp.attachFunction(comp.OPCODE_DATA, &data);
 	
+	// Set BT in programming mode, 115200 baudrate
+	comp.addDeviceService("RESET", "");
+	comp.attachFunction(comp.OPCODE_RESET, &reset);
+	
 	// Speaker
 	comp.addDeviceService("SPEAKER", "3");
 	comp.attachFunction(comp.OPCODE_SPEAKER, &speaker);
-	pinMode(PIN_SOUND, OUTPUT);	
+	// pinMode(PIN_SOUND, OUTPUT);
 	
 	// LCD
 	comp.addDeviceService("LCD_SCREEN", "");
 	comp.attachFunction(comp.OPCODE_TEXT, &text);
 	lcd.begin(16, 2);
 	lcd.setCursor(0, 0);
-	lcd.print("OSNAP Jacket");
+	lcd.print("iJacket Clone");
 	lcd.setCursor(0, 1);
 	lcd.print("Scan QR tag");
 	

@@ -35,7 +35,7 @@ class ComputerSerial
 	void speaker(word size, uint8_t flag, uint8_t content[]);
 	void pinRead(uint8_t pin);
 	void pinWrite(uint8_t pin, uint8_t value);
-	void reset();
+	void reset(word size, uint8_t flag, uint8_t content[]);
 
 	unsigned int bytesReceived;
 
@@ -45,6 +45,7 @@ class ComputerSerial
 		void serialEvent();
 		void begin(int baud);
 		void attachFunction(uint8_t opcode, void* (*handler)(uint8_t flag, uint8_t content[], word contentSize));
+		void atMode(int baud);
 
 		// Device info functions
 		void getDeviceInfo();
