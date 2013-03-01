@@ -1,6 +1,8 @@
 package no.group09.utils;
 
 import no.group09.arduinoair.R;
+import no.group09.database.Save;
+import no.group09.database.objects.App;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,7 +10,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.content.DialogInterface;
 
 public class AppView extends Activity {
@@ -16,6 +21,7 @@ public class AppView extends Activity {
 	ProgressDialog progressBar;
 	private int progressStatus = 0;
 	private Handler progressHandler = new Handler();
+	private Save save;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +31,25 @@ public class AppView extends Activity {
 		//Set the xml layout
 		setContentView(R.layout.app_view);	
 
-
-		setContentView(R.layout.app_view);
+		//Fetch the application ID from the intent
+		int appID = getIntent().getExtras().getInt("app");
+		
+		//Get the database
+		save = new Save(getBaseContext());
+		
+		//Open the database
+		save.open();
+		
+		//Fetch the application from the database
+		App app = save.getApp(appID);
+		
+		TextView appName = (TextView) findViewById(R.id.app_view_app_name);
+		TextView appDeveloper = (TextView) findViewById(R.id.app_view_developer);
+		RatingBar rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
+		
+		appName.setText(app.getName());
+		appDeveloper.setText(String.valueOf(app.getDeveloperID()));	//TODO: Get the developer from the database on this ID
+		rating.setRating((float)app.getRating());
 	}
 	//	method for handling click of the review button
 	public void reviewClicked(View view){

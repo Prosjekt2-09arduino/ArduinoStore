@@ -159,13 +159,13 @@ public class Save {
 	}
 
 	/** Get the the requested app from the database */
-	public synchronized App getApp(String name) {
+	public synchronized App getApp(int id) {
 
 		Cursor c = null;
 		App app = null;
 		try {
 			//			db = getDb();
-			c = db.rawQuery(Constants.SELECT_APP, new String[] { name });
+			c = db.rawQuery(Constants.SELECT_APP, new String[] { String.valueOf(id) });
 
 			if (c.moveToFirst()) {
 				app = new App(

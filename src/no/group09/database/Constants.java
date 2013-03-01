@@ -2,7 +2,7 @@ package no.group09.database;
 
 public class Constants {
 
-    protected final static String SELECT_APP = "select * from app where name=?";
+    protected final static String SELECT_APP = "select * from app where appid=?";
     protected final static String INSERT_APP = "insert or replace into app (name, rating, developerid, category) values (?, ?, ?, ?)";
 //    protected final static String INSERT_APP = "insert or replace into app (name, description, developerid, icon) values (?, ?, ?, ?)";
     protected final static String DELETE_APP = "delete from app where name=?";
