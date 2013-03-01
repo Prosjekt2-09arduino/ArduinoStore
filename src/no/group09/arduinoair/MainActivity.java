@@ -179,13 +179,14 @@ public class MainActivity extends FragmentActivity {
 
 			//This is just for testing purposes. Remove when done.
 			//TODO: Remove when done testing the application view.
-		case R.id.application_view:
-			startActivity(new Intent(this, AppView.class));
-			return true;
+//		case R.id.application_view:
+//			startActivity(new Intent(this, AppView.class));
+//			return true;
+//		}
+//
+//		//The item was none of the following
+		default : return false;
 		}
-
-		//The item was none of the following
-		return false;
 	}
 
 	@Override

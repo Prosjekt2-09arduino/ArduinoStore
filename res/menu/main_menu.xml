@@ -39,12 +39,13 @@
         android:title="@string/menu_settings4" />
 	-->
 	<!-- This is just for testing purposes. Remove when done. -->
+	<!-- 
 	<item
         android:id="@+id/application_view"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_settings5" />
-	
+	-->
 	<item
         android:id="@+id/settings"
         android:orderInCategory="70"
