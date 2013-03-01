@@ -165,35 +165,7 @@ public class MainActivity extends FragmentActivity {
 			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
 			this.startActivity(myIntent);
 			return true;
-//
-//			//Toggle hide incompatible
-//		case R.id.hide_incompatible:
-//
-//			//Prepare to edit the setting
-////			Editor edit = sharedPref.edit();
-//			//Fetches the current value of the 'hide incompatible' option in the preference file
-////			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
-//
-//			if (hideIncompatible == true) {
-//				//Changes the value and commits the changes
-//				edit.putBoolean("hide_incompatible", false);
-//				edit.commit();
-//				//User feedback
-//				Toast.makeText(this, "Showing all applications", Toast.LENGTH_SHORT).show();
-//				//Used for debugging
-//				Log.d(TAG, "The 'hide incompatible' settings option were true. Changing to false");
-//			}
-//			else {
-//				//Changes the value and commits the changes
-//				edit.putBoolean("hide_incompatible", true);
-//				edit.commit();
-//				//User feedback
-//				Toast.makeText(this, "Showing only applications compatible with your device", Toast.LENGTH_SHORT).show();
-//				//Used for debugging
-//				Log.d(TAG, "The 'hide incompatible' settings option were false. Changing to true");
-//			}
-//
-//			return true;
+
 			
 		//Show the device list
 		case R.id.device_list:
@@ -201,9 +173,9 @@ public class MainActivity extends FragmentActivity {
 			startActivity(intent);
 			return true;
 
-		case R.id.add_device:
-			startActivity(new Intent(this, AddDeviceScreen.class));
-			return true;
+//		case R.id.add_device:
+//			startActivity(new Intent(this, AddDeviceScreen.class));
+//			return true;
 
 			//This is just for testing purposes. Remove when done.
 			//TODO: Remove when done testing the application view.

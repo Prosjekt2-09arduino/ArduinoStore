@@ -25,6 +25,8 @@ import no.group09.arduinoair.MainActivity;
 import no.group09.arduinoair.R;
 import no.group09.database.Save;
 import no.group09.database.objects.App;
+import no.group09.utils.AppView;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -121,7 +123,18 @@ public class All extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(view.getContext(), "You hit the button", Toast.LENGTH_SHORT).show();
+				
+				//Create a new intent for the application view
+				Intent intent = new Intent(view.getContext(), AppView.class);
+				
+				//Fetch the application ID
+				int appID = Integer.parseInt(adapter.getID(position));
+				
+				//Give the intent a message (which application to retreive from the db)
+				intent.putExtra("app", appID);
+				
+				//Start the activity
+				startActivity(intent);
 			}
 		});	
 	}

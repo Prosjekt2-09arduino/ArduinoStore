@@ -84,4 +84,8 @@ public class ListAdapter extends BaseAdapter {
         
         return vi;
     }
+    
+    public String getID(int position){
+    	return data.get(position).get(KEY_ID);
+    }
 }
