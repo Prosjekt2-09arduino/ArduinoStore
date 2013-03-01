@@ -37,6 +37,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 
@@ -111,6 +112,17 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
+		
+		Editor edit = sharedPref.edit();
+		
+		//When the menu is created, check the preferences and set the correct text
+		if(sharedPref.getBoolean("hide_incompatible", false)){
+			menu.getItem(1).setTitle("Show incompatible");
+		}
+		else{
+			menu.getItem(1).setTitle("Hide incompatible");
+		}
+		
 		return true;
 	}
 
@@ -118,6 +130,35 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
+		case R.id.toggle_incompitable:
+			
+			//Prepare to edit the setting
+			Editor edit = sharedPref.edit();
+			
+			//Fetches the current value of the 'hide incompatible' option in the preference file
+			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
+			
+			if(hideIncompatible == true){
+				
+				//Changes the value and commits the changes
+				edit.putBoolean("hide_incompatible", false);
+				edit.commit();
+				
+				item.setChecked(false);
+				item.setTitle("Hide incompatible");
+			}
+			else{
+				
+				//Changes the value and commits the changes
+				edit.putBoolean("hide_incompatible", true);
+				edit.commit();
+				
+				item.setChecked(true);
+				item.setTitle("Show incompatible");
+			}
+			
+			return true;
+			
 		//Start the preferences class
 		case R.id.settings:
 			//Create an intent to start the preferences activity
@@ -125,48 +166,16 @@ public class MainActivity extends FragmentActivity {
 			this.startActivity(myIntent);
 			return true;
 
-			//Toggle hide incompatible
-		case R.id.hide_incompatible:
-
-			/*
-			 * TODO: If time: check if it is possible to change the text in action
-			 * overflow according to the value 'hide incompatible' in Preferences.
-			 */
-
-			//Prepare to edit the setting
-			Editor edit = sharedPref.edit();
-			//Fetches the current value of the 'hide incompatible' option in the preference file
-			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
-
-			if (hideIncompatible == true) {
-				//Changes the value and commits the changes
-				edit.putBoolean("hide_incompatible", false);
-				edit.commit();
-				//User feedback
-				Toast.makeText(this, "Showing all applications", Toast.LENGTH_SHORT).show();
-				//Used for debugging
-				Log.d(TAG, "The 'hide incompatible' settings option were true. Changing to false");
-			}
-			else {
-				//Changes the value and commits the changes
-				edit.putBoolean("hide_incompatible", true);
-				edit.commit();
-				//User feedback
-				Toast.makeText(this, "Showing only applications compatible with your device", Toast.LENGTH_SHORT).show();
-				//Used for debugging
-				Log.d(TAG, "The 'hide incompatible' settings option were false. Changing to true");
-			}
-
-			return true;
-			//Show the device list
+			
+		//Show the device list
 		case R.id.device_list:
 			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
 			startActivity(intent);
 			return true;
 
-		case R.id.add_device:
-			startActivity(new Intent(this, AddDeviceScreen.class));
-			return true;
+//		case R.id.add_device:
+//			startActivity(new Intent(this, AddDeviceScreen.class));
+//			return true;
 
 			//This is just for testing purposes. Remove when done.
 			//TODO: Remove when done testing the application view.

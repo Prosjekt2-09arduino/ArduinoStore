@@ -70,7 +70,7 @@
         android:textSize="10dip" />
 
     <!-- Rightend rating -->
-
+<!-- 
     <TextView
         android:id="@+id/rating"
         android:layout_width="wrap_content"
@@ -82,19 +82,19 @@
         android:textColor="#33b5e5"
         android:textSize="20dip"
         android:textStyle="bold" />
+    -->
     
-	<!-- 
-	 <RatingBar
-        android:id="@+id/getRating"
+      <RatingBar
+        android:id="@+id/ratingBarIndicator"
+        style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/app_name"
-        android:layout_marginRight="5dip"
-        android:gravity="right"
+        android:isIndicator="true"
         android:numStars="5"
-        android:stepSize="1.0" />
-	 -->
+        android:gravity="right"
+        android:layout_marginRight="5dip" />
+
 
     <!-- Rightend Arrow -->
     <ImageView
