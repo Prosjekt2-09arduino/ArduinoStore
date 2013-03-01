@@ -81,7 +81,7 @@ public class ListAdapter extends BaseAdapter {
         distributor.setText(listItem.get(DISTRIBUTOR));
 //        rating.setText(listItem.get(RATING));
 //        thumb_image.setImageBitmap(Save.converteStringToBitmap(listItem.get(IMAGE)));
-//        getRatingBar.setRating(Float.parseFloat(listItem.get(All.RATING)));
+        getRatingBar.setRating((float)Integer.parseInt(listItem.get(RATING)));
         
         return vi;
     }
