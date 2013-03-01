@@ -50,6 +50,8 @@ public class AppView extends Activity {
 		appName.setText(app.getName());
 		appDeveloper.setText(String.valueOf(app.getDeveloperID()));	//TODO: Get the developer from the database on this ID
 		rating.setRating((float)app.getRating());
+		//TODO: get all the information from the database.
+		
 	}
 	//	method for handling click of the review button
 	public void reviewClicked(View view){
