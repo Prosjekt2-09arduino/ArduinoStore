@@ -84,4 +84,7 @@
     <string name="install_dialog_topic">Installing app</string>
     <string name="install_dialog_warning">DO NOT DISCONNECT OR MOVE AWAY FROM THE DEVICE!</string>
     
+    <string name="hide_incompitable_checkbox">Hide/show incompitable</string>
+    
+    
 </resources>
