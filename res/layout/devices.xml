@@ -80,7 +80,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/explanatory_text1"
-            android:textColor="#FFF" />
+            android:textColor="#FFF"
+            android:gravity="center" />
 
     </LinearLayout>
 
@@ -94,16 +95,22 @@
         <Button
             android:id="@+id/add_device_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:text="@string/add_device_button_text" />
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/add_device_button_text"
+            android:background="@drawable/refresh_button_layout" />
 
         <Button
             android:id="@+id/browse_shop_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:text="@string/browse_shop_button_text" />
+			android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/browse_shop_button_text"
+            android:background="@drawable/refresh_button_layout" />
 
     </LinearLayout>
 
