@@ -112,6 +112,17 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
+		
+		Editor edit = sharedPref.edit();
+		
+		//When the menu is created, check the preferences and set the correct text
+		if(sharedPref.getBoolean("hide_incompatible", false)){
+			menu.getItem(1).setTitle("Show incompatible");
+		}
+		else{
+			menu.getItem(1).setTitle("Hide incompatible");
+		}
+		
 		return true;
 	}
 
@@ -143,7 +154,7 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 				
 				item.setChecked(true);
-				item.setTitle("Hide incompatible");
+				item.setTitle("Show incompatible");
 			}
 			
 			return true;
