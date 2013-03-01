@@ -183,7 +183,7 @@ public class MainActivity extends FragmentActivity {
 			return true;
 			//Show the device list
 		case R.id.device_list:
-			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
+			Intent intent = new Intent(this, Devices.class);
 //			Intent intent = new Intent();
 //			Bundle bundle = new Bundle();
 //			bundle.putSerializable(CONNECTION_HOLDER, connectionHolder);

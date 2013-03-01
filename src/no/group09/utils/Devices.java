@@ -39,15 +39,18 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -65,7 +68,7 @@ import android.view.View.OnClickListener;
 /**
  * This class searches for the BT devices in range and put them in a list
  */
-public class Devices extends Activity{
+public class Devices extends Activity  {
 
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
@@ -73,7 +76,7 @@ public class Devices extends Activity{
 	private static final boolean LIST_NON_ARDUINO_DEVICES = true;
 	private static final int REQUEST_ENABLE_BT = 1;
 	private ListView tv;
-	private BluetoothDeviceAdapter adapter;
+	private BluetoothDeviceAdapter listAdapter;
 	private BluetoothAdapter btAdapter; 
 	private ArrayList<HashMap<String, String>> category_list;
 	private IntentFilter filter;
@@ -83,21 +86,16 @@ public class Devices extends Activity{
 	private ArrayList<HashMap<String, String>> device_list;
 	private boolean alreadyChecked = false;
 	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
-	private BluetoothConnection con;
-	private ConnectionHolder ch;
+//	private BluetoothConnection con;
+	private MyBroadcastReceiver actionFoundReceiver;
+	public static final String MAC_ADDRESS = "MAC_ADDRESS";
+	static Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Set the xml layout
 		setContentView(R.layout.devices);
-		
-//		Bundle bundle = this.getIntent().getExtras();
-//		if (bundle != null) {
-//			ch = (ConnectionHolder) bundle.getSerializable(MainActivity.CONNECTION_HOLDER);
-//		}
-		
-		ch = MainActivity.getConnectionHolder();
 		
 		//Fetching the shared preferences object used to write the preference file
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -108,23 +106,15 @@ public class Devices extends Activity{
 		//progressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		progressBar = (ProgressBar) findViewById(R.id.progbar);
 
-		//Register the BroadcastReceiver
-		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		filter.addAction(BluetoothDevice.ACTION_UUID);
-		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-
-		//Registers the BT receiver with the requested filters
-		//Don't forget to unregister during onDestroy
-		registerReceiver(ActionFoundReceiver, filter);
+		registerBroadcastReceiver();
 
 		// Getting the Bluetooth adapter
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
-		
+
 		category_list = new ArrayList<HashMap<String, String>>();
 
 		// Getting adapter by passing xml data ArrayList
-		adapter = new BluetoothDeviceAdapter(getBaseContext(), category_list);        
+		listAdapter = new BluetoothDeviceAdapter(getBaseContext(), category_list); 
 
 		//List of devices
 		device_list = new ArrayList<HashMap<String, String>>();
@@ -133,10 +123,10 @@ public class Devices extends Activity{
 		tv = (ListView) findViewById(R.id.bluetooth_devices_list);
 
 		//Get the adapter for the device list
-		adapter = new BluetoothDeviceAdapter(getBaseContext(), device_list);        
+		listAdapter = new BluetoothDeviceAdapter(getBaseContext(), device_list);        
 
 		//Set the adapter
-		tv.setAdapter(adapter);
+		tv.setAdapter(listAdapter);
 
 		//Click event for single list row
 		tv.setOnItemClickListener(new OnItemClickListener() {
@@ -144,72 +134,44 @@ public class Devices extends Activity{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-				// Handle successful scan
-				try {
-					con = new BluetoothConnection(adapter.getMacAddress(position), 
-							(Activity)view.getContext(), getConnectionListener());
-					
-					
-					ch.setConnection(con);
-					
-//					progressDialog.setMessage("Connecting...");
-//					progressDialog.setCancelable(false);
-//					progressDialog.show();
-//					
-					con.connect();
-					
-//					int count = 0;
-//					while(!con.isConnected() && count < 10) {
-//						Thread.currentThread().sleep(1000);
-//						count++;
-//					}
-					
-//					progressDialog.dismiss();
-					
-					Log.d(TAG, "Check if the device is connected: " + con.isConnected());
-					
-					String lastConnectedDevice = "Device name: " + adapter.getName(position)
-							+ "\nMAC Address: " + adapter.getMacAddress(position);
+				String macAddress = listAdapter.getMacAddress(position);
+				
+				//Stygg hack, men det funker. Fix hvis du orker... (Good luck.)
+				setContext(view.getContext());
+				
+				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
+				serviceIntent.putExtra(MAC_ADDRESS, macAddress);
+				Bundle bundle = new Bundle();
+//				serviceIntent.putextra
+				
+				//FIXME: If the service allready is running, it does not start over.
+				//This might be a problem if it needs to change the connected device.
+				getApplicationContext().startService(serviceIntent);
 
-					Editor edit = sharedPref.edit();
+				
+//				progressDialog.setMessage("Connecting...");
+//				progressDialog.setCancelable(false);
+//				progressDialog.show();
+//				
 
-					//Saves the full information about the last connected device to sharedPreferences
-					edit.putString("connected_device_dialog", lastConnectedDevice);
 
-					//Save the name of the BT device as a separate setting. Used
-					//to show the name of last connected device in title bar.
-					edit.putString("connected_device_name", adapter.getName(position));
+//				Log.d(TAG, "Check if the device is connected: " + con.isConnected());
 
-					edit.commit();
-					Log.d(TAG, "The information about the last connected device was written to shared preferences");
-					Log.d(TAG, "Minneadresse fra Devices: " + MainActivity.getConnectionHolder().getConnection().toString());
-					
-					//Working on making a progress bar visible when the device is trying
-					//to connect. Do not remove!
-					/*
-					progressDialog.setMessage("Connecting...");
-					progressDialog.setCancelable(false);
-					progressDialog.show();
-					
-					if(con.isConnected()) {
-						Toast.makeText(view.getContext(), "Connection sucsessfull. Connected to device "
-								+ sharedPref.getString("connected_device_name", null), Toast.LENGTH_SHORT).show();
-						Log.d(TAG, "Connected to device: " + con.isConnected());
-					}
-					else {
-						progressDialog.dismiss();
-						Toast.makeText(view.getContext(), "Could not connect to device. Check your settings and try again.", Toast.LENGTH_SHORT).show();
-					}
-					*/
-					
-					Log.d(TAG, "Check if the device is connected: " + con.isConnected()); 
+				String lastConnectedDevice = "Device name: " + listAdapter.getName(position)
+						+ "\nMAC Address: " + listAdapter.getMacAddress(position);
 
-					//					Toast.makeText(view.getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+				Editor edit = sharedPref.edit();
 
-				} catch (Exception e) {
-					Log.d(TAG, "Could not connect");
-					Log.d(TAG, e.getMessage());
-				}
+				//Saves the full information about the last connected device to sharedPreferences
+				edit.putString("connected_device_dialog", lastConnectedDevice);
+
+				//Save the name of the BT device as a separate setting. Used
+				//to show the name of last connected device in title bar.
+				edit.putString("connected_device_name", listAdapter.getName(position));
+
+				edit.commit();
+				Log.d(TAG, "The information about the last connected device was written to shared preferences");
+
 			}
 		});	
 
@@ -219,7 +181,7 @@ public class Devices extends Activity{
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				try{
-					con.print("HAHAHA", false);
+//					con.print("HAHAHA", false);
 				}
 				catch(Exception e){
 					Log.d(TAG, "Could not send message");
@@ -239,7 +201,7 @@ public class Devices extends Activity{
 				device_list.clear();
 
 				//Notify the adapter that the list is now empty
-				adapter.notifyDataSetChanged();
+				listAdapter.notifyDataSetChanged();
 
 				//Scan for new BT devices
 				checkBTState();
@@ -265,6 +227,7 @@ public class Devices extends Activity{
 
 		//Add the button that takes you directly to the shop.
 		//TODO: Check if this is done right since the shop is our main actvity
+		//FIXME: This is not done rigth. Make it go back instead of making a new Activity
 		browseShowButton = (Button) findViewById(R.id.browse_shop_button);
 		browseShowButton.setOnClickListener(new OnClickListener() {
 
@@ -273,6 +236,33 @@ public class Devices extends Activity{
 				startActivity(new Intent(getBaseContext(), MainActivity.class));
 			}
 		});
+	}
+	
+	//Disse to er en del av en stygg hack, men det funker. Fix senere.
+	private void setContext(Context context) {
+		this.context = context;
+	}
+	
+	public static Context getContext() {
+		return context;
+	}
+
+
+	/**
+	 * Method used to register the broadcast receiver for communicating with
+	 * bluetooth API
+	 */
+	private void registerBroadcastReceiver() {
+		//Register the BroadcastReceiver
+		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+		filter.addAction(BluetoothDevice.ACTION_UUID);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+
+		actionFoundReceiver = new MyBroadcastReceiver();
+		//Registers the BT receiver with the requested filters
+		//Don't forget to unregister during onDestroy
+		registerReceiver(actionFoundReceiver, filter);
 	}
 
 
@@ -284,46 +274,47 @@ public class Devices extends Activity{
 			checkBTState();
 		}
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		unregisterReceiver(ActionFoundReceiver);
+//		unregisterReceiver(actionFoundReceiver);
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		unregisterReceiver(actionFoundReceiver);
 		if (btAdapter != null) {
 			btAdapter.cancelDiscovery();
 		}
-//		unregisterReceiver(ActionFoundReceiver);
+		//		unregisterReceiver(ActionFoundReceiver);
 
 		//Shut down the BT connection
-//		if(con != null) con.disconnect();
+		//		if(con != null) con.disconnect();
 	}
 
 	public void onResume() {
 		super.onResume();
 
 		//Check if there is an active connection with a BT device
-		if (con != null) Log.d(TAG, "Check if the device is connected " + con.isConnected());
+//		if (con != null) Log.d(TAG, "Check if the device is connected " + con.isConnected());
 
 		//Clear the list of BT devices
 		device_list.clear();
 
 		//Notify the adapter that the list is now empty
-		adapter.notifyDataSetChanged();
+		listAdapter.notifyDataSetChanged();
 
 		//Scan for new BT devices
 		//		checkBTState();
 
 		try {
 
-			String mac = "";	//FIXME: get mac from preferences
+//			String mac = "";	//FIXME: get mac from preferences
 
-			con = new BluetoothConnection(mac, (Activity)getBaseContext(), getConnectionListener());
-			con.connect();		
+//			con = new BluetoothConnection(mac, (Activity)getBaseContext(), getConnectionListener());
+//			con.connect();		
 
 
 		} catch (Exception e) {
@@ -362,7 +353,71 @@ public class Devices extends Activity{
 		}
 	}
 
-	private final BroadcastReceiver ActionFoundReceiver = new BroadcastReceiver() {
+	/**
+	 * For debugging (?).
+	 * @return 
+	 */
+//	private ConnectionListener getConnectionListener() {
+//		return new ConnectionListener() {
+//			public void onConnect(BluetoothConnection bluetoothConnection) {
+//				Log.d(TAG, "Connected to: " + con.toString());
+//
+//				//Add a button for every service found
+//				ConnectionMetadata meta = con.getConnectionData();
+//				for(String service : meta.getServicesSupported()) {
+//					Integer pins[] = meta.getServicePins(service);
+//
+//					//Pin controlled button
+//					if(pins.length > 0) {
+//						if(service.equals(DefaultServices.SERVICE_LED_LAMP.name()))  for(int pin : pins) Log.d(TAG, "LED pin: " + pin);
+//						if(service.equals(DefaultServices.SERVICE_VIBRATION.name()))  for(int pin : pins) Log.d(TAG, "VIBRATION pin " + pin);
+//						if(service.equals(DefaultServices.SERVICE_SPEAKER.name())) Log.d(TAG, "SPEAKER");
+//					}
+//
+//					//LCD print screen
+//					else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())) Log.d(TAG, "LCD");
+//				}
+//
+//			}
+//
+//			@Override
+//			public void onConnecting(BluetoothConnection bluetoothConnection) {
+//				Log.d(TAG, "Connecting to BT");
+//			}
+//
+//			@Override
+//			public void onDisconnect(BluetoothConnection bluetoothConnection) {
+//				Log.d(TAG, "Disconnected from BT");
+//			}
+//		};
+//
+//	};
+
+	//TODO: Not in use. Remove? 
+//	private class LCDButton extends Button implements View.OnClickListener {
+//		int timesClicked;
+//
+//		public LCDButton(Context context) {
+//			super(context);
+//			setOnClickListener(this);
+//			setText("Print \"Hello World\"");
+//		}
+//
+//		public void onClick(View v) {
+//			try {
+//				con.print("Hello World! (" + timesClicked++ + ")", false);
+//			} catch (TimeoutException e) {}
+//		}
+//	}
+
+
+	/**
+	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
+	 * 
+	 * @author JeppeE
+	 *
+	 */
+	private class MyBroadcastReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -378,7 +433,7 @@ public class Devices extends Activity{
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
 				//If the bluetooth class is named 708 that we made as a 'standard' for recognizing arduinos
-				if((device.getBluetoothClass().toString()).equals("708") || LIST_NON_ARDUINO_DEVICES){
+				if((device.getBluetoothClass().toString()).equals("708")){
 
 
 					//Adding found device
@@ -391,100 +446,17 @@ public class Devices extends Activity{
 
 					btDeviceList.add(device);	//FIXME: debugging
 
-					adapter.notifyDataSetChanged();
+					listAdapter.notifyDataSetChanged();
 				}
-
-				//				Log.d(TAG, device.getName());
-				//				Log.d(TAG, device.getBluetoothClass().getClass().getCanonicalName());
-				//				Log.d(TAG, device.getBluetoothClass().getClass().getName());
-				//				Log.d(TAG, device.getBluetoothClass().getClass().getSimpleName());
-				//				Log.d(TAG, "major: " + String.valueOf(device.getBluetoothClass().getMajorDeviceClass()));
-				//				Log.d(TAG, "device: " + String.valueOf(device.getBluetoothClass().getDeviceClass()));
-				//				Log.d(TAG, device.getBluetoothClass().toString());
-
 			}
-
-			//If it received a UUID parcel
-			//			if(BluetoothDevice.ACTION_UUID.equals(action)) {	TODO: uncomment these lines
-			//				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-			//				Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
-			//
-			//				for (int i=0; i<uuidExtra.length; i++) {
-			//					Log.d(TAG, "\n  Device: " + device.getName() + ", " + device + ", Service: " + uuidExtra[i].toString());
-			//				}
-			//			}
-
 			//If discovery finished
 			if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
 				refresh.setVisibility(View.VISIBLE);
-
-				//				Iterator<BluetoothDevice> itr = btDeviceList.iterator(); TODO: incomment these lines
-				//
-				//				while (itr.hasNext()) {
-				//
-				//					// Get Services for paired devices
-				//					BluetoothDevice device = itr.next();
-				//					Log.d(TAG, "\nGetting Services for " + device.getName() + ", " + device);
-				//
-				//				}
-
 				Log.d(TAG, "\nDiscovery Finished");
 			}
-		}
-	};
-
-	private ConnectionListener getConnectionListener() {
-		return new ConnectionListener() {
-			public void onConnect(BluetoothConnection bluetoothConnection) {
-				Log.d(TAG, "Connected to: " + con.toString());
-
-				//Add a button for every service found
-				ConnectionMetadata meta = con.getConnectionData();
-				for(String service : meta.getServicesSupported()) {
-					Integer pins[] = meta.getServicePins(service);
-
-					//Pin controlled button
-					if(pins.length > 0) {
-						if(service.equals(DefaultServices.SERVICE_LED_LAMP.name()))  for(int pin : pins) Log.d(TAG, "LED pin: " + pin);
-						if(service.equals(DefaultServices.SERVICE_VIBRATION.name()))  for(int pin : pins) Log.d(TAG, "VIBRATION pin " + pin);
-						if(service.equals(DefaultServices.SERVICE_SPEAKER.name())) Log.d(TAG, "SPEAKER");
-					}
-
-					//LCD print screen
-					else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())) Log.d(TAG, "LCD");
-				}
-
-			}
-
-			@Override
-			public void onConnecting(BluetoothConnection bluetoothConnection) {
-				Log.d(TAG, "Connecting to BT");
-			}
-
-			@Override
-			public void onDisconnect(BluetoothConnection bluetoothConnection) {
-				Log.d(TAG, "Disconnected from BT");
-			}
-		};
-
-	};
-
-	private class LCDButton extends Button implements View.OnClickListener {
-		int timesClicked;
-
-		public LCDButton(Context context) {
-			super(context);
-			setOnClickListener(this);
-			setText("Print \"Hello World\"");
-		}
-
-		public void onClick(View v) {
-			try {
-				con.print("Hello World! (" + timesClicked++ + ")", false);
-			} catch (TimeoutException e) {}
 		}
 
 	}
