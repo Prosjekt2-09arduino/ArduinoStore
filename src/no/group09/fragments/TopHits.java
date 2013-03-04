@@ -21,33 +21,29 @@ package no.group09.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import no.group09.arduinoair.MainActivity;
 import no.group09.arduinoair.R;
-import no.group09.arduinoair.R.id;
-import no.group09.arduinoair.R.layout;
-
+import no.group09.database.Save;
+import no.group09.database.objects.App;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class TopHits extends MyFragment{
+public class TopHits extends Fragment{
 
 	private int mCurrentPage;
-	private Activity activity;
-//	private Fragment fragment;
-	
-	private RatingBar getRatingBar;
-	
 	private ListView list;
-    private ListAdapter adapter;
-	
+	private ListAdapter adapter;
+	private View view;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,87 +52,76 @@ public class TopHits extends MyFragment{
 		Bundle data = getArguments();
 
 		/** Getting integer data of the key current_page from the bundle */
-		mCurrentPage = data.getInt("current_page", 1);
+		mCurrentPage = data.getInt("current_page", 3);
 	}
 	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		final View v = inflater.inflate(R.layout.main, container,false);
-//        activity = (Activity) v.getContext();
-//        SharedPreferences prefs = activity.getSharedPreferences("no.group09.arduinoair", Context.MODE_PRIVATE);
-		
-		ArrayList<HashMap<String, String>> category_list = new ArrayList<HashMap<String, String>>();
-		
-		////////////////////////////////////////////////////////////////////////////////////
-		//TODO: change this with SQLLite or something
+		view = inflater.inflate(R.layout.main, container,false);
 
-		HashMap<String, String> map = new HashMap<String, String>();
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "3");
-		map.put(ListAdapter.APP_NAME, "Where is my phonebook?");
-		map.put(ListAdapter.DISTRIBUTOR, "Telemor");
-		map.put(ListAdapter.RATING, "*****");
-		category_list.add(map);
+		update();
+		
+		return view;
+	}
 	
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "7");
-		map.put(ListAdapter.APP_NAME, "The coolest app");
-		map.put(ListAdapter.DISTRIBUTOR, "Appelapp");
-		map.put(ListAdapter.RATING, "*****");
-		category_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "2");
-		map.put(ListAdapter.APP_NAME, "House Sofa App");
-		map.put(ListAdapter.DISTRIBUTOR, "Appfel AS");
-		map.put(ListAdapter.RATING, "****");
-		category_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "5");
-		map.put(ListAdapter.APP_NAME, "Earth Control");
-		map.put(ListAdapter.DISTRIBUTOR, "Obama");
-		map.put(ListAdapter.RATING, "****");
-		category_list.add(map);
+	public void update(){
+		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
 
-		map.put(ListAdapter.KEY_ID, "1");
-		map.put(ListAdapter.APP_NAME, "Something Cool");
-		map.put(ListAdapter.DISTRIBUTOR, "Miskrosoft Corporation");
-		map.put(ListAdapter.RATING, "***");
-		category_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "4");
-		map.put(ListAdapter.APP_NAME, "Phonebook 2000");
-		map.put(ListAdapter.DISTRIBUTOR, "Nextcom");
-		map.put(ListAdapter.RATING, "**");
-		category_list.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put(ListAdapter.KEY_ID, "6");
-		map.put(ListAdapter.APP_NAME, "Where is my house? Im drunk!");
-		map.put(ListAdapter.DISTRIBUTOR, "Alcohol AS");
-		map.put(ListAdapter.RATING, "*");
-		category_list.add(map);
-		
-		////////////////////////////////////////////////////////////////////////////////////
-		
-		list = (ListView)v.findViewById(R.id.list);
-		
+		//This adds elements from the database to the listview
+		Save save = new Save(this.view.getContext());
+		save.open();
+
+		for(App app : save.getAllApps()){
+
+			if(app.getCategory().equals("Games") && MainActivity.pagerAdapter.page2 == Page.GAMES_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+			else if(app.getCategory().equals("Medical") && MainActivity.pagerAdapter.page2 == Page.MEDICAL_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+			else if(app.getCategory().equals("Tools") && MainActivity.pagerAdapter.page2 == Page.TOOLS_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+			else if(app.getCategory().equals("Media") && MainActivity.pagerAdapter.page2 == Page.MEDIA_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+		}
+
+		list = (ListView)this.view.findViewById(R.id.list);
+
 		// Getting adapter by passing xml data ArrayList
-        adapter = new ListAdapter(v.getContext(), category_list);        
-        list.setAdapter(adapter);
+		adapter = new ListAdapter(this.view.getContext(), application_list);        
+		list.setAdapter(adapter);
 
-        // Click event for single list row
-        list.setOnItemClickListener(new OnItemClickListener() {
+		// Click event for single list row
+		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Toast.makeText(view.getContext(), "You hit the button", Toast.LENGTH_SHORT).show();
 			}
 		});	
-		
-		return v;
 	}
 }

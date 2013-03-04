@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class ListAdapter extends BaseAdapter {
@@ -68,8 +69,8 @@ public class ListAdapter extends BaseAdapter {
 
         TextView appName = (TextView)vi.findViewById(R.id.app_name);
         TextView distributor = (TextView)vi.findViewById(R.id.distributor);
-        TextView rating = (TextView)vi.findViewById(R.id.rating);
-//        getRatingBar = (RatingBar) vi.findViewById(R.id.getRating);;
+//        TextView rating = (TextView)vi.findViewById(R.id.rating);
+        RatingBar getRatingBar = (RatingBar) vi.findViewById(R.id.ratingBarIndicator);;
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image);
         
         HashMap<String, String> listItem = new HashMap<String, String>();
@@ -78,10 +79,14 @@ public class ListAdapter extends BaseAdapter {
         // Setting all values in listview
         appName.setText(listItem.get(APP_NAME));
         distributor.setText(listItem.get(DISTRIBUTOR));
-        rating.setText(listItem.get(RATING));
+//        rating.setText(listItem.get(RATING));
 //        thumb_image.setImageBitmap(Save.converteStringToBitmap(listItem.get(IMAGE)));
-//        getRatingBar.setRating(Float.parseFloat(listItem.get(All.RATING)));
+        getRatingBar.setRating((float)Integer.parseInt(listItem.get(RATING)));
         
         return vi;
+    }
+    
+    public String getID(int position){
+    	return data.get(position).get(KEY_ID);
     }
 }

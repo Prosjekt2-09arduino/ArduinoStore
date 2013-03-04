@@ -97,4 +97,8 @@ public class ListAdapterCategory extends BaseAdapter {
         
         return vi;
     }
+    
+	public String getName(int id){
+		return data.get(id).get(APP_NAME);
+	}
 }

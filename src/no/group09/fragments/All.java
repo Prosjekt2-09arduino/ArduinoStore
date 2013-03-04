@@ -20,10 +20,16 @@ package no.group09.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import no.group09.arduinoair.MainActivity;
 import no.group09.arduinoair.R;
 import no.group09.database.Save;
 import no.group09.database.objects.App;
+import no.group09.utils.AppView;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,48 +39,83 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class All extends MyFragment {
+public class All extends Fragment {
 
 	private int mCurrentPage;
 	private ListView list;
 	private ListAdapter adapter;
+	private View view;
+	private ViewGroup container;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		/** Getting the arguments to the Bundle object */
-		Bundle data = getArguments();
+//		Bundle data = getArguments();
 
 		/** Getting integer data of the key current_page from the bundle */
-		mCurrentPage = data.getInt("current_page", 1);
+//		mCurrentPage = data.getInt("current_page", 2);
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		final View v = inflater.inflate(R.layout.main, container,false);
+		view = inflater.inflate(R.layout.main, container,false);
+		
+		update();
+		Log.d("All", "this should not be created yet");
 
+		return view;
+	}
+	
+	public void update(){
 		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
 
 		//This adds elements from the database to the listview
-		Save save = new Save(v.getContext());
+		Save save = new Save(this.view.getContext());
 		save.open();
-		for(App app : save.getAllApps()){
-			HashMap<String, String >map = new HashMap<String, String>();
-			map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-			map.put(ListAdapter.APP_NAME, app.getName());
-			map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
-			map.put(ListAdapter.RATING, app.getDescription());
-//			map.put(ListAdapter.IMAGE, Save.convertBitmapToString(	FIXME: add icon support
-//					Save.convertByteArrayToBitmap(app.getIcon())));
-			application_list.add(map);
-		}
 
-		list = (ListView)v.findViewById(R.id.list);
+		for(App app : save.getAllApps()){
+
+			if(app.getCategory().equals("Games") && MainActivity.pagerAdapter.page1 == Page.GAMES_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+			else if(app.getCategory().equals("Medical") && MainActivity.pagerAdapter.page1 == Page.MEDICAL_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+			else if(app.getCategory().equals("Tools") && MainActivity.pagerAdapter.page1 == Page.TOOLS_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+			else if(app.getCategory().equals("Media") && MainActivity.pagerAdapter.page1 == Page.MEDIA_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
+				HashMap<String, String >map = new HashMap<String, String>();
+				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+				map.put(ListAdapter.APP_NAME, app.getName());
+				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+				application_list.add(map);
+			}
+		}
+		
+		list = (ListView)this.view.findViewById(R.id.list);
 
 		// Getting adapter by passing xml data ArrayList
-		adapter = new ListAdapter(v.getContext(), application_list);        
+		adapter = new ListAdapter(this.view.getContext(), application_list);        
 		list.setAdapter(adapter);
 
 		// Click event for single list row
@@ -82,10 +123,19 @@ public class All extends MyFragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(view.getContext(), "You hit the button", Toast.LENGTH_SHORT).show();
+				
+				//Create a new intent for the application view
+				Intent intent = new Intent(view.getContext(), AppView.class);
+				
+				//Fetch the application ID
+				int appID = Integer.parseInt(adapter.getID(position));
+				
+				//Give the intent a message (which application to retreive from the db)
+				intent.putExtra("app", appID);
+				
+				//Start the activity
+				startActivity(intent);
 			}
 		});	
-
-		return v;
 	}
 }
