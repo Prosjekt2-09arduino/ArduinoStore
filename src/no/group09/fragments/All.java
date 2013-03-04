@@ -38,7 +38,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-
+/**
+ * The content of ALL content tab in the FragmentPager
+ */
 public class All extends Fragment {
 
 	private int mCurrentPage;
@@ -64,7 +66,6 @@ public class All extends Fragment {
 		view = inflater.inflate(R.layout.main, container,false);
 		
 		update();
-		Log.d("All", "this should not be created yet");
 
 		return view;
 	}
@@ -76,6 +77,7 @@ public class All extends Fragment {
 		Save save = new Save(this.view.getContext());
 		save.open();
 
+		//Iterate over all the apps from the local database
 		for(App app : save.getAllApps()){
 
 			if(app.getCategory().equals("Games") && MainActivity.pagerAdapter.page1 == Page.GAMES_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){

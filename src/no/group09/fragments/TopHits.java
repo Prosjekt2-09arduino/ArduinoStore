@@ -38,7 +38,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-
+/**
+ * The content of the TOPHITS / MOST VISITED tab.
+ */
 public class TopHits extends Fragment{
 
 	private int mCurrentPage;

@@ -134,6 +134,8 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(false);
+				
+				//Set new text when item is clicked
 				item.setTitle("Hide incompatible");
 			}
 			else{
@@ -143,6 +145,8 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(true);
+				
+				//Set new text when item is clicked
 				item.setTitle("Show incompatible");
 			}
 
