@@ -19,12 +19,9 @@ package no.group09.arduinoair;
  * under the License.
  */
 
-<<<<<<< HEAD
 import no.group09.connection.BluetoothConnection;
 import no.group09.database.DatabaseHandler;
 import no.group09.database.Db;
-=======
->>>>>>> master
 import no.group09.database.Save;
 import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
@@ -43,26 +40,24 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class MainActivity extends FragmentActivity {
 
 	private String TAG = "MainActivity";
 
-<<<<<<< HEAD
 	DatabaseHandler database = null;
 	ToggleButton toggleButton1, toggleButton2;
 	Button btnDisplay;
-	Save save;
 	
 	private static ConnectionHolder connectionHolder;
 	public static final String CONNECTION_HOLDER = "connection_holder";
-=======
 	public static MyFragmentPagerAdapter pagerAdapter;
 	public static ViewPager pager;
 	private Save save;
->>>>>>> master
 
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
@@ -96,36 +91,28 @@ public class MainActivity extends FragmentActivity {
 		save = new Save(getBaseContext());
 		save.open();
 
-<<<<<<< HEAD
 		connectionHolder = new ConnectionHolder();
 		
 		
+
+		save.insertApp(new App("Game1", 3, 1, "Games"));	//FIXME: add support for icons
+		save.insertApp(new App("Game2", 4, 2, "Games"));	//FIXME: add support for icons
+		save.insertApp(new App("Game3", 2, 3, "Games"));	//FIXME: add support for icons
+		save.insertApp(new App("Game4", 4, 4, "Games"));	//FIXME: add support for icons
+		save.insertApp(new App("Game5", 1, 2, "Games"));	//FIXME: add support for icons
 		
-//		save.insertApp(new App("Game1", "haha", 1, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game2", "asd", 2, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game3", "ddddd", 3, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game4", "hassha", 4, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game5", "aaaa", 2, "Games"));	//FIXME: add support for icons
-=======
-//		save.insertApp(new App("Game1", 3, 1, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game2", 4, 2, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game3", 2, 3, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game4", 4, 4, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game5", 1, 2, "Games"));	//FIXME: add support for icons
->>>>>>> master
-//		
-//		save.insertApp(new App("Medical1", 1, 1, "Medical"));	//FIXME: add support for icons
-//		save.insertApp(new App("Medical2", 1, 3, "Medical"));	//FIXME: add support for icons
-//		save.insertApp(new App("Medical3", 4, 5, "Medical"));	//FIXME: add support for icons
-//		
-//		save.insertApp(new App("Tool1", 5, 8, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool2", 5, 3, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool3", 2, 1, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool4", 3, 1, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool5", 4, 1, "Tools"));	//FIXME: add support for icons
-//		
-//		save.insertApp(new App("Player", 4, 7, "Media"));	//FIXME: add support for icons
-//		save.insertApp(new App("MusicP", 2, 6, "Media"));	//FIXME: add support for icons
+		save.insertApp(new App("Medical1", 1, 1, "Medical"));	//FIXME: add support for icons
+		save.insertApp(new App("Medical2", 1, 3, "Medical"));	//FIXME: add support for icons
+		save.insertApp(new App("Medical3", 4, 5, "Medical"));	//FIXME: add support for icons
+		
+		save.insertApp(new App("Tool1", 5, 8, "Tools"));	//FIXME: add support for icons
+		save.insertApp(new App("Tool2", 5, 3, "Tools"));	//FIXME: add support for icons
+		save.insertApp(new App("Tool3", 2, 1, "Tools"));	//FIXME: add support for icons
+		save.insertApp(new App("Tool4", 3, 1, "Tools"));	//FIXME: add support for icons
+		save.insertApp(new App("Tool5", 4, 1, "Tools"));	//FIXME: add support for icons
+		
+		save.insertApp(new App("Player", 4, 7, "Media"));	//FIXME: add support for icons
+		save.insertApp(new App("MusicP", 2, 6, "Media"));	//FIXME: add support for icons
 //		
 		//This clears the database
 //		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
@@ -162,7 +149,6 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
-<<<<<<< HEAD
 		//Start the preferences class
 		case R.id.settings:
 			//Create an intent to start the preferences activity
@@ -170,23 +156,8 @@ public class MainActivity extends FragmentActivity {
 			this.startActivity(myIntent);
 			return true;
 
-			//Toggle hide incompatible
-		case R.id.hide_incompatible:
-
-			/*
-			 * TODO: If time: check if it is possible to change the text in action
-			 * overflow according to the value 'hide incompatible' in Preferences.
-			 */
-			
-			
-			//For testing purposes
-//			Log.d(TAG, "Connection: " + connectionHolder.getConnection());
-			Log.d(TAG, "Minneadresse fra MainAactivity: " + connectionHolder.getConnection().toString());
-			Log.d(TAG, "Isconnected: " + connectionHolder.getConnection().isConnected());
-=======
 		case R.id.toggle_incompitable:
 			
->>>>>>> master
 			//Prepare to edit the setting
 			Editor edit = sharedPref.edit();
 			
@@ -214,14 +185,6 @@ public class MainActivity extends FragmentActivity {
 			
 			return true;
 			
-		//Start the preferences class
-		case R.id.settings:
-			//Create an intent to start the preferences activity
-			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
-			this.startActivity(myIntent);
-			return true;
-
-			
 		//Show the device list
 		case R.id.device_list:
 			Intent intent = new Intent(this, Devices.class);
@@ -236,14 +199,7 @@ public class MainActivity extends FragmentActivity {
 //		case R.id.add_device:
 //			startActivity(new Intent(this, AddDeviceScreen.class));
 //			return true;
-
-			//This is just for testing purposes. Remove when done.
-			//TODO: Remove when done testing the application view.
-//		case R.id.application_view:
-//			startActivity(new Intent(this, AppView.class));
-//			return true;
-//		}
-//
+			
 //		//The item was none of the following
 		default : return false;
 		}
