@@ -46,7 +46,6 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-
 public class MainActivity extends FragmentActivity {
 
 	private String TAG = "MainActivity";
