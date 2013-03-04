@@ -18,7 +18,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		database.execSQL(Constants.DATABASE_CREATE_APP);
 //		database.execSQL(Constants.DATABASE_CREATE_VERSION);
 //		database.execSQL(Constants.DATABASE_CREATE_RATINGS);
-//		database.execSQL(Constants.DATABASE_CREATE_DEVELOPER);
+		database.execSQL(Constants.DATABASE_CREATE_DEVELOPER);
 //		database.execSQL(Constants.DATABASE_CREATE_PICTURES);
 //		database.execSQL(Constants.DATABASE_CREATE_HARDWARE);
 //		database.execSQL(Constants.DATABASE_CREATE_PLATFORM);
@@ -36,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		database.execSQL("DROP TABLE IF EXISTS app");
 //		database.execSQL("DROP TABLE IF EXISTS version");
 //		database.execSQL("DROP TABLE IF EXISTS ratings");
-//		database.execSQL("DROP TABLE IF EXISTS developer");
+		database.execSQL("DROP TABLE IF EXISTS developer");
 //		database.execSQL("DROP TABLE IF EXISTS pictures");
 //		database.execSQL("DROP TABLE IF EXISTS hardware");
 //		database.execSQL("DROP TABLE IF EXISTS platform");

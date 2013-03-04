@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.group09.database.objects.App;
+import no.group09.database.objects.Developer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -77,14 +78,14 @@ public class Save {
 //			tempCursor = null;
 //		}
 //
-//		//developer(developerid, name, website)
-//		String[] developer = new String[] {Constants.DEVELOPER_ID, Constants.DEVELOPER_NAME, Constants.DEVELOPER_WEBSITE};
-//		tempCursor = db.query(true, Constants.DEVELOPER_TABLE, developer, null, null, null, null, null, null); 
-//		if (tempCursor != null){
-//			tempCursor.moveToFirst(); 
-//			tables.put("developer", tempCursor);
-//			tempCursor = null;
-//		}
+		//developer(developerid, name, website)
+		String[] developer = new String[] {Constants.DEVELOPER_ID, Constants.DEVELOPER_NAME, Constants.DEVELOPER_WEBSITE};
+		tempCursor = db.query(true, Constants.DEVELOPER_TABLE, developer, null, null, null, null, null, null); 
+		if (tempCursor != null){
+			tempCursor.moveToFirst(); 
+			tables.put("developer", tempCursor);
+			tempCursor = null;
+		}
 //
 //		//pictures(pictureid, appid, fileURL)
 //		String[] pictures = new String[] {Constants.PICTURES_ID, Constants.PICTURES_APPID, Constants.PICTURES_FILEURL};
@@ -157,6 +158,30 @@ public class Save {
 		return apps;
 		
 	}
+	
+	/** Get the requested developer from the database */
+	public synchronized Developer getDeveloper(int id){
+		Cursor c = null;
+		Developer developer = null;
+		
+		try{
+			c = db.rawQuery(Constants.SELECT_DEVELOPER, new String[] {String.valueOf(id)});
+			
+			if(c.moveToFirst()){
+				developer = new Developer(
+						c.getInt(0),
+						c.getString(1),
+						c.getString(2));
+			}
+		}
+		catch (SQLiteException e){ Log.e(TAG, e.getMessage());}
+		
+		catch (IllegalStateException e){ Log.e(TAG, e.getMessage());}
+		
+		finally { if (c != null) c.close();}
+		
+		return developer;
+	}
 
 	/** Get the the requested app from the database */
 	public synchronized App getApp(int id) {
@@ -208,6 +233,29 @@ public class Save {
 				insertStmt.bindString(3, String.valueOf(app.getDeveloperID()));
 				insertStmt.bindString(4, app.getCategory());
 //				insertStmt.bindBlob(4, app.getIcon());	//FIXME: add icon support
+				insertStmt.executeInsert();
+			}
+		}
+
+		catch (SQLiteException e) {
+			Log.e(TAG, e.getMessage());
+		}
+
+		finally {
+			close();
+		}
+	}
+	
+	public void insertDeveloper(Developer developer) {
+
+		db = Db.openDb(Db.DATABASE_NAME, SQLiteDatabase.NO_LOCALIZED_COLLATORS|SQLiteDatabase.OPEN_READWRITE);
+
+		try {
+			if (db.isOpen()) {
+				SQLiteStatement insertStmt = db.compileStatement(Constants.INSERT_APP);
+				insertStmt.clearBindings();
+				insertStmt.bindString(1, developer.getName());
+				insertStmt.bindString(2, developer.getWebsite());
 				insertStmt.executeInsert();
 			}
 		}
