@@ -82,7 +82,7 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -90,7 +90,7 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -98,7 +98,7 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -106,7 +106,7 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}

@@ -25,7 +25,9 @@ import no.group09.database.Save;
 import no.group09.database.objects.App;
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
+import no.group09.utils.AppView;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -66,6 +68,7 @@ public class TopHits extends Fragment{
 		return view;
 	}
 	
+	/** Update the list-content */
 	public void update(){
 		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
 
@@ -73,13 +76,14 @@ public class TopHits extends Fragment{
 		Save save = new Save(this.view.getContext());
 		save.open();
 
+		//Iterate over all the applications in the database
 		for(App app : save.getAllApps()){
 
 			if(app.getCategory().equals("Games") && MainActivity.pagerAdapter.page2 == Page.GAMES_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());	//Fetch the developer from the ID
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -87,7 +91,7 @@ public class TopHits extends Fragment{
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -95,7 +99,7 @@ public class TopHits extends Fragment{
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -103,7 +107,7 @@ public class TopHits extends Fragment{
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, String.valueOf(app.getDeveloperID()));
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -120,7 +124,17 @@ public class TopHits extends Fragment{
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(view.getContext(), "You hit the button", Toast.LENGTH_SHORT).show();
+				//Create a new intent for the application view
+				Intent intent = new Intent(view.getContext(), AppView.class);
+				
+				//Fetch the application ID
+				int appID = Integer.parseInt(adapter.getID(position));
+				
+				//Give the intent a message (which application to retreive from the db)
+				intent.putExtra("app", appID);
+				
+				//Start the activity
+				startActivity(intent);
 			}
 		});	
 	}
