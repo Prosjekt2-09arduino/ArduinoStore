@@ -30,7 +30,6 @@ public class Save {
 
 	public Save(Context context){
 		dbHelper = new DatabaseHandler(context);
-		this.ctx = context;
 	}
 
 	public void close(){
@@ -39,21 +38,12 @@ public class Save {
 
 	public void open(){
 		db = dbHelper.getWritableDatabase();
-		
-//		if(checkDataBase()){
-//			
-//			//Delete the old database
-//			ctx.deleteDatabase(Db.DATABASE_NAME);
-//			
-//			//Create new database
-//			populateDatabase();
-//		}
 	}
 	
-	private boolean checkDataBase(){
-
+	public boolean isPopulated(){
+		Cursor cursor = null;
 		String[] app = new String[] {Constants.APP_ID, Constants.APP_NAME, Constants.APP_RATING, Constants.APP_DEVELOPERID, Constants.APP_CATEGORY};  
-		Cursor cursor = db.query(true, Constants.APP_TABLE, app, null, null, null, null, null, null); 
+		cursor = db.query(true, Constants.APP_TABLE, app, null, null, null, null, null, null); 
 		
 		return cursor.moveToFirst();
 	}
@@ -321,25 +311,32 @@ public class Save {
 		return stream.toByteArray();
 	}
 	
-	public void populateDatabase(){
+	public synchronized void populateDatabase(){
+		//FIXME: add support for icons
+		insertApp(new App("FunGame", 3, 1, "Games"));	
+		insertApp(new App("Game", 4, 2, "Games"));	
+		insertApp(new App("PlayTime", 2, 5, "Games"));	
+		insertApp(new App("FunTime", 4, 4, "Games"));	
+		insertApp(new App("PlayWithPlayers", 1, 2, "Games"));	
 		
-		insertApp(new App("Game1", 3, 1, "Games"));	//FIXME: add support for icons
-		insertApp(new App("Game2", 4, 2, "Games"));	//FIXME: add support for icons
-		insertApp(new App("Game3", 2, 3, "Games"));	//FIXME: add support for icons
-		insertApp(new App("Game4", 4, 4, "Games"));	//FIXME: add support for icons
-		insertApp(new App("Game5", 1, 2, "Games"));	//FIXME: add support for icons
+		insertApp(new App("Medic", 1, 1, "Medical"));	
+		insertApp(new App("Medical", 6, 3, "Medical"));	
+		insertApp(new App("Helper", 4, 5, "Medical"));	
 		
-		insertApp(new App("Medical1", 1, 1, "Medical"));	//FIXME: add support for icons
-		insertApp(new App("Medical2", 1, 3, "Medical"));	//FIXME: add support for icons
-		insertApp(new App("Medical3", 4, 5, "Medical"));	//FIXME: add support for icons
+		insertApp(new App("Tool", 5, 5, "Tools"));	
+		insertApp(new App("ToolBox", 5, 3, "Tools"));	
+		insertApp(new App("BoxTooler", 2, 1, "Tools"));	
+		insertApp(new App("ToolTooler", 3, 1, "Tools"));	
+		insertApp(new App("ScrewDriver", 4, 1, "Tools"));	
 		
-		insertApp(new App("Tool1", 5, 8, "Tools"));	//FIXME: add support for icons
-		insertApp(new App("Tool2", 5, 3, "Tools"));	//FIXME: add support for icons
-		insertApp(new App("Tool3", 2, 1, "Tools"));	//FIXME: add support for icons
-		insertApp(new App("Tool4", 3, 1, "Tools"));	//FIXME: add support for icons
-		insertApp(new App("Tool5", 4, 1, "Tools"));	//FIXME: add support for icons
+		insertApp(new App("Player", 4, 5, "Media"));	
+		insertApp(new App("MusicP", 2, 2, "Media"));
 		
-		insertApp(new App("Player", 4, 7, "Media"));	//FIXME: add support for icons
-		insertApp(new App("MusicP", 2, 6, "Media"));	//FIXME: add support for icons
+		insertDeveloper(new Developer("Wilhelm", "www.lol.com"));
+		insertDeveloper(new Developer("Robin", "www.haha.com"));
+		insertDeveloper(new Developer("Jeppe", "www.hehe.com"));
+		insertDeveloper(new Developer("Bjørn", "www.hoho.com"));
+		insertDeveloper(new Developer("Ståle", "www.rofl.com"));
+		insertDeveloper(new Developer("Nina", "www.kake.com"));
 	}
 }

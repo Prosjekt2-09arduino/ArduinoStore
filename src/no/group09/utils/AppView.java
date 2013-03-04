@@ -2,6 +2,7 @@ package no.group09.utils;
 
 import no.group09.database.Save;
 import no.group09.database.objects.App;
+import no.group09.database.objects.Developer;
 import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,17 +43,19 @@ public class AppView extends Activity {
 		
 		//Fetch the application from the database
 		App app = save.getApp(appID);
+		Developer developer = save.getDeveloper(app.getDeveloperID());
 		
 		TextView appName = (TextView) findViewById(R.id.app_view_app_name);
 		TextView appDeveloper = (TextView) findViewById(R.id.app_view_developer);
 		RatingBar rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
 		
 		appName.setText(app.getName());
-		appDeveloper.setText(String.valueOf(app.getDeveloperID()));	//TODO: Get the developer from the database on this ID
-		rating.setRating((float)app.getRating());
-		//TODO: get all the information from the database.
 		
+		appDeveloper.setText(developer.getName());	//TODO: Get the developer from the database on this ID
+		
+		rating.setRating((float)app.getRating());
 	}
+
 	//	method for handling click of the review button
 	public void reviewClicked(View view){
 		//		

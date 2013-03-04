@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity {
 
 		/** Instantiating FragmentPagerAdapter */
 		pagerAdapter = new MyFragmentPagerAdapter(fm);
-		
+
 		/** Setting the pagerAdapter to the pager object */
 		pager.setAdapter(pagerAdapter);
 
@@ -87,7 +87,7 @@ public class MainActivity extends FragmentActivity {
 
 		//This clears the database
 //		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
-		
+
 		//This populates the database
 //		save.populateDatabase();
 	}
@@ -101,9 +101,9 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
-		
+
 		Editor edit = sharedPref.edit();
-		
+
 		//When the menu is created, check the preferences and set the correct text
 		if(sharedPref.getBoolean("hide_incompatible", false)){
 			menu.getItem(1).setTitle("Show incompatible");
@@ -111,7 +111,7 @@ public class MainActivity extends FragmentActivity {
 		else{
 			menu.getItem(1).setTitle("Hide incompatible");
 		}
-		
+
 		return true;
 	}
 
@@ -120,60 +120,60 @@ public class MainActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 
 		case R.id.toggle_incompitable:
-			
+
 			//Prepare to edit the setting
 			Editor edit = sharedPref.edit();
-			
+
 			//Fetches the current value of the 'hide incompatible' option in the preference file
 			boolean hideIncompatible = sharedPref.getBoolean("hide_incompatible", false);
-			
+
 			if(hideIncompatible == true){
-				
+
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", false);
 				edit.commit();
-				
+
 				item.setChecked(false);
 				item.setTitle("Hide incompatible");
 			}
 			else{
-				
+
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", true);
 				edit.commit();
-				
+
 				item.setChecked(true);
 				item.setTitle("Show incompatible");
 			}
-			
+
 			return true;
-			
-		//Start the preferences class
+
+			//Start the preferences class
 		case R.id.settings:
 			//Create an intent to start the preferences activity
 			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
 			this.startActivity(myIntent);
 			return true;
 
-			
-		//Show the device list
+
+			//Show the device list
 		case R.id.device_list:
 			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
 			startActivity(intent);
 			return true;
 
-//		case R.id.add_device:
-//			startActivity(new Intent(this, AddDeviceScreen.class));
-//			return true;
+			//		case R.id.add_device:
+			//			startActivity(new Intent(this, AddDeviceScreen.class));
+			//			return true;
 
 			//This is just for testing purposes. Remove when done.
 			//TODO: Remove when done testing the application view.
-//		case R.id.application_view:
-//			startActivity(new Intent(this, AppView.class));
-//			return true;
-//		}
-//
-//		//The item was none of the following
+			//		case R.id.application_view:
+			//			startActivity(new Intent(this, AppView.class));
+			//			return true;
+			//		}
+			//
+			//		//The item was none of the following
 		default : return false;
 		}
 	}

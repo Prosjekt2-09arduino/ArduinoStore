@@ -8,7 +8,7 @@ public class Constants {
     
     /** Insert an app to the database */
     protected final static String INSERT_APP = "insert or replace into app (name, rating, developerid, category) values (?, ?, ?, ?)";
-    protected final static String INSERT_DEVELOPER = "insert or replace into app (name, rating, developerid, category) values (?, ?, ?, ?)";
+    protected final static String INSERT_DEVELOPER = "insert or replace into developer (name, website) values (?, ?)";
 
     /** Delete an app from the database */
     protected final static String DELETE_APP = "delete from app where name=?";
