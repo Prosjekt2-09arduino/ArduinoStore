@@ -85,27 +85,11 @@ public class MainActivity extends FragmentActivity {
 		save = new Save(getBaseContext());
 		save.open();
 
-//		save.insertApp(new App("Game1", 3, 1, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game2", 4, 2, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game3", 2, 3, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game4", 4, 4, "Games"));	//FIXME: add support for icons
-//		save.insertApp(new App("Game5", 1, 2, "Games"));	//FIXME: add support for icons
-//		
-//		save.insertApp(new App("Medical1", 1, 1, "Medical"));	//FIXME: add support for icons
-//		save.insertApp(new App("Medical2", 1, 3, "Medical"));	//FIXME: add support for icons
-//		save.insertApp(new App("Medical3", 4, 5, "Medical"));	//FIXME: add support for icons
-//		
-//		save.insertApp(new App("Tool1", 5, 8, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool2", 5, 3, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool3", 2, 1, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool4", 3, 1, "Tools"));	//FIXME: add support for icons
-//		save.insertApp(new App("Tool5", 4, 1, "Tools"));	//FIXME: add support for icons
-//		
-//		save.insertApp(new App("Player", 4, 7, "Media"));	//FIXME: add support for icons
-//		save.insertApp(new App("MusicP", 2, 6, "Media"));	//FIXME: add support for icons
-//		
 		//This clears the database
 //		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
+		
+		//This populates the database
+//		save.populateDatabase();
 	}
 
 	@Override

@@ -10,6 +10,11 @@ public class Developer {
 		this.name = name;
 		this.website = website;
 	}
+	
+	public Developer(String name, String website){
+		this.name = name;
+		this.website = website;
+	}
 
 	public int getId() {
 		return id;

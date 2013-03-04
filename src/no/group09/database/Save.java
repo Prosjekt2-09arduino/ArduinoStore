@@ -6,10 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import no.group09.database.objects.App;
 import no.group09.database.objects.Developer;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -26,11 +24,13 @@ public class Save {
 
 	public SQLiteDatabase db;
 	private DatabaseHandler dbHelper;
+	private Context ctx;
 
 	protected HashMap<String, Cursor> tables;
 
 	public Save(Context context){
 		dbHelper = new DatabaseHandler(context);
+		this.ctx = context;
 	}
 
 	public void close(){
@@ -39,8 +39,25 @@ public class Save {
 
 	public void open(){
 		db = dbHelper.getWritableDatabase();
+		
+//		if(checkDataBase()){
+//			
+//			//Delete the old database
+//			ctx.deleteDatabase(Db.DATABASE_NAME);
+//			
+//			//Create new database
+//			populateDatabase();
+//		}
 	}
+	
+	private boolean checkDataBase(){
 
+		String[] app = new String[] {Constants.APP_ID, Constants.APP_NAME, Constants.APP_RATING, Constants.APP_DEVELOPERID, Constants.APP_CATEGORY};  
+		Cursor cursor = db.query(true, Constants.APP_TABLE, app, null, null, null, null, null, null); 
+		
+		return cursor.moveToFirst();
+	}
+	
 	/**
 	 * Selects all the records in the database
 	 * @return return a Cursor[] with all the values. Iterate over each cursor to get out the values.
@@ -252,7 +269,7 @@ public class Save {
 
 		try {
 			if (db.isOpen()) {
-				SQLiteStatement insertStmt = db.compileStatement(Constants.INSERT_APP);
+				SQLiteStatement insertStmt = db.compileStatement(Constants.INSERT_DEVELOPER);
 				insertStmt.clearBindings();
 				insertStmt.bindString(1, developer.getName());
 				insertStmt.bindString(2, developer.getWebsite());
@@ -302,5 +319,27 @@ public class Save {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
 		return stream.toByteArray();
+	}
+	
+	public void populateDatabase(){
+		
+		insertApp(new App("Game1", 3, 1, "Games"));	//FIXME: add support for icons
+		insertApp(new App("Game2", 4, 2, "Games"));	//FIXME: add support for icons
+		insertApp(new App("Game3", 2, 3, "Games"));	//FIXME: add support for icons
+		insertApp(new App("Game4", 4, 4, "Games"));	//FIXME: add support for icons
+		insertApp(new App("Game5", 1, 2, "Games"));	//FIXME: add support for icons
+		
+		insertApp(new App("Medical1", 1, 1, "Medical"));	//FIXME: add support for icons
+		insertApp(new App("Medical2", 1, 3, "Medical"));	//FIXME: add support for icons
+		insertApp(new App("Medical3", 4, 5, "Medical"));	//FIXME: add support for icons
+		
+		insertApp(new App("Tool1", 5, 8, "Tools"));	//FIXME: add support for icons
+		insertApp(new App("Tool2", 5, 3, "Tools"));	//FIXME: add support for icons
+		insertApp(new App("Tool3", 2, 1, "Tools"));	//FIXME: add support for icons
+		insertApp(new App("Tool4", 3, 1, "Tools"));	//FIXME: add support for icons
+		insertApp(new App("Tool5", 4, 1, "Tools"));	//FIXME: add support for icons
+		
+		insertApp(new App("Player", 4, 7, "Media"));	//FIXME: add support for icons
+		insertApp(new App("MusicP", 2, 6, "Media"));	//FIXME: add support for icons
 	}
 }
