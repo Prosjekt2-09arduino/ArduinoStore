@@ -21,10 +21,10 @@ package no.group09.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import no.group09.arduinoair.MainActivity;
-import no.group09.arduinoair.R;
 import no.group09.database.Save;
 import no.group09.database.objects.App;
+import no.group09.ucsoftwarestore.MainActivity;
+import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

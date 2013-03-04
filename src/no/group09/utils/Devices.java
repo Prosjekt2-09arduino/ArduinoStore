@@ -24,14 +24,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.TimeoutException;
 
-import no.group09.arduinoair.ConnectionHolder;
-import no.group09.arduinoair.MainActivity;
-import no.group09.arduinoair.R;
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.ConnectionListener;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
+import no.group09.ucsoftwarestore.ConnectionHolder;
+import no.group09.ucsoftwarestore.MainActivity;
+import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

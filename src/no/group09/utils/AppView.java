@@ -1,8 +1,8 @@
 package no.group09.utils;
 
-import no.group09.arduinoair.R;
 import no.group09.database.Save;
 import no.group09.database.objects.App;
+import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

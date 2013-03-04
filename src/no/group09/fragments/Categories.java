@@ -22,8 +22,8 @@ package no.group09.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import no.group09.arduinoair.MainActivity;
-import no.group09.arduinoair.R;
+import no.group09.ucsoftwarestore.MainActivity;
+import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.os.Bundle;

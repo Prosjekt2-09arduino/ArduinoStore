@@ -8,7 +8,7 @@ public class Db{
 
 	public static final String TAG = "Db";
 	public static final String DATABASE_NAME = "uCSoftwareStore.db";
-	public static final String DATABASE_PATH = "/data/data/no.group09.arduinoair/databases/";
+	public static final String DATABASE_PATH = "/data/data/no.group09.ucsoftwarestore/databases/";
 	public static final int DATABASE_VERSION = 2;
 	
 	public Db(){  

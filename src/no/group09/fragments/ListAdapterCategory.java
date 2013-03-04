@@ -22,9 +22,9 @@ package no.group09.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import no.group09.arduinoair.R;
-import no.group09.arduinoair.R.id;
-import no.group09.arduinoair.R.layout;
+import no.group09.ucsoftwarestore.R;
+import no.group09.ucsoftwarestore.R.id;
+import no.group09.ucsoftwarestore.R.layout;
 
 import android.app.Activity;
 import android.content.Context;

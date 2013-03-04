@@ -21,7 +21,8 @@ package no.group09.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import no.group09.arduinoair.R;
+
+import no.group09.ucsoftwarestore.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
