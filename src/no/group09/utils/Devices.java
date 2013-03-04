@@ -70,10 +70,11 @@ import android.view.View.OnClickListener;
  */
 public class Devices extends Activity  {
 
+	private boolean ONLY_SHOW_ARDUINOS = false;
+	
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
 	private static final String TAG = "DEVICES";
-	private static final boolean LIST_NON_ARDUINO_DEVICES = true;
 	private static final int REQUEST_ENABLE_BT = 1;
 	private ListView tv;
 	private BluetoothDeviceAdapter listAdapter;
@@ -433,8 +434,7 @@ public class Devices extends Activity  {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
 				//If the bluetooth class is named 708 that we made as a 'standard' for recognizing arduinos
-				if((device.getBluetoothClass().toString()).equals("708")){
-
+				if(onlyShowArduinos(device)){
 
 					//Adding found device
 					HashMap<String, String> map = new HashMap<String, String>();
@@ -459,5 +459,17 @@ public class Devices extends Activity  {
 			}
 		}
 
+	}
+	
+	private boolean onlyShowArduinos(BluetoothDevice device){
+		if(ONLY_SHOW_ARDUINOS){
+			if((device.getBluetoothClass().toString()).equals("708")){
+				return true;
+			}
+			
+			//Only return false if we only should show pagers, and that the device is not a pager
+			else return false;
+		}
+		return true;
 	}
 }
