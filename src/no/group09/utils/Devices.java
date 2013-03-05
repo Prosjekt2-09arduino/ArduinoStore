@@ -182,7 +182,7 @@ public class Devices extends Activity  {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				try{
-					print("HAHAHA", false);
+//					print("HAHAHA", false);
 				}
 				catch(Exception e){
 					Log.d(TAG, "Could not send message");
@@ -474,6 +474,6 @@ public class Devices extends Activity  {
 	}
 	
 	public void print(String message, boolean b){
-		con.print("HAHAHA", b);
+//		con.print("HAHAHA", b);
 	}
 }
