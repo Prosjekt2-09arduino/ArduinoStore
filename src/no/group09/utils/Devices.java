@@ -51,6 +51,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -142,8 +143,8 @@ public class Devices extends Activity  {
 				
 				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
 				serviceIntent.putExtra(MAC_ADDRESS, macAddress);
+				
 				Bundle bundle = new Bundle();
-//				serviceIntent.putextra
 				
 				//FIXME: If the service allready is running, it does not start over.
 				//This might be a problem if it needs to change the connected device.
@@ -182,7 +183,7 @@ public class Devices extends Activity  {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				try{
-//					print("HAHAHA", false);
+//					con.print("something hehe", false);
 				}
 				catch(Exception e){
 					Log.d(TAG, "Could not send message");

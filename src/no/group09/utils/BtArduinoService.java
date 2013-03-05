@@ -9,6 +9,7 @@ import no.group09.connection.ConnectionMetadata.DefaultServices;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -44,14 +45,15 @@ public class BtArduinoService extends Service {
 		*/
 		
 		//Stygg hack, men det funker. Fix hvis du orker... (Good luck.)
-		Activity a = (Activity) Devices.getContext();
+//		Activity a = (Activity) Devices.getContext();
+		
 		
 		Log.d(TAG, "Service started");
 		Log.d(TAG, "MAC address: " + macAddress);
 		if (macAddress != null) {
 			Log.d(TAG, "The MAC address of the chosen device is: " + macAddress);
 			try {
-				connection = new BluetoothConnection(macAddress, a , getConnectionListener());
+				connection = new BluetoothConnection(macAddress, (Activity)getBaseContext() , getConnectionListener());
 			} catch (Exception e) {
 				Log.d(TAG, "Could not connect to device.");
 				e.printStackTrace();
@@ -65,7 +67,6 @@ public class BtArduinoService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		
 		this.macAddress = intent.getStringExtra(Devices.MAC_ADDRESS);
 		Log.d(TAG, "Extra: " + macAddress);
 		
@@ -132,7 +133,5 @@ public class BtArduinoService extends Service {
 			}
 		};
 	}
-
-
 }
 
