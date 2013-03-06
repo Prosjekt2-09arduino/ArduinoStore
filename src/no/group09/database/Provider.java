@@ -190,28 +190,28 @@ public class Provider extends ContentProvider{
 		switch (sUriMatcher.match(uri)){
 
 		case URI_MATCHER_INDEX_APP:
-			return save.queryApp(projection, selection, selectionArgs, sortOrder);
+			return save.getApp(projection, selection, selectionArgs, sortOrder);
 
 		case URI_MATCHER_INDEX_APP_SHARP:
 			//I have to set selection to exact row ID:
 			rowID = uri.getPathSegments().get(1);
-			return save.queryApp(projection, APP_ID+" = "+rowID, selectionArgs, sortOrder);
+			return save.getApp(projection, APP_ID+" = "+rowID, selectionArgs, sortOrder);
 
 		case URI_MATCHER_INDEX_DEVELOPER:
-			return save.queryDeveloper(projection, selection, selectionArgs, sortOrder);
+			return save.getDeveloper(projection, selection, selectionArgs, sortOrder);
 
 		case URI_MATCHER_INDEX_DEVELOPER_SHARP:
 			//I have to set selection to exact row ID:
 			rowID = uri.getPathSegments().get(1);
-			return save.queryDeveloper(projection, DEVELOPER_ID+" = "+rowID, selectionArgs, sortOrder);
+			return save.getDeveloper(projection, DEVELOPER_ID+" = "+rowID, selectionArgs, sortOrder);
 
 		case URI_MATCHER_INDEX_REQUIREMENTS:
-			return save.queryRequirements(projection, selection, selectionArgs, sortOrder);
+			return save.getRequirements(projection, selection, selectionArgs, sortOrder);
 
 		case URI_MATCHER_INDEX_REQUIREMENTS_SHARP:
 			//I have to set selection to exact row ID:
 			rowID = uri.getPathSegments().get(1);
-			return save.queryRequirements(projection, REQUIREMENTS_ID+" = "+rowID, selectionArgs, sortOrder);
+			return save.getRequirements(projection, REQUIREMENTS_ID+" = "+rowID, selectionArgs, sortOrder);
 
 		default:
 			throw new IllegalArgumentException("Unsupported URI in SocialProvider query method:" + uri);   			

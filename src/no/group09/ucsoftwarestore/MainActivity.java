@@ -78,8 +78,8 @@ public class MainActivity extends FragmentActivity {
 		//This clears the database
 //		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
 
-		//This populates the database
-//		save.populateDatabase();
+		//This populates the database: false because we dont want to use content provider
+//		save.populateDatabase(false);
 		
 		//Closing the database
 //		save.close();
