@@ -20,6 +20,7 @@ package no.group09.ucsoftwarestore;
  */
 
 import no.group09.ucsoftwarestore.R;
+import no.group09.database.DatabaseHandler;
 import no.group09.database.Save;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.Devices;
@@ -81,7 +82,7 @@ public class MainActivity extends FragmentActivity {
 //		save.populateDatabase();
 		
 		//Closing the database
-		save.close();
+//		save.close();
 	}
 
 	@Override

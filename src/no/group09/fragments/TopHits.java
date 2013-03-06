@@ -115,7 +115,7 @@ public class TopHits extends Fragment{
 			}
 			
 			//Closing the database
-			save.close();
+//			save.close();
 		}
 
 		list = (ListView)this.view.findViewById(R.id.list);

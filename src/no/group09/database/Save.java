@@ -220,78 +220,78 @@ public class Save{
 
 	/** Populates the database with some hardcoded examples */
 	public synchronized void populateDatabase(){
-		ContentValues v = new ContentValues();
-		v.put("name", "FunGame");
-		v.put("rating", 3);
-		v.put("developerid", 1);
-		v.put("category", "Games");
-		v.put("description", "This describes this amazing, life changing app. yey!");
-		insertApp(v);
-		
-		v = new ContentValues();
-		v.put("name", "Medic");
-		v.put("rating", 1);
-		v.put("developerid", 2);
-		v.put("category", "Medical");
-		v.put("description", "This describes this amazing, life changing app. yey!");
-		insertApp(v);
-		
-		v = new ContentValues();
-		v.put("name", "PlayerX");
-		v.put("rating", 4);
-		v.put("developerid", 3);
-		v.put("category", "Media");
-		v.put("description", "This describes this amazing, life changing app. yey!");
-		insertApp(v);
-		
-		v = new ContentValues();
-		v.put("name", "Toolio");
-		v.put("rating", 3);
-		v.put("developerid", 4);
-		v.put("category", "Tools");
-		v.put("description", "This describes this amazing, life changing app. yey!");
-		insertApp(v);
-		
-		v = new ContentValues();
-		v.put("name", "Whilhelm");
-		v.put("website", "www.lol.com");
-		insertDeveloper(v);
-		
-		v = new ContentValues();
-		v.put("name", "Robin");
-		v.put("website", "www.haha.com");
-		insertDeveloper(v);
-		
-		v = new ContentValues();
-		v.put("name", "Jeppe");
-		v.put("website", "www.hehe.com");
-		insertDeveloper(v);
-		
-//		insertApp(new App("FunGame", 3, 1, "Games", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("Game", 4, 2, "Games", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("PlayTime", 2, 5, "Games", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("FunTime", 4, 4, "Games", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("PlayWithPlayers", 1, 2, "Games", "This describes this amazing, life changing app. yey!"));	
+//		ContentValues v = new ContentValues();
+//		v.put("name", "FunGame");
+//		v.put("rating", 3);
+//		v.put("developerid", 1);
+//		v.put("category", "Games");
+//		v.put("description", "This describes this amazing, life changing app. yey!");
+//		insertApp(v);
 //		
-//		insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!"));	
+//		v = new ContentValues();
+//		v.put("name", "Medic");
+//		v.put("rating", 1);
+//		v.put("developerid", 2);
+//		v.put("category", "Medical");
+//		v.put("description", "This describes this amazing, life changing app. yey!");
+//		insertApp(v);
 //		
-//		insertApp(new App("Tool", 5, 5, "Tools", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("ToolBox", 5, 3, "Tools", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("BoxTooler", 2, 1, "Tools", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("ToolTooler", 3, 1, "Tools", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("ScrewDriver", 4, 1, "Tools", "This describes this amazing, life changing app. yey!"));	
+//		v = new ContentValues();
+//		v.put("name", "PlayerX");
+//		v.put("rating", 4);
+//		v.put("developerid", 3);
+//		v.put("category", "Media");
+//		v.put("description", "This describes this amazing, life changing app. yey!");
+//		insertApp(v);
 //		
-//		insertApp(new App("Player", 4, 5, "Media", "This describes this amazing, life changing app. yey!"));	
-//		insertApp(new App("MusicP", 2, 2, "Media", "This describes this amazing, life changing app. yey!"));
+//		v = new ContentValues();
+//		v.put("name", "Toolio");
+//		v.put("rating", 3);
+//		v.put("developerid", 4);
+//		v.put("category", "Tools");
+//		v.put("description", "This describes this amazing, life changing app. yey!");
+//		insertApp(v);
 //		
-//		insertDeveloper(new Developer("Wilhelm", "www.lol.com"));
-//		insertDeveloper(new Developer("Robin", "www.haha.com"));
-//		insertDeveloper(new Developer("Jeppe", "www.hehe.com"));
-//		insertDeveloper(new Developer("Bjørn", "www.hoho.com"));
-//		insertDeveloper(new Developer("Ståle", "www.rofl.com"));
-//		insertDeveloper(new Developer("Nina", "www.kake.com"));
+//		v = new ContentValues();
+//		v.put("name", "Whilhelm");
+//		v.put("website", "www.lol.com");
+//		insertDeveloper(v);
+//		
+//		v = new ContentValues();
+//		v.put("name", "Robin");
+//		v.put("website", "www.haha.com");
+//		insertDeveloper(v);
+//		
+//		v = new ContentValues();
+//		v.put("name", "Jeppe");
+//		v.put("website", "www.hehe.com");
+//		insertDeveloper(v);
+		
+		insertApp(new App("FunGame", 3, 1, "Games", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("Game", 4, 2, "Games", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("PlayTime", 2, 5, "Games", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("FunTime", 4, 4, "Games", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("PlayWithPlayers", 1, 2, "Games", "This describes this amazing, life changing app. yey!"));	
+		
+		insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!"));	
+		
+		insertApp(new App("Tool", 5, 5, "Tools", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("ToolBox", 5, 3, "Tools", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("BoxTooler", 2, 1, "Tools", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("ToolTooler", 3, 1, "Tools", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("ScrewDriver", 4, 1, "Tools", "This describes this amazing, life changing app. yey!"));	
+		
+		insertApp(new App("Player", 4, 5, "Media", "This describes this amazing, life changing app. yey!"));	
+		insertApp(new App("MusicP", 2, 2, "Media", "This describes this amazing, life changing app. yey!"));
+		
+		insertDeveloper(new Developer("Wilhelm", "www.lol.com"));
+		insertDeveloper(new Developer("Robin", "www.haha.com"));
+		insertDeveloper(new Developer("Jeppe", "www.hehe.com"));
+		insertDeveloper(new Developer("Bjørn", "www.hoho.com"));
+		insertDeveloper(new Developer("Ståle", "www.rofl.com"));
+		insertDeveloper(new Developer("Nina", "www.kake.com"));
 		
 		
 	}
