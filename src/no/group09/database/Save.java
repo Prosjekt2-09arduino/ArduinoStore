@@ -19,19 +19,18 @@ public class Save{
 	public SQLiteDatabase db;
 	private DatabaseHandler dbHelper;
 	private Context ctx;
-
 	protected HashMap<String, Cursor> tables;
 
 	public Save(Context context){
 		dbHelper = new DatabaseHandler(context);
 	}
 
-	public void close(){
-		dbHelper.close();
-	}
-
-	public void open(){
-		db = dbHelper.getWritableDatabase();
+	/**
+	 * Populates the database with some hardcoded examples
+	 * @param useContentProvider - if you want to use content provider or not
+	 */
+	public synchronized void populateDatabase(boolean useContentProvider){
+		Constants.populateDatabase(this, useContentProvider);
 	}
 	
 	/**
@@ -41,6 +40,8 @@ public class Save{
 	 */
 	public HashMap<String, Cursor> selectRecords() {
 
+		db = dbHelper.getWritableDatabase();
+		
 		tables = new HashMap<String, Cursor>();
 		Cursor tempCursor = null;
 
@@ -90,7 +91,8 @@ public class Save{
 //			tables.put("appusespins", tempCursor);
 //			tempCursor = null;
 //		}
-
+		db.close();
+		
 		return tables;
 	}
 
@@ -106,20 +108,31 @@ public class Save{
 		
 		while(cursor.isAfterLast() == false){
 			apps.add(new App(
-					cursor.getInt(0),
-					cursor.getString(1),
-					cursor.getInt(2),
-					cursor.getInt(3),
-					cursor.getString(4),
-					cursor.getString(5)));
+					cursor.getInt(0),		//appid
+					cursor.getString(1),	//name
+					cursor.getInt(2),		//rating
+					cursor.getInt(3),		//developerid
+					cursor.getString(4),	//category
+					cursor.getString(5)));	//description
 			cursor.moveToNext();
 		}
 		
 		return apps;
 	}
 	
+//	public synchronized ArrayList<App> getAllApps(){
+//		
+//		ArrayList<App> apps = new ArrayList<App>();
+//		
+//		
+//		
+//		return apps;
+//	}
+	
 	/** Get the requested developer from the database */
-	public synchronized Developer getDeveloper(int id){
+	public synchronized Developer getDeveloperByID(int id){
+		
+		db = dbHelper.getWritableDatabase();
 		Cursor c = null;
 		Developer developer = null;
 		
@@ -137,14 +150,15 @@ public class Save{
 		
 		catch (IllegalStateException e){ Log.e(TAG, e.getMessage());}
 		
-		finally { if (c != null) c.close();}
+		finally { db.close(); if (c != null) c.close();}
 		
 		return developer;
 	}
 
 	/** Get the the requested app from the database */
-	public synchronized App getApp(int id) {
+	public synchronized App getAppByID(int id) {
 
+		db = dbHelper.getWritableDatabase();
 		Cursor c = null;
 		App app = null;
 		try {
@@ -166,7 +180,7 @@ public class Save{
 
 		catch (IllegalStateException e) { Log.e(TAG, e.getMessage()); }
 
-		finally { if (c != null) { c.close(); } }
+		finally { db.close(); if (c != null) { c.close(); } }
 
 		return app;
 	}
@@ -191,11 +205,7 @@ public class Save{
 
 		catch (SQLiteException e) { Log.e(TAG, e.getMessage()); }
 
-		finally { close(); }
-	}
-	
-	public void deleteApp(App app){
-		
+		finally { db.close(); }
 	}
 	
 	public void insertDeveloper(Developer developer) {
@@ -215,77 +225,93 @@ public class Save{
 
 		catch (SQLiteException e) { Log.e(TAG, e.getMessage()); }
 
-		finally { close(); }
-	}
-
-	/**
-	 * Populates the database with some hardcoded examples
-	 * @param useContentProvider - if you want to use content provider or not
-	 */
-	public synchronized void populateDatabase(boolean useContentProvider){
-		Constants.populateDatabase(this, useContentProvider);
+		finally { db.close(); }
 	}
 
 	//APP DATABASE FUNCTIONS
 	public long insertApp(ContentValues values) {
 		db = dbHelper.getWritableDatabase();
-		return db.insert(Constants.APP_TABLE, null, values);
+		long l = db.insert(Constants.APP_TABLE, null, values);
+		db.close();
+		return l;
 	}
 
 	public Cursor getApp(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		db = dbHelper.getWritableDatabase();
-		return db.query(Constants.APP_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+		Cursor r = db.query(Constants.APP_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+		db.close();
+		return r;
 	}
 
 	public int updateApp(ContentValues values, String selection, String[] selectionArgs) {
 		db = dbHelper.getWritableDatabase();
-		return db.update(Constants.APP_TABLE, values, selection, selectionArgs);
+		int i = db.update(Constants.APP_TABLE, values, selection, selectionArgs);
+		db.close();
+		return i;
 	}
 
 	public int deleteApp(String selection, String[] selectionArgs){
 		db = dbHelper.getWritableDatabase();
-		return db.delete(Constants.APP_TABLE, selection, selectionArgs);
+		int i = db.delete(Constants.APP_TABLE, selection, selectionArgs);
+		db.close();
+		return i;
 	}
 	
 	//DEVELOPER DATABASE FUNCTIONS
 	public long insertDeveloper(ContentValues values) {
 		db = dbHelper.getWritableDatabase();
-		return db.insert(Constants.DEVELOPER_TABLE, null, values);
+		long l = db.insert(Constants.DEVELOPER_TABLE, null, values);
+		db.close();
+		return l;
 	}
 	
 	public Cursor getDeveloper(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		db = dbHelper.getWritableDatabase();
-		return db.query(Constants.DEVELOPER_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+		Cursor i = db.query(Constants.DEVELOPER_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+		db.close();
+		return i;
 	}
 
 	public int updateDeveloper(ContentValues values, String selection, String[] selectionArgs) {
 		db = dbHelper.getWritableDatabase();
-		return db.update(Constants.DEVELOPER_TABLE, values, selection, selectionArgs);
+		int i = db.update(Constants.DEVELOPER_TABLE, values, selection, selectionArgs);
+		db.close();
+		return i;
 	}
 
 	public int deleteDeveloper(String selection, String[] selectionArgs){
 		db = dbHelper.getWritableDatabase();
-		return db.delete(Constants.DEVELOPER_TABLE, selection, selectionArgs);
+		int i = db.delete(Constants.DEVELOPER_TABLE, selection, selectionArgs);
+		db.close();
+		return i;
 	}
 	
 	//REQUIREMENTS DATABASE FUNCTIONS
 	public long insertRequirements(ContentValues values) {
 		db = dbHelper.getWritableDatabase();
-		return db.insert(Constants.REQUIREMENTS_TABLE, null, values);
+		long i = db.insert(Constants.REQUIREMENTS_TABLE, null, values);
+		db.close();
+		return i;
 	}
 	
 	public Cursor getRequirements(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		db = dbHelper.getWritableDatabase();
-		return db.query(Constants.REQUIREMENTS_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+		Cursor i = db.query(Constants.REQUIREMENTS_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+		db.close();
+		return i;
 	}
 
 	public int updateRequirements(ContentValues values, String selection, String[] selectionArgs) {
 		db = dbHelper.getWritableDatabase();
-		return db.update(Constants.REQUIREMENTS_TABLE, values, selection, selectionArgs);
+		int i = db.update(Constants.REQUIREMENTS_TABLE, values, selection, selectionArgs);
+		db.close();
+		return i;
 	}
 
 	public int deleteRequirements(String selection, String[] selectionArgs){
 		db = dbHelper.getWritableDatabase();
-		return db.delete(Constants.REQUIREMENTS_TABLE, selection, selectionArgs);
+		int i = db.delete(Constants.REQUIREMENTS_TABLE, selection, selectionArgs);
+		db.close();
+		return i;
 	}
 }

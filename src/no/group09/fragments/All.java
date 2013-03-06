@@ -75,8 +75,7 @@ public class All extends Fragment {
 
 		//This adds elements from the database to the listview
 		Save save = new Save(this.view.getContext());
-		save.open();
-
+		
 		//Iterate over all the apps from the local database
 		for(App app : save.getAllApps()){
 
@@ -84,7 +83,7 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -92,7 +91,7 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -100,7 +99,7 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
@@ -108,13 +107,10 @@ public class All extends Fragment {
 				HashMap<String, String >map = new HashMap<String, String>();
 				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
 				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloper(app.getDeveloperID()).getName());
+				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
-			
-			//Closing the database
-//			save.close();
 		}
 		
 		list = (ListView)this.view.findViewById(R.id.list);

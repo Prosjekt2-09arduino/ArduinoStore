@@ -73,16 +73,12 @@ public class MainActivity extends FragmentActivity {
 
 		/** Create the database if it does not excist, or copy it into the application */
 		save = new Save(getBaseContext());
-		save.open();
 
 		//This clears the database
 //		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
 
 		//This populates the database: false because we dont want to use content provider
-//		save.populateDatabase(false);
-		
-		//Closing the database
-//		save.close();
+//		save.populateDatabase(true);
 	}
 
 	@Override

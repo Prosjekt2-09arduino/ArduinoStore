@@ -38,15 +38,9 @@ public class AppView extends Activity {
 		//Get the database
 		save = new Save(getBaseContext());
 		
-		//Open the database
-		save.open();
-		
 		//Fetch the application from the database
-		App app = save.getApp(appID);
-		Developer developer = save.getDeveloper(app.getDeveloperID());
-		
-		//Closeing the database
-		save.close();
+		App app = save.getAppByID(appID);
+		Developer developer = save.getDeveloperByID(app.getDeveloperID());
 		
 		//Get the objects from xml
 		TextView appName = (TextView) findViewById(R.id.app_view_app_name);

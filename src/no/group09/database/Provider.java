@@ -46,7 +46,6 @@ public class Provider extends ContentProvider{
 	@Override
 	public boolean onCreate(){
 		save = new Save(getContext());
-		save.open();
 		return true;
 	}
 
