@@ -256,20 +256,12 @@ public class BluetoothConnection extends Protocol {
 	 * remote device can be done again.
 	 */
 	public void disconnect() {
-		if(connectionState != ConnectionState.STATE_DISCONNECTED) Log.v(getClass().getSimpleName(), "Bluetooth connection closed: " + device.getAddress());
+		if(connectionState != ConnectionState.STATE_DISCONNECTED) Log.d(TAG, "Bluetooth connection closed: " + device.getAddress());
 
 		setConnectionState(ConnectionState.STATE_DISCONNECTED);
 
 		//Disconnect superclass
 		super.disconnect();
-
-    	//Make sure activity is unregistered
-		try {
-			parentActivity.unregisterReceiver(mReceiver);
-		}
-		catch(IllegalArgumentException ex) {
-			//oh ok... the receiver is already unregistered so no harm done here
-		}
 
 		//Disconnect socket
 		try {

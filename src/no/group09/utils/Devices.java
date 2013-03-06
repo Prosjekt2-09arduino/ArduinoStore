@@ -54,6 +54,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -71,8 +72,8 @@ import android.view.View.OnClickListener;
  */
 public class Devices extends Activity  {
 
+	/**Should be true if only arduinos is to be showed. False otherwise */
 	private boolean ONLY_SHOW_ARDUINOS = false;
-	
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
 	private static final String TAG = "DEVICES";
@@ -91,13 +92,18 @@ public class Devices extends Activity  {
 	private MyBroadcastReceiver actionFoundReceiver;
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
 	static Context context;
+	private ProgressDialogTask progressDialogThread;
+	private volatile boolean showProgressDialog = false;
+
+	private BtArduinoService bluetoothService;
+	private BluetoothConnection connection;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Set the xml layout
 		setContentView(R.layout.devices);
-		
+
 		//Fetching the shared preferences object used to write the preference file
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -128,7 +134,7 @@ public class Devices extends Activity  {
 
 		//Set the adapter
 		deviceList.setAdapter(listAdapter);
-		
+
 		//Initialize the device list
 		initializeDeviceList();
 
@@ -145,10 +151,10 @@ public class Devices extends Activity  {
 
 		//Add the button that takes you directly to the shop.
 		browseShowButton = (Button) findViewById(R.id.browse_shop_button);
-		
+
 		addButtonFunctionality();
 	}
-	
+
 	/**
 	 * Method that initializes the device list and creates a service if an
 	 * item is clicked.
@@ -160,23 +166,30 @@ public class Devices extends Activity  {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+				//Cancel discovery when an item in the list is clicked
+				btAdapter.cancelDiscovery();
+
 				String macAddress = listAdapter.getMacAddress(position);
-				
+
 				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
 				serviceIntent.putExtra(MAC_ADDRESS, macAddress);
-				
+
 				//FIXME: If the service allready is running, it does not start over.
 				//This might be a problem if it needs to change the connected device.
 				startService(serviceIntent);
 
 				
-//				progressDialog.setMessage("Connecting...");
-//				progressDialog.setCancelable(false);
-//				progressDialog.show();
-//				
+				ProgressDialogTask task = new ProgressDialogTask();
+				task.execute();
+				//				showProgressDialog = true;
+				//				progressDialogThread = new ProgressDialogTask();
+				//				progressDialogThread.run();
+				//
+				//
+				//
+				//				progressDialogThread.dismiss();
 
-
-//				Log.d(TAG, "Check if the device is connected: " + con.isConnected());
+				//				Log.d(TAG, "Check if the device is connected: " + con.isConnected());
 
 				String lastConnectedDevice = "Device name: " + listAdapter.getName(position)
 						+ "\nMAC Address: " + listAdapter.getMacAddress(position);
@@ -194,7 +207,7 @@ public class Devices extends Activity  {
 				Log.d(TAG, "The information about the last connected device was written to shared preferences");
 			}
 		});	
-		
+
 		deviceList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
@@ -210,12 +223,12 @@ public class Devices extends Activity  {
 			}
 		});
 	}
-	
+
 	/**
 	 * Adds the functionality to all the buttons in Devices screen
 	 */
 	public void addButtonFunctionality() {
-		
+
 		refresh.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -231,14 +244,14 @@ public class Devices extends Activity  {
 				checkBTState();
 			}
 		});
-		
+
 		addDeviceButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(getBaseContext(), AddDeviceScreen.class));
 			}
 		});
-		
+
 		browseShowButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -247,7 +260,7 @@ public class Devices extends Activity  {
 			}
 		});
 	}
-	
+
 	/**
 	 * Method used to register the broadcast receiver for communicating with
 	 * bluetooth API
@@ -341,7 +354,7 @@ public class Devices extends Activity  {
 			}
 		}
 	}
-	
+
 	/**
 	 * Method used to only show valid arduinos in the device list. Should be called
 	 * each time a new device is to be added to the device list.
@@ -357,13 +370,13 @@ public class Devices extends Activity  {
 			if((device.getBluetoothClass().toString()).equals("708")){
 				return true;
 			}
-			
+
 			//Only return false if we only should show pagers, and that the device is not a pager
 			else return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
 	 * 
@@ -411,5 +424,72 @@ public class Devices extends Activity  {
 			}
 		}
 	}
-	
+
+	public Dialog createDialog(String message) {
+		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
+		
+		responseDialog.setMessage(message)
+		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		});
+
+		return responseDialog.show();
+	}
+	private class ProgressDialogTask extends AsyncTask<Void, Void, Boolean> {
+
+		private long timeout;
+
+
+		@Override
+		protected void onPreExecute() {
+			timeout = System.currentTimeMillis() + 8000;
+			progressDialog.setMessage("Connecting, please wait...");
+			progressDialog.setCancelable(true);
+			progressDialog.show();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			while(true) {
+				if (bluetoothService == null) {
+					bluetoothService = BtArduinoService.getBtService();
+				}
+				if (bluetoothService != null && connection == null) {
+					connection = bluetoothService.getBluetoothConnection();
+				}
+				if (connection != null) {
+					if (connection.isConnected()) {
+						return true;
+					}
+				}
+				if (System.currentTimeMillis() > timeout) {
+					return false;
+				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {}
+			}
+		}
+
+		@Override 
+		protected void onPostExecute(Boolean success) {
+			progressDialog.dismiss();
+			String message;
+			if (success) {
+				message = "The connection was successful.";
+				createDialog(message);
+				Log.d(TAG, "The connection was successful!");
+			}
+			else {
+				message = "The connection was not successfull." +
+						"\nPlease try again.";
+				createDialog(message);
+				Log.d(TAG, "The connection was NOT successful!");
+			}
+		}
+	}
 }

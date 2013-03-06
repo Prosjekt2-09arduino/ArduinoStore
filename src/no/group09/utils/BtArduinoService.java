@@ -41,11 +41,11 @@ public class BtArduinoService extends Service {
 			Log.d(TAG, "The MAC address of the chosen device is: " + macAddress);
 			try {
 				connection = new BluetoothConnection(macAddress, getConnectionListener());
+				connection.connect();
 			} catch (Exception e) {
 				Log.d(TAG, "Could not connect to device.");
 				e.printStackTrace();
 			}
-			connection.connect();
 		}
 	}
 
@@ -75,10 +75,18 @@ public class BtArduinoService extends Service {
 	 */
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
+		Log.d(TAG, "onStartCommand called");
 		this.macAddress = intent.getStringExtra(Devices.MAC_ADDRESS);
+		
+		//Disconnect from the previous device before creating a new connection
+		if (getBluetoothConnection() != null) {
+			Log.d(TAG, "The connection was not null");
+			connection.disconnect();
+			Log.d(TAG, "Connection state: " + connection.getConnectionState());
+		}
 
-		connect();
 		setBtService(this);
+		connect();
 
 		//START_NOT_STICKY makes sure the service dies when the app is killed
 		return START_NOT_STICKY;
