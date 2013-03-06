@@ -5,14 +5,20 @@ public class Constants {
 	/** Select an app from the database */
     protected final static String SELECT_APP = "select * from app where appid=?";
     protected final static String SELECT_DEVELOPER = "select * from developer where developerid=?";
+    protected final static String SELECT_REQUIREMENTS = "select * from requirements where requirementid=?";
+    protected final static String SELECT_PICTURES = "select * from pictures where pictureid=?";
     
     /** Insert an app to the database */
-    protected final static String INSERT_APP = "insert or replace into app (name, rating, developerid, category) values (?, ?, ?, ?)";
+    protected final static String INSERT_APP = "insert or replace into app (name, rating, developerid, category, description) values (?, ?, ?, ?, ?)";
     protected final static String INSERT_DEVELOPER = "insert or replace into developer (name, website) values (?, ?)";
+    protected final static String INSERT_REQUIREMENTS = "insert or replace into requirements (name, description) values (?, ?)";
+    protected final static String INSERT_PICTURES = "insert or replace into pictures (appid, fileURL) values (?, ?)";
 
     /** Delete an app from the database */
-    protected final static String DELETE_APP = "delete from app where name=?";
-    protected final static String DELETE_DEVELOPER = "delete from developer where name=?";
+    protected final static String DELETE_APP = "delete from app where appid=?";
+    protected final static String DELETE_DEVELOPER = "delete from developer where developerid=?";
+    protected final static String DELETE_REQUIREMENTS = "delete from requirements where requirementid=?";
+    protected final static String DELETE_PICTURES = "delete from pictures where pictureid=?";
 	
 	/** app(appid, name, description, developerid, icon) */
 	protected final static String APP_TABLE="app";
@@ -21,22 +27,9 @@ public class Constants {
 	protected final static String APP_RATING="rating"; 
 	protected final static String APP_DEVELOPERID="developerid"; 
 	protected final static String APP_CATEGORY="category"; 
+	protected final static String APP_DESCRIPTION="description"; 
+	
 //	protected final static String APP_ICON="icon"; 
-	
-	/** version(versionid, appid, version, fileURL, filesize) */
-	protected final static String VERSION_TABLE="version";
-	protected final static String VERSION_ID="versionid";
-	protected final static String VERSION_APPID="appid";
-	protected final static String VERSION_VERSION="version";
-	protected final static String VERSION_FILEURL="fileURL";
-	protected final static String VERSION_FILESIZE="filesize";
-	
-	/** ratings(ratingid, versionid, title, rating) */
-	protected final static String RATINGS_TABLE="ratings";
-	protected final static String RATINGS_ID="ratingid";
-	protected final static String RATINGS_VERSIONID="versionid";
-	protected final static String RATINGS_TITLE="title";
-	protected final static String RATINGS_RATING="rating";
 	
 	/** developer(developerid, name, website) */
 	protected final static String DEVELOPER_TABLE="developer";
@@ -50,31 +43,16 @@ public class Constants {
 	protected final static String PICTURES_APPID="appid";
 	protected final static String PICTURES_FILEURL="fileURL";
 	
-	/** hardware(hardwareid, name, description) */
-	protected final static String HARDWARE_TABLE="hardware";
-	protected final static String HARDWARE_ID="hardwareid";
-	protected final static String HARDWARE_NAME="name";
-	protected final static String HARDWARE_DESCRIPTION="description";
+	/** requirement(requirement, name, description) */
+	protected final static String REQUIREMENTS_TABLE="requirements";
+	protected final static String REQUIREMENTS_ID="requirementid";
+	protected final static String REQUIREMENTS_NAME="name";
+	protected final static String REQUIREMENTS_DESCRIPTION="description";
 	
-	/** platform(platformid, name, description, ramSize, romSize) */
-	protected final static String PLATFORM_TABLE="platform";
-	protected final static String PLATFORM_ID="platformid";
-	protected final static String PLATFORM_NAME="name";
-	protected final static String PLATFORM_DESCRIPTION="description";
-	protected final static String PLATFORM_RAMSIZE="ramSize";
-	protected final static String PLATFORM_ROMSIZE="romSize";
-	
-	/** btdevices(btdeviceid, name, mac-address, installedApp) */
-	protected final static String BTDEVICES_TABLE="btdevices";
-	protected final static String BTDEVICES_ID="btdeviceid";
-	protected final static String BTDEVICES_NAME="name";
-	protected final static String BTDEVICES_MACADDRESS="mac-address";
-	protected final static String BTDEVICES_INSTALLEDAPP="installedApp";
-	
-	/** appusespins(appid, hardwareid) */
+	/** appusespins(appid, requirementid) */
 	protected final static String APPUSESPINS_TABLE="appusespins";
 	protected final static String APPUSESPINS_APPID="appid";
-	protected final static String APPUSESPINS_HARDWAREID="hardwareid";
+	protected final static String APPUSESPINS_REQUIREMENTID="requirementid";
 	
 	/**	Database app creation sql statement */
 	protected static final String DATABASE_CREATE_APP = 
@@ -83,8 +61,8 @@ public class Constants {
 					"name varchar(160), " +
 					"rating int(10), " +
 					"developerid int(10)," +
-					"category varchar(200))";
-	
+					"category varchar(200)," +
+					"description varchar(200))";
 	
 //	/**	Database app creation sql statement */
 //	protected static final String DATABASE_CREATE_APP = 
@@ -95,22 +73,6 @@ public class Constants {
 //					"developerid int(10), " +
 //					"image BLOB)";
 
-	/** Database version creation sql statement */
-	protected static final String DATABASE_CREATE_VERSION = 
-			"CREATE TABLE version (" +
-					"versionid integer primary key autoincrement, " +
-					"version varchar(160), " +
-					"fileURL varchar(200), " +
-					"filesize int(10))";
-
-	/** Database ratings creation sql statement */
-	protected static final String DATABASE_CREATE_RATINGS = 
-			"CREATE TABLE ratings (" +
-					"ratingid integer primary key autoincrement, " +
-					"title varchar(160), " +
-					"comment varchar(200), " +
-					"rating int(10))";
-	
 	/** Database developer creation sql statement */
 	protected static final String DATABASE_CREATE_DEVELOPER = 
 			"CREATE TABLE developer (" +
@@ -125,35 +87,20 @@ public class Constants {
 					"appid int(10), " +
 					"fileURL varchar(200))";
 	
-	/** Database hardware creation sql statement */
-	protected static final String DATABASE_CREATE_HARDWARE = 
-			"CREATE TABLE hardware (" +
-					"hardwareid integer primary key autoincrement, " +
+	/** Database requirement creation sql statement */
+	protected static final String DATABASE_CREATE_REQUIREMENTS = 
+			"CREATE TABLE requirements (" +
+					"requirementid integer primary key autoincrement, " +
 					"name varchar(160), " +
 					"description varchar(200))";
-	
-	/** Database platform creation sql statement */
-	protected static final String DATABASE_CREATE_PLATFORM = 
-			"CREATE TABLE platform (" +
-					"platformid integer primary key autoincrement, " +
-					"name varchar(160), " +
-					"description varchar(200)" +
-					"ramSize int(100)" +
-					"romSize int(100))";
-	
-	/** Database platform creation sql statement */
-	protected static final String DATABASE_CREATE_BTDEVICES = 
-			"CREATE TABLE platform (" +
-					"btdeviceid integer primary key autoincrement, " +
-					"name varchar(160), " +
-					"mac-address varchar(200)" +
-					"installedApp int(10))";
 	
 	/** Database appUsesPins creation sql statement */
 	protected static final String DATABASE_CREATE_APPUSESPINS = 
 				"CREATE TABLE appUsesPins (" +
 						"appid int(10) , " +
-						"hardwareid int(10)" +
+						"requirementid int(10)" +
 						"FOREIGN KEY (appid) REFERENCES app(appid)," +
-						"FOREIGN KEY (hardwareid) REFERENCES hardware(hardwareid))";
+						"FOREIGN KEY (requirementid) REFERENCES requirements(requirementid))";
+	
+	
 }
