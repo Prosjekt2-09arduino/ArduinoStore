@@ -17,7 +17,6 @@ public class DatabaseHandler extends SQLiteOpenHelper  {
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
 	}
 
 
@@ -30,6 +29,7 @@ public class DatabaseHandler extends SQLiteOpenHelper  {
 		database.execSQL(Constants.DATABASE_CREATE_PICTURES);
 		database.execSQL(Constants.DATABASE_CREATE_REQUIREMENTS);
 //		database.execSQL(Constants.DATABASE_CREATE_APPUSESPINS);
+		
 	}
 
 	//This method is called when database is upgraded like modifying the table structure, adding constraints to database etc
