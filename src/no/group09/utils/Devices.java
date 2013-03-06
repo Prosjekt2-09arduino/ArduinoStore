@@ -77,7 +77,7 @@ public class Devices extends Activity  {
 	private ProgressDialog progressDialog;
 	private static final String TAG = "DEVICES";
 	private static final int REQUEST_ENABLE_BT = 1;
-	private ListView tv;
+	private ListView deviceList;
 	private BluetoothDeviceAdapter listAdapter;
 	private BluetoothAdapter btAdapter; 
 	private ArrayList<HashMap<String, String>> category_list;
@@ -88,7 +88,6 @@ public class Devices extends Activity  {
 	private ArrayList<HashMap<String, String>> device_list;
 	private boolean alreadyChecked = false;
 	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
-//	private BluetoothConnection con;
 	private MyBroadcastReceiver actionFoundReceiver;
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
 	static Context context;
@@ -122,33 +121,53 @@ public class Devices extends Activity  {
 		device_list = new ArrayList<HashMap<String, String>>();
 
 		//Get the xml to how the list is structured
-		tv = (ListView) findViewById(R.id.bluetooth_devices_list);
+		deviceList = (ListView) findViewById(R.id.bluetooth_devices_list);
 
 		//Get the adapter for the device list
 		listAdapter = new BluetoothDeviceAdapter(getBaseContext(), device_list);        
 
 		//Set the adapter
-		tv.setAdapter(listAdapter);
+		deviceList.setAdapter(listAdapter);
+		
+		//Initialize the device list
+		initializeDeviceList();
 
+		//Add refresh button to UI
+		refresh = (Button) findViewById(R.id.refresh);
+
+		refresh.setVisibility(View.GONE);
+
+		//Check the BT state
+		checkBTState();
+
+		//Add the button that opens the 'Add device' screen
+		addDeviceButton = (Button) findViewById(R.id.add_device_button);
+
+		//Add the button that takes you directly to the shop.
+		browseShowButton = (Button) findViewById(R.id.browse_shop_button);
+		
+		addButtonFunctionality();
+	}
+	
+	/**
+	 * Method that initializes the device list and creates a service if an
+	 * item is clicked.
+	 */
+	public void initializeDeviceList() {
 		//Click event for single list row
-		tv.setOnItemClickListener(new OnItemClickListener() {
+		deviceList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				String macAddress = listAdapter.getMacAddress(position);
 				
-				//Stygg hack, men det funker. Fix hvis du orker... (Good luck.)
-				setContext(view.getContext());
-				
 				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
 				serviceIntent.putExtra(MAC_ADDRESS, macAddress);
 				
-				Bundle bundle = new Bundle();
-				
 				//FIXME: If the service allready is running, it does not start over.
 				//This might be a problem if it needs to change the connected device.
-				getApplicationContext().startService(serviceIntent);
+				startService(serviceIntent);
 
 				
 //				progressDialog.setMessage("Connecting...");
@@ -173,17 +192,16 @@ public class Devices extends Activity  {
 
 				edit.commit();
 				Log.d(TAG, "The information about the last connected device was written to shared preferences");
-
 			}
 		});	
-
-		//What does this do? TODO: Answer.
-		tv.setOnItemLongClickListener(new OnItemLongClickListener() {
-
+		
+		deviceList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				try{
-//					con.print("something hehe", false);
+					/*
+					 * Add functionality for longclick here.
+					 */
 				}
 				catch(Exception e){
 					Log.d(TAG, "Could not send message");
@@ -191,9 +209,13 @@ public class Devices extends Activity  {
 				return false;
 			}
 		});
-
-		//Add refresh button to UI
-		refresh = (Button) findViewById(R.id.refresh);
+	}
+	
+	/**
+	 * Adds the functionality to all the buttons in Devices screen
+	 */
+	public void addButtonFunctionality() {
+		
 		refresh.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -209,47 +231,23 @@ public class Devices extends Activity  {
 				checkBTState();
 			}
 		});
-
-		refresh.setVisibility(View.GONE);
-
-		//Check the BT state
-		checkBTState();
-
-
-		//Add the button that opens the 'Add device' screen
-		addDeviceButton = (Button) findViewById(R.id.add_device_button);
+		
 		addDeviceButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(getBaseContext(), AddDeviceScreen.class));
 			}
 		});
-
-
-		//Add the button that takes you directly to the shop.
-		//TODO: Check if this is done right since the shop is our main actvity
-		//FIXME: This is not done rigth. Make it go back instead of making a new Activity
-		browseShowButton = (Button) findViewById(R.id.browse_shop_button);
+		
 		browseShowButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(getBaseContext(), MainActivity.class));
+				//Finishes this activity and goes back to the parent
+				finish();
 			}
 		});
 	}
 	
-	//Disse to er en del av en stygg hack, men det funker. Fix senere.
-	private void setContext(Context context) {
-		this.context = context;
-	}
-	
-	public static Context getContext() {
-		return context;
-	}
-
-
 	/**
 	 * Method used to register the broadcast receiver for communicating with
 	 * bluetooth API
@@ -280,52 +278,41 @@ public class Devices extends Activity  {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-//		unregisterReceiver(actionFoundReceiver);
 	}
 
 	@Override
+	/**
+	 * Called when this activity is destroyed. If a discovery is ongoing, it is
+	 * cancelled. The broadcastreceiver is also unregistered.
+	 */
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(actionFoundReceiver);
 		if (btAdapter != null) {
 			btAdapter.cancelDiscovery();
 		}
-		//		unregisterReceiver(ActionFoundReceiver);
-
-		//Shut down the BT connection
-		//		if(con != null) con.disconnect();
 	}
 
+	/**
+	 * Called when Devices screen is resumed. Clears the list of visible 
+	 * bluetooth devices and starts a new search.
+	 */
 	public void onResume() {
 		super.onResume();
-
-		//Check if there is an active connection with a BT device
-//		if (con != null) Log.d(TAG, "Check if the device is connected " + con.isConnected());
 
 		//Clear the list of BT devices
 		device_list.clear();
 
 		//Notify the adapter that the list is now empty
 		listAdapter.notifyDataSetChanged();
-
-		//Scan for new BT devices
-		//		checkBTState();
-
-		try {
-
-//			String mac = "";	//FIXME: get mac from preferences
-
-//			con = new BluetoothConnection(mac, (Activity)getBaseContext(), getConnectionListener());
-//			con.connect();		
-
-
-		} catch (Exception e) {
-			Log.d(TAG, "Could not find the last connected device");
-		}
 	}
 
 	/**
-	 * Checks the current BT state
+	 * Method used to check the state of the bluetooth connection. First checks
+	 * if the Android device supports bluetooth connections. Starts a bluetooth
+	 * discovery and sets the progress bar visible if bluetooth is enabled on the
+	 * Android device. If bluetooth is disabled, it asks the user if he wants to 
+	 * enable it.
 	 */
 	private void checkBTState() {
 
@@ -354,65 +341,29 @@ public class Devices extends Activity  {
 			}
 		}
 	}
-
+	
 	/**
-	 * For debugging (?).
-	 * @return 
+	 * Method used to only show valid arduinos in the device list. Should be called
+	 * each time a new device is to be added to the device list.
+	 * 
+	 * The code used for a valid arduino device is 708. This is originally the
+	 * code used a pager.
+	 * 
+	 * @param device The device to be checked if it is valid
+	 * @return true if the device is valid, false if not
 	 */
-//	private ConnectionListener getConnectionListener() {
-//		return new ConnectionListener() {
-//			public void onConnect(BluetoothConnection bluetoothConnection) {
-//				Log.d(TAG, "Connected to: " + con.toString());
-//
-//				//Add a button for every service found
-//				ConnectionMetadata meta = con.getConnectionData();
-//				for(String service : meta.getServicesSupported()) {
-//					Integer pins[] = meta.getServicePins(service);
-//
-//					//Pin controlled button
-//					if(pins.length > 0) {
-//						if(service.equals(DefaultServices.SERVICE_LED_LAMP.name()))  for(int pin : pins) Log.d(TAG, "LED pin: " + pin);
-//						if(service.equals(DefaultServices.SERVICE_VIBRATION.name()))  for(int pin : pins) Log.d(TAG, "VIBRATION pin " + pin);
-//						if(service.equals(DefaultServices.SERVICE_SPEAKER.name())) Log.d(TAG, "SPEAKER");
-//					}
-//
-//					//LCD print screen
-//					else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())) Log.d(TAG, "LCD");
-//				}
-//
-//			}
-//
-//			@Override
-//			public void onConnecting(BluetoothConnection bluetoothConnection) {
-//				Log.d(TAG, "Connecting to BT");
-//			}
-//
-//			@Override
-//			public void onDisconnect(BluetoothConnection bluetoothConnection) {
-//				Log.d(TAG, "Disconnected from BT");
-//			}
-//		};
-//
-//	};
-
-	//TODO: Not in use. Remove? 
-//	private class LCDButton extends Button implements View.OnClickListener {
-//		int timesClicked;
-//
-//		public LCDButton(Context context) {
-//			super(context);
-//			setOnClickListener(this);
-//			setText("Print \"Hello World\"");
-//		}
-//
-//		public void onClick(View v) {
-//			try {
-//				con.print("Hello World! (" + timesClicked++ + ")", false);
-//			} catch (TimeoutException e) {}
-//		}
-//	}
-
-
+	private boolean onlyShowArduinos(BluetoothDevice device){
+		if(ONLY_SHOW_ARDUINOS){
+			if((device.getBluetoothClass().toString()).equals("708")){
+				return true;
+			}
+			
+			//Only return false if we only should show pagers, and that the device is not a pager
+			else return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
 	 * 
@@ -459,22 +410,6 @@ public class Devices extends Activity  {
 				Log.d(TAG, "\nDiscovery Finished");
 			}
 		}
-
 	}
 	
-	private boolean onlyShowArduinos(BluetoothDevice device){
-		if(ONLY_SHOW_ARDUINOS){
-			if((device.getBluetoothClass().toString()).equals("708")){
-				return true;
-			}
-			
-			//Only return false if we only should show pagers, and that the device is not a pager
-			else return false;
-		}
-		return true;
-	}
-	
-	public void print(String message, boolean b){
-//		con.print("HAHAHA", b);
-	}
 }

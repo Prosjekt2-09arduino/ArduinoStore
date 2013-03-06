@@ -27,57 +27,66 @@ public class BtArduinoService extends Service {
 	private BluetoothConnection connection;
 	private ConnectionListener connectionListener;
 	private String macAddress;
+	private static BtArduinoService btService;
 
-	//	public BtArduinoService() {
-	//		onCreate();
-	//		Log.d(TAG, "Service constructor");
-	//	}
-	//	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 	}
-	
+
 	private void connect() {
-		/*
-		ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-		List< ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
-		*/
-		
-		//Stygg hack, men det funker. Fix hvis du orker... (Good luck.)
-//		Activity a = (Activity) Devices.getContext();
-		
-		
+
 		Log.d(TAG, "Service started");
-		Log.d(TAG, "MAC address: " + macAddress);
 		if (macAddress != null) {
 			Log.d(TAG, "The MAC address of the chosen device is: " + macAddress);
 			try {
-				connection = new BluetoothConnection(macAddress, (Activity)getBaseContext() , getConnectionListener());
+				connection = new BluetoothConnection(macAddress, getConnectionListener());
 			} catch (Exception e) {
 				Log.d(TAG, "Could not connect to device.");
 				e.printStackTrace();
 			}
-
 			connection.connect();
 		}
-		
+	}
+
+	/**
+	 * Gets the active connection
+	 * @return The active BluetoothConnection. Null if there is no active connection
+	 */
+	public BluetoothConnection getBluetoothConnection() {
+		return connection;
+	}
+
+	/**
+	 * Gets this service
+	 * @return The active service
+	 */
+	public static BtArduinoService getBtService() {
+		return btService;
+	}
+
+	private static void setBtService(BtArduinoService btService) {
+		BtArduinoService.btService = btService;
 	}
 
 	@Override
+	/**
+	 * Method automatically called by the system when a service is started.
+	 */
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		this.macAddress = intent.getStringExtra(Devices.MAC_ADDRESS);
-		Log.d(TAG, "Extra: " + macAddress);
-		
+
 		connect();
-		
+		setBtService(this);
+
 		return START_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		Log.d(TAG, "Service onDestroy() called");
 		connection.disconnect();
 	}
 
@@ -89,8 +98,8 @@ public class BtArduinoService extends Service {
 	}
 
 	/**
-	 * For debugging (?).
-	 * @return 
+	 * Returns the current connection listener.
+	 * @return The current connection listener. Creates a new one if it is null
 	 */
 	private ConnectionListener getConnectionListener() {
 		if (connectionListener == null) {
@@ -99,6 +108,9 @@ public class BtArduinoService extends Service {
 		return this.connectionListener;
 	}
 
+	/**
+	 * Creates a new connection listener.
+	 */
 	private void createConnectionListener() {
 		this.connectionListener = new ConnectionListener() {
 			public void onConnect(BluetoothConnection bluetoothConnection) {

@@ -1,6 +1,6 @@
 /*
-* Copyright 2012 Anders Eie, Henrik Goldsack, Johan Jansen, Asbjørn 
-* Lucassen, Emanuele Di Santo, Jonas Svarvaa, Bjørnar Håkenstad Wold
+* Copyright 2012 Anders Eie, Henrik Goldsack, Johan Jansen, Asbjï¿½rn 
+* Lucassen, Emanuele Di Santo, Jonas Svarvaa, Bjï¿½rnar Hï¿½kenstad Wold
 *
 *   Licensed under the Apache License, Version 2.0 (the "License");
 *   you may not use this file except in compliance with the License.
@@ -75,27 +75,15 @@ public class BluetoothConnection extends Protocol {
 		/** A valid open connection is established to the remote device. */
 		STATE_CONNECTED
 	}
-
-
-	/**
-	 * Same as calling BluetoothConnection(device.getAddress(), parentActivity)
-	 * Is useful for connecting to a specific device through discovery mode
-	 * @see BluetoothConnection(String address, Activity parentActivity)
-	 */
-	public BluetoothConnection(BluetoothDevice device, Activity parentActivity, ConnectionListener listener) throws Exception {
-		this(device.getAddress(), parentActivity, listener);
-	}
-
-
+	
 	/**
 	 * Default constructor for creating a new BluetoothConnection to a remote device.
 	 * @param address The Bluetooth MAC address of the remote device
-	 * @param parentActivity The Activity that wants exclusive access to the BluetoothConnection
+	 * @param listener Listener that is called when changes is made on the connection
 	 * @throws ComLibException is thrown if the Android device does not support Bluetooth
 	 * @throws IllegalArgumentException is thrown if the specified address/remote device is invalid or if ConnectionListener is null
 	 */
-	public BluetoothConnection(String address, Activity parentActivity, ConnectionListener listener) throws Exception{
-
+	public BluetoothConnection(String address, ConnectionListener listener) {
 		//Validate the address
 		if( !BluetoothAdapter.checkBluetoothAddress(address) ){
 			throw new IllegalArgumentException("The specified bluetooth address is not valid");
@@ -113,7 +101,6 @@ public class BluetoothConnection extends Protocol {
 		}		
 
 		this.connectionListener = listener;
-		this.parentActivity = parentActivity;
 		connectionState = ConnectionState.STATE_DISCONNECTED;
 		device = bluetooth.getRemoteDevice(address);
 
@@ -124,7 +111,7 @@ public class BluetoothConnection extends Protocol {
 				disconnect();
 			}
 		});
-	}	
+	}
 
 	/**
 	 * Ensures that we have a valid bluetooth socket
@@ -209,18 +196,18 @@ public class BluetoothConnection extends Protocol {
 			return;
 		}
     	
-		//Register broadcast receivers
-		parentActivity.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-		parentActivity.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));    	
-
-		//Make sure bluetooth is enabled
-		if( !bluetooth.isEnabled() ) {
-			//wait until Bluetooth is enabled by the OS
-			Log.d(TAG, "BluetoothDevice is DISABLED. Asking user to enable Bluetooth");
-			parentActivity.startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT);
-			connectionRequested = true;
-			return;
-		}
+//		//Register broadcast receivers
+//		parentActivity.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+//		parentActivity.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));    	
+//
+//		//Make sure bluetooth is enabled
+//		if( !bluetooth.isEnabled() ) {
+//			//wait until Bluetooth is enabled by the OS
+//			Log.d(TAG, "BluetoothDevice is DISABLED. Asking user to enable Bluetooth");
+//			parentActivity.startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT);
+//			connectionRequested = true;
+//			return;
+//		}
 
 		//Start an asynchronous connection and return immediately so we do not interrupt program flow
 		if(validateSocket()) new ConnectionThread(this).start();
