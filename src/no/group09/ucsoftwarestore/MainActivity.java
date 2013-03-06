@@ -20,16 +20,8 @@ package no.group09.ucsoftwarestore;
  */
 
 import no.group09.ucsoftwarestore.R;
-import no.group09.ucsoftwarestore.R.id;
-import no.group09.ucsoftwarestore.R.layout;
-import no.group09.ucsoftwarestore.R.menu;
-import no.group09.ucsoftwarestore.R.xml;
-import no.group09.database.Db;
 import no.group09.database.Save;
-import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
-import no.group09.utils.AddDeviceScreen;
-import no.group09.utils.AppView;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.content.Intent;
@@ -40,11 +32,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -86,16 +75,18 @@ public class MainActivity extends FragmentActivity {
 		save.open();
 
 		//This clears the database
-//		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
+//		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
 
 		//This populates the database
 //		save.populateDatabase();
+		
+		//Closing the database
+		save.close();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		//		save.close();
 	}
 
 	@Override
@@ -134,7 +125,7 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(false);
-				
+
 				//Set new text when item is clicked
 				item.setTitle("Hide incompatible");
 			}
@@ -145,7 +136,7 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(true);
-				
+
 				//Set new text when item is clicked
 				item.setTitle("Show incompatible");
 			}
@@ -185,6 +176,5 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		//		save.open();
 	}
 }

@@ -1,8 +1,8 @@
 package no.group09.utils;
 
 import no.group09.database.Save;
-import no.group09.database.objects.App;
-import no.group09.database.objects.Developer;
+import no.group09.database.entity.App;
+import no.group09.database.entity.Developer;
 import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,15 +45,20 @@ public class AppView extends Activity {
 		App app = save.getApp(appID);
 		Developer developer = save.getDeveloper(app.getDeveloperID());
 		
+		//Closeing the database
+		save.close();
+		
+		//Get the objects from xml
 		TextView appName = (TextView) findViewById(R.id.app_view_app_name);
 		TextView appDeveloper = (TextView) findViewById(R.id.app_view_developer);
 		RatingBar rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
+		TextView appDescription = (TextView) findViewById(R.id.app_view_description);
 		
+		//Set the information on the UI that we fetched from the database-objects
 		appName.setText(app.getName());
-		
 		appDeveloper.setText(developer.getName());	//TODO: Get the developer from the database on this ID
-		
 		rating.setRating((float)app.getRating());
+		appDescription.setText(app.getDescription());
 	}
 
 	//	method for handling click of the review button

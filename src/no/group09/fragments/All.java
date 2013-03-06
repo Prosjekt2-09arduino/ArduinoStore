@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.group09.database.Save;
-import no.group09.database.objects.App;
+import no.group09.database.entity.App;
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import no.group09.utils.AppView;
@@ -112,6 +112,9 @@ public class All extends Fragment {
 				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
 				application_list.add(map);
 			}
+			
+			//Closing the database
+			save.close();
 		}
 		
 		list = (ListView)this.view.findViewById(R.id.list);
