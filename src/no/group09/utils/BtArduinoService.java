@@ -80,7 +80,8 @@ public class BtArduinoService extends Service {
 		connect();
 		setBtService(this);
 
-		return START_STICKY;
+		//START_NOT_STICKY makes sure the service dies when the app is killed
+		return START_NOT_STICKY;
 	}
 
 	@Override

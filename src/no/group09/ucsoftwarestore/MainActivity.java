@@ -100,6 +100,14 @@ public class MainActivity extends FragmentActivity {
 	public void onPause(){
 		super.onPause();
 	}
+	
+//	@Override
+//	public void onDestroy() {
+//		super.onDestroy();
+//		Log.d(TAG, "MainActivity is now beeing destroyed");
+//		BtArduinoService service = BtArduinoService.getBtService();
+//		service.onDestroy();
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
