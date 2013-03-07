@@ -29,7 +29,6 @@ import no.group09.connection.ConnectionListener;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
-import no.group09.ucsoftwarestore.ConnectionHolder;
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
