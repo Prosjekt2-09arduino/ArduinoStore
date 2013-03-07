@@ -29,8 +29,8 @@ public class Save{
 	 * Populates the database with some hardcoded examples
 	 * @param useContentProvider - if you want to use content provider or not
 	 */
-	public synchronized void populateDatabase(boolean useContentProvider){
-		Constants.populateDatabase(this, useContentProvider);
+	public synchronized void populateDatabase(){
+		Constants.populateDatabase(this);
 	}
 	
 	/**
@@ -64,16 +64,7 @@ public class Save{
 		}
 		
 		//TODO: check if this is possible if the database is empty
-//
-//		//pictures(pictureid, appid, fileURL)
-//		String[] pictures = new String[] {Constants.PICTURES_ID, Constants.PICTURES_APPID, Constants.PICTURES_FILEURL};
-//		tempCursor = db.query(true, Constants.PICTURES_TABLE, pictures, null, null, null, null, null, null); 
-//		if (tempCursor != null){
-//			tempCursor.moveToFirst(); 
-//			tables.put("pictures", tempCursor);
-//			tempCursor = null;
-//		}
-//
+		
 //		//requirements(requirementid, name, description)
 //		String[] requirements = new String[] {Constants.REQUIREMENTS_ID, Constants.REQUIREMENTS_NAME, Constants.REQUIREMENTS_DESCRIPTION};
 //		tempCursor = db.query(true, Constants.REQUIREMENTS_TABLE, requirements, null, null, null, null, null, null); 
@@ -82,15 +73,7 @@ public class Save{
 //			tables.put("requirements", tempCursor);
 //			tempCursor = null;
 //		}
-//
-//		//appusespins(appid, requirementid)
-//		String[] appusespins = new String[] {Constants.APPUSESPINS_APPID, Constants.APPUSESPINS_REQUIREMENTID};
-//		tempCursor = db.query(true, Constants.APPUSESPINS_TABLE, appusespins, null, null, null, null, null, null); 
-//		if (tempCursor != null){
-//			tempCursor.moveToFirst();  
-//			tables.put("appusespins", tempCursor);
-//			tempCursor = null;
-//		}
+
 		db.close();
 		
 		return tables;
@@ -119,15 +102,6 @@ public class Save{
 		
 		return apps;
 	}
-	
-//	public synchronized ArrayList<App> getAllApps(){
-//		
-//		ArrayList<App> apps = new ArrayList<App>();
-//		
-//		
-//		
-//		return apps;
-//	}
 	
 	/** Get the requested developer from the database */
 	public synchronized Developer getDeveloperByID(int id){
@@ -226,92 +200,5 @@ public class Save{
 		catch (SQLiteException e) { Log.e(TAG, e.getMessage()); }
 
 		finally { db.close(); }
-	}
-
-	//APP DATABASE FUNCTIONS
-	public long insertApp(ContentValues values) {
-		db = dbHelper.getWritableDatabase();
-		long l = db.insert(Constants.APP_TABLE, null, values);
-		db.close();
-		return l;
-	}
-
-	public Cursor getApp(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		db = dbHelper.getWritableDatabase();
-		Cursor r = db.query(Constants.APP_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
-		db.close();
-		return r;
-	}
-
-	public int updateApp(ContentValues values, String selection, String[] selectionArgs) {
-		db = dbHelper.getWritableDatabase();
-		int i = db.update(Constants.APP_TABLE, values, selection, selectionArgs);
-		db.close();
-		return i;
-	}
-
-	public int deleteApp(String selection, String[] selectionArgs){
-		db = dbHelper.getWritableDatabase();
-		int i = db.delete(Constants.APP_TABLE, selection, selectionArgs);
-		db.close();
-		return i;
-	}
-	
-	//DEVELOPER DATABASE FUNCTIONS
-	public long insertDeveloper(ContentValues values) {
-		db = dbHelper.getWritableDatabase();
-		long l = db.insert(Constants.DEVELOPER_TABLE, null, values);
-		db.close();
-		return l;
-	}
-	
-	public Cursor getDeveloper(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		db = dbHelper.getWritableDatabase();
-		Cursor i = db.query(Constants.DEVELOPER_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
-		db.close();
-		return i;
-	}
-
-	public int updateDeveloper(ContentValues values, String selection, String[] selectionArgs) {
-		db = dbHelper.getWritableDatabase();
-		int i = db.update(Constants.DEVELOPER_TABLE, values, selection, selectionArgs);
-		db.close();
-		return i;
-	}
-
-	public int deleteDeveloper(String selection, String[] selectionArgs){
-		db = dbHelper.getWritableDatabase();
-		int i = db.delete(Constants.DEVELOPER_TABLE, selection, selectionArgs);
-		db.close();
-		return i;
-	}
-	
-	//REQUIREMENTS DATABASE FUNCTIONS
-	public long insertRequirements(ContentValues values) {
-		db = dbHelper.getWritableDatabase();
-		long i = db.insert(Constants.REQUIREMENTS_TABLE, null, values);
-		db.close();
-		return i;
-	}
-	
-	public Cursor getRequirements(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		db = dbHelper.getWritableDatabase();
-		Cursor i = db.query(Constants.REQUIREMENTS_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
-		db.close();
-		return i;
-	}
-
-	public int updateRequirements(ContentValues values, String selection, String[] selectionArgs) {
-		db = dbHelper.getWritableDatabase();
-		int i = db.update(Constants.REQUIREMENTS_TABLE, values, selection, selectionArgs);
-		db.close();
-		return i;
-	}
-
-	public int deleteRequirements(String selection, String[] selectionArgs){
-		db = dbHelper.getWritableDatabase();
-		int i = db.delete(Constants.REQUIREMENTS_TABLE, selection, selectionArgs);
-		db.close();
-		return i;
 	}
 }

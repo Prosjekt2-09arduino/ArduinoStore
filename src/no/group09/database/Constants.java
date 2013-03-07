@@ -111,58 +111,7 @@ public class Constants {
 	 * @param save - the current save class
 	 * @param useContentProvider - if you want to use content provider or not
 	 */
-	public static void populateDatabase(Save save, boolean useContentProvider) {
-		
-		if(useContentProvider){
-			ContentValues v = new ContentValues();
-			v.put("name", "FunGame");
-			v.put("rating", 3);
-			v.put("developerid", 1);
-			v.put("category", "Games");
-			v.put("description", "This describes this amazing, life changing app. yey!");
-			save.insertApp(v);
-			
-			v = new ContentValues();
-			v.put("name", "Medic");
-			v.put("rating", 1);
-			v.put("developerid", 2);
-			v.put("category", "Medical");
-			v.put("description", "This describes this amazing, life changing app. yey!");
-			save.insertApp(v);
-			
-			v = new ContentValues();
-			v.put("name", "PlayerX");
-			v.put("rating", 4);
-			v.put("developerid", 3);
-			v.put("category", "Media");
-			v.put("description", "This describes this amazing, life changing app. yey!");
-			save.insertApp(v);
-			
-			v = new ContentValues();
-			v.put("name", "Toolio");
-			v.put("rating", 3);
-			v.put("developerid", 4);
-			v.put("category", "Tools");
-			v.put("description", "This describes this amazing, life changing app. yey!");
-			save.insertApp(v);
-			
-			v = new ContentValues();
-			v.put("name", "Whilhelm");
-			v.put("website", "www.lol.com");
-			save.insertDeveloper(v);
-			
-			v = new ContentValues();
-			v.put("name", "Robin");
-			v.put("website", "www.haha.com");
-			save.insertDeveloper(v);
-			
-			v = new ContentValues();
-			v.put("name", "Jeppe");
-			v.put("website", "www.hehe.com");
-			save.insertDeveloper(v);
-		}
-		else{
-			
+	public static void populateDatabase(Save save) {
 			save.insertApp(new App("FunGame", 3, 1, "Games", "This describes this amazing, life changing app. yey!"));	
 			save.insertApp(new App("Game", 4, 2, "Games", "This describes this amazing, life changing app. yey!"));	
 			save.insertApp(new App("PlayTime", 2, 5, "Games", "This describes this amazing, life changing app. yey!"));	
@@ -188,7 +137,5 @@ public class Constants {
 			save.insertDeveloper(new Developer("Bjørn", "www.hoho.com"));
 			save.insertDeveloper(new Developer("Ståle", "www.rofl.com"));
 			save.insertDeveloper(new Developer("Nina", "www.kake.com"));
-		}
-		
 	}
 }
