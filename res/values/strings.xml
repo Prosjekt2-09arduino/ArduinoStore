@@ -27,7 +27,7 @@
     <string name="menu_settings1">Toggle hide incompatible</string>
     <string name="menu_settings2">Device List</string>
     <string name="menu_settings3">Settings</string>
-    <string name="menu_settings4">Add device</string>
+    <string name="menu_settings4">Populate Database</string>
     <!-- This is just for testing purposes. Remove when done. -->
     <string name="menu_settings5">Application view</string>
     

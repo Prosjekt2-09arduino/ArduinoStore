@@ -21,8 +21,13 @@ package no.group09.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeoutException;
 
 import no.group09.connection.BluetoothConnection;
+import no.group09.connection.ConnectionMetadata;
+import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
@@ -41,6 +46,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 import android.util.Log;
@@ -83,6 +89,10 @@ public class Devices extends Activity  {
 
 	private BtArduinoService bluetoothService;
 	private BluetoothConnection connection;
+
+	private boolean secondClick = false;
+	
+	private int savedPosition;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +174,7 @@ public class Devices extends Activity  {
 				//This might be a problem if it needs to change the connected device.
 				startService(serviceIntent);
 
-				
+
 				ProgressDialogTask task = new ProgressDialogTask();
 				task.execute();
 				//				showProgressDialog = true;
@@ -177,34 +187,16 @@ public class Devices extends Activity  {
 
 				//				Log.d(TAG, "Check if the device is connected: " + con.isConnected());
 
-				String lastConnectedDevice = "Device name: " + listAdapter.getName(position)
-						+ "\nMAC Address: " + listAdapter.getMacAddress(position);
-
-				Editor edit = sharedPref.edit();
-
-				//Saves the full information about the last connected device to sharedPreferences
-				edit.putString("connected_device_dialog", lastConnectedDevice);
-
-				//Save the name of the BT device as a separate setting. Used
-				//to show the name of last connected device in title bar.
-				edit.putString("connected_device_name", listAdapter.getName(position));
-
-				edit.commit();
-				Log.d(TAG, "The information about the last connected device was written to shared preferences");
+				savedPosition = position;
 			}
 		});	
 
 		deviceList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
-				try{
-					/*
-					 * Add functionality for longclick here.
-					 */
-				}
-				catch(Exception e){
-					Log.d(TAG, "Could not send message");
-				}
+
+				dialogBoxForTestingPurposes();
+
 				return false;
 			}
 		});
@@ -226,6 +218,10 @@ public class Devices extends Activity  {
 				//Notify the adapter that the list is now empty
 				listAdapter.notifyDataSetChanged();
 
+				if(!BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
+					setTitle("Devices");
+				}
+
 				//Scan for new BT devices
 				checkBTState();
 			}
@@ -242,7 +238,10 @@ public class Devices extends Activity  {
 			@Override
 			public void onClick(View v) {
 				//Finishes this activity and goes back to the parent
-				finish();
+				//				finish();
+
+				//TODO: use finish() and delete this call when you want to browse shop instead for debug
+				dialogBoxForTestingPurposes();
 			}
 		});
 	}
@@ -304,6 +303,25 @@ public class Devices extends Activity  {
 
 		//Notify the adapter that the list is now empty
 		listAdapter.notifyDataSetChanged();
+
+		setActivityTitle();
+	}
+
+	/** Add the connected device name to the title if connected */
+	private void setActivityTitle(){
+		String appName = sharedPref.getString("connected_device_name", "null");
+
+		if(BtArduinoService.getBtService() != null){
+			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+				setTitle("Devices - " + appName);
+			}
+			else{
+				setTitle("Devices");
+			}
+		}
+		else{
+			setTitle("Devices");
+		}
 	}
 
 	/**
@@ -413,13 +431,13 @@ public class Devices extends Activity  {
 
 	public Dialog createDialog(String message) {
 		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
-		
+
 		responseDialog.setMessage(message)
 		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				
+
 			}
 		});
 
@@ -444,7 +462,7 @@ public class Devices extends Activity  {
 				if (bluetoothService == null) {
 					bluetoothService = BtArduinoService.getBtService();
 				}
-				if (bluetoothService != null && connection == null) {
+				if (bluetoothService != null) {
 					connection = bluetoothService.getBluetoothConnection();
 				}
 				if (connection != null) {
@@ -456,26 +474,154 @@ public class Devices extends Activity  {
 					return false;
 				}
 				try {
-					Thread.sleep(10);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {}
 			}
 		}
 
 		@Override 
 		protected void onPostExecute(Boolean success) {
+			BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
 			progressDialog.dismiss();
-			String message;
-			if (success) {
+			String message, title;
+
+			String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
+
+			if (success && connection.isConnected()) {
 				message = "The connection was successful.";
-				createDialog(message);
-				Log.d(TAG, "The connection was successful!");
+				title = "Devices - " + appName;
+				
+				String lastConnectedDevice = "Device name: " + listAdapter.getName(savedPosition)
+						+ "\nMAC Address: " + listAdapter.getMacAddress(savedPosition);
+
+				Editor edit = sharedPref.edit();
+
+				//Saves the full information about the last connected device to sharedPreferences
+				edit.putString("connected_device_dialog", lastConnectedDevice);
+
+				//Save the name of the BT device as a separate setting. Used
+				//to show the name of last connected device in title bar.
+				edit.putString("connected_device_name", listAdapter.getName(savedPosition));
+
+				edit.commit();
+				Log.d(TAG, "The information about the last connected device was written to shared preferences");
+				
 			}
 			else {
-				message = "The connection was not successfull." +
-						"\nPlease try again.";
-				createDialog(message);
-				Log.d(TAG, "The connection was NOT successful!");
+				message = "The connection was not successfull." + "\nPlease try again.";
+				title = "Devices";
 			}
+
+			createDialog(message);
+			Log.d(TAG, message);
+			setTitle(title);
+			Log.d(TAG, "ConnectionState was: " + connection.getConnectionState());
+		}
+	}
+
+	/** 
+	 * This only shows a dialog box with functions to the arduino 
+	 * TODO: delete me when you dont need me anymore
+	 */
+	private void dialogBoxForTestingPurposes(){
+
+		final BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
+
+		if(connection.isConnected()){
+
+
+			// custom dialog
+			final Dialog dialog = new Dialog(Devices.this);
+			dialog.setContentView(R.layout.dialog_box_for_test_purposes);
+
+			Button LED = (Button) dialog.findViewById(R.id.LED);
+			Button VIBRATE = (Button) dialog.findViewById(R.id.VIBRATE);
+			Button SPEAKER = (Button) dialog.findViewById(R.id.SPEAKER);
+			Button LCD = (Button) dialog.findViewById(R.id.LCD);
+
+			ConnectionMetadata meta = connection.getConnectionData();
+			for(String service : meta.getServicesSupported()) {
+				Integer pins[] = meta.getServicePins(service);
+
+				if(pins.length > 0) {
+					if(service.equals(DefaultServices.SERVICE_LED_LAMP.name())){
+						LED.setOnClickListener(new OnClickListener() {
+
+							boolean ledIsToggled;
+							int pinID;
+
+							@Override
+							public void onClick(View v) {
+								ledIsToggled = !ledIsToggled;
+								try {
+									connection.write(pinID, ledIsToggled, false);
+								} catch (TimeoutException e) {}
+							}
+						});
+					}
+					if(service.equals(DefaultServices.SERVICE_VIBRATION.name())){
+						VIBRATE.setOnClickListener(new OnClickListener() {
+
+							Timer timer = new Timer();
+							int pin;
+
+							@Override
+							public void onClick(View v) {
+								timer.schedule(new TimerTask(){
+									public void run(){
+										try {
+
+											//Vibrate mobile
+											Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+											vib.vibrate(2000);
+
+											//Vibrate remote module
+											connection.write(pin, true, false);
+											Thread.sleep(2000);
+											connection.write(pin, false, false);
+
+										} 
+										catch (Exception e) {
+										}
+									}
+								}, 0);
+							}
+						});
+					}
+					if(service.equals(DefaultServices.SERVICE_SPEAKER.name())){
+						SPEAKER.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								try {
+									connection.data(new byte[]{100, 75, 52, 15}, false);
+								} catch (TimeoutException e) {}
+							}
+						});
+					}
+				}
+
+				else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())){
+					LCD.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							try {
+								if(secondClick){
+									connection.print("hallo robin", false);
+									secondClick = false;
+								}
+								else{
+									connection.print(connection.getConnectionState().toString(), false);
+									secondClick = true;
+								}
+							} catch (TimeoutException e) {}
+						}
+					});
+				}
+			}
+
+			dialog.show();
 		}
 	}
 }

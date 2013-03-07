@@ -24,9 +24,12 @@ import java.util.HashMap;
 
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
+import no.group09.utils.BtArduinoService;
 import android.app.Activity;
 import android.app.TabActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -39,8 +42,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class Categories extends Fragment{
 
 	private int mCurrentPage;
-	private Activity activity;
-	//	private Fragment fragment;
+	private SharedPreferences sharedPref = null;
 
 	private ListView list;
 	private ListAdapterCategory adapter;
@@ -54,7 +56,8 @@ public class Categories extends Fragment{
 
 		/** Getting integer data of the key current_page from the bundle */
 		mCurrentPage = data.getInt("current_page", 1);
-
+		
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());	//FIXME: is getActivity() correct here?
 	}
 
 	@Override
