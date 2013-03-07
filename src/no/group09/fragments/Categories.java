@@ -126,6 +126,8 @@ public class Categories extends Fragment{
 
 				/** Move to selected category */
 				MainActivity.pager.setCurrentItem(1);
+				
+				
 			}
 		});	
 

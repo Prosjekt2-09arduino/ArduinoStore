@@ -85,7 +85,8 @@ public class BtArduinoService extends Service {
 			
 			if(connection.getConnectionState() != ConnectionState.STATE_DISCONNECTED){
 				Log.d(TAG, "State was not disconnected (onStartCommand())\nSetting state to Disconnected.");
-				connection.setConnectionState(ConnectionState.STATE_DISCONNECTED);
+//				connection.setConnectionState(ConnectionState.STATE_DISCONNECTED); //This made some other bugs, but got rid of the socket error
+				connection.disconnect();	//FIXME: it is instant connection failed when connection from arduino to another device
 			}
 			
 			Log.d(TAG, "Connection state: " + connection.getConnectionState());
