@@ -26,7 +26,6 @@ import java.util.concurrent.TimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.nfc.Tag;
 import android.util.Log;
 
 //import android.util.Log;
@@ -211,6 +210,7 @@ public abstract class Protocol implements Runnable {
     /**
      * Internal loop to process queued instructions
      */
+	@Override
 	public void run() {
 		activeConnection = true;
 
@@ -402,9 +402,9 @@ public abstract class Protocol implements Runnable {
      */
     private short toUnsigned(byte value) {
         if (value < 0) {
-            return (short) ((short) value & (short) 0xFF);
+            return (short) (value & (short) 0xFF);
         }
-        return (short) value;
+        return value;
     }
 
     /**

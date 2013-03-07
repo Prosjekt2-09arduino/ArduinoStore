@@ -1,6 +1,5 @@
 package no.group09.database;
 
-import android.content.ContentValues;
 import no.group09.database.entity.App;
 import no.group09.database.entity.Developer;
 

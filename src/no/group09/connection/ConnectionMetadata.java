@@ -24,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.net.wifi.WifiConfiguration.Protocol;
 import android.util.Log;
 
 public class ConnectionMetadata {

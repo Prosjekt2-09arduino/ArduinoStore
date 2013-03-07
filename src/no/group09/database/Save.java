@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import no.group09.database.entity.App;
 import no.group09.database.entity.Developer;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

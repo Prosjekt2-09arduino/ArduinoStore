@@ -57,6 +57,7 @@ class ConnectionThread extends Thread {
 	 * This thread monitors and polls for new data received from the remote device
 	 */
 	private class PollingThread extends Thread {
+		@Override
 		public void run() {			
 
 			//Keep listening bytes from the stream

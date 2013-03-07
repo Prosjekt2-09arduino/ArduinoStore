@@ -201,6 +201,7 @@ public class BluetoothConnection extends Protocol {
      * check when the connection has been established. disconnect() can be called to stop trying to get an 
      * active connection (STATE_CONNECTING to STATE_DISCONNECTED)
      */
+	@Override
 	public void connect() {
 
 		//Don't try to connect more than once
@@ -268,6 +269,7 @@ public class BluetoothConnection extends Protocol {
 	 * Disconnects the remote device. connect() has to be called before any communication to the
 	 * remote device can be done again.
 	 */
+	@Override
 	public void disconnect() {
 		if(connectionState != ConnectionState.STATE_DISCONNECTED) Log.v(getClass().getSimpleName(), "Bluetooth connection closed: " + device.getAddress());
 
@@ -295,7 +297,8 @@ public class BluetoothConnection extends Protocol {
 
 	 // Create a BroadcastReceiver for enabling bluetooth
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
+        @Override
+		public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
                                     
             //Device is turning on or off
@@ -344,6 +347,7 @@ public class BluetoothConnection extends Protocol {
     };
 
 
+	@Override
 	protected void sendBytes(byte[] data) throws IOException {
 
 		//Make sure we are connected before sending data

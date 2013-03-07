@@ -222,7 +222,7 @@ public class Devices extends Activity  {
 	
 	//Disse to er en del av en stygg hack, men det funker. Fix senere.
 	private void setContext(Context context) {
-		this.context = context;
+		Devices.context = context;
 	}
 	
 	public static Context getContext() {
@@ -276,6 +276,7 @@ public class Devices extends Activity  {
 		//		if(con != null) con.disconnect();
 	}
 
+	@Override
 	public void onResume() {
 		super.onResume();
 
