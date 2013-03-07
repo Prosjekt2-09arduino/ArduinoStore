@@ -27,9 +27,8 @@ import no.group09.ucsoftwarestore.R.layout;
 import no.group09.ucsoftwarestore.R.menu;
 import no.group09.ucsoftwarestore.R.xml;
 import no.group09.connection.BluetoothConnection;
-import no.group09.database.Db;
+import no.group09.database.DatabaseHandler;
 import no.group09.database.Save;
-import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.AddDeviceScreen;
 import no.group09.utils.AppView;
@@ -44,11 +43,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -85,15 +81,14 @@ public class MainActivity extends FragmentActivity {
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
+		//This clears the database
+//		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
+
 		/** Create the database if it does not excist, or copy it into the application */
 		save = new Save(getBaseContext());
-		save.open();
 
-		//This clears the database
-//		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
-
-		//This populates the database
-//		save.populateDatabase();
+		//This populates the database: false because we dont want to use content provider
+//		save.populateDatabase(true);
 	}
 
 	@Override
@@ -145,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(false);
-				
+
 				//Set new text when item is clicked
 				item.setTitle("Hide incompatible");
 			}
@@ -157,7 +152,7 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(true);
-				
+
 				//Set new text when item is clicked
 				item.setTitle("Show incompatible");
 			}
@@ -197,6 +192,5 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		//		save.open();
 	}
 }

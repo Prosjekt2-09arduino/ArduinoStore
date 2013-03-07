@@ -1,4 +1,4 @@
-package no.group09.database.objects;
+package no.group09.database.entity;
 
 public class App {
 
@@ -8,37 +8,34 @@ public class App {
 	private int developerID;
 	private byte[] icon;
 	private String category = "";
+	private String description = "";
 
-
-	/** This is used when we fetch the objects from the database */ 
-	App(int ID, String name, int rating, int developerID, byte[] icon){	//TODO: use this instead
-		this.ID = ID;
-		this.name = name;
-		this.rating = rating;
-		this.developerID = developerID;
-		this.icon = icon;
-	}
 
 	/** This is used when we create new samples (not from db) */
-	public App(String name, int rating, int developerID, String category){
+	public App(String name, int rating, int developerID, String category, String description){
 		this.name = name;
 		this.rating = rating;
 		this.developerID = developerID;
 		this.category = category;
+		this.description = description;
 	}
 
-	/**
-	 * @deprecated this is temporary, fix and use with byte[]
-	 * @param name
-	 * @param description
-	 * @param developerID
-	 */
-	public App(int ID, String name, int rating, int developerID, String category){
+	/** This is used when we create a App that is fetched from the database (hence have a ID) */
+	public App(int ID, String name, int rating, int developerID, String category, String description){
 		this.ID = ID;
 		this.name = name;
 		this.rating = rating;
 		this.developerID = developerID;
 		this.category = category;
+		this.description = description;
+	}
+	
+	public String getDescription(){
+		return this.description;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
 	}
 
 	public String getCategory() {
