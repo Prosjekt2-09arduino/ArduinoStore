@@ -123,7 +123,7 @@ public class AppView extends Activity {
 					progressStatus++;
 					//				to make sure thread doesnt use up too much resources
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(10);
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
