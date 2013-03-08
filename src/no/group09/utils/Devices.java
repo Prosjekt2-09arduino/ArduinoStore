@@ -170,19 +170,8 @@ public class Devices extends Activity  {
 				//This might be a problem if it needs to change the connected device.
 				startService(serviceIntent);
 
-
 				ProgressDialogTask task = new ProgressDialogTask();
 				task.execute();
-				//				showProgressDialog = true;
-				//				progressDialogThread = new ProgressDialogTask();
-				//				progressDialogThread.run();
-				//
-				//
-				//
-				//				progressDialogThread.dismiss();
-
-				//				Log.d(TAG, "Check if the device is connected: " + con.isConnected());
-
 				savedPosition = position;
 			}
 		});	
@@ -241,6 +230,16 @@ public class Devices extends Activity  {
 			}
 		});
 	}
+	
+	//Disse to er en del av en stygg hack, men det funker. Fix senere.
+	private void setContext(Context context) {
+		Devices.context = context;
+	}
+	
+	public static Context getContext() {
+		return context;
+	}
+
 
 	/**
 	 * Method used to register the broadcast receiver for communicating with
@@ -291,6 +290,7 @@ public class Devices extends Activity  {
 	 * Called when Devices screen is resumed. Clears the list of visible 
 	 * bluetooth devices and starts a new search.
 	 */
+	@Override
 	public void onResume() {
 		super.onResume();
 

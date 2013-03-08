@@ -48,7 +48,7 @@ public class AppView extends Activity {
 		//Set the information on the UI that we fetched from the database-objects
 		appName.setText(app.getName());
 		appDeveloper.setText(developer.getName());	//TODO: Get the developer from the database on this ID
-		rating.setRating((float)app.getRating());
+		rating.setRating(app.getRating());
 		appDescription.setText(app.getDescription());
 	}
 

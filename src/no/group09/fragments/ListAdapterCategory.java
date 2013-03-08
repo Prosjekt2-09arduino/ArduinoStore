@@ -23,12 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.group09.ucsoftwarestore.R;
-import no.group09.ucsoftwarestore.R.id;
-import no.group09.ucsoftwarestore.R.layout;
-
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,19 +48,23 @@ public class ListAdapterCategory extends BaseAdapter {
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public int getCount() {
+    @Override
+	public int getCount() {
         return data.size();
     }
 
-    public Object getItem(int position) {
+    @Override
+	public Object getItem(int position) {
         return position;
     }
 
-    public long getItemId(int position) {
+    @Override
+	public long getItemId(int position) {
         return position;
     }
     
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+	public View getView(int position, View convertView, ViewGroup parent) {
         View vi=convertView;
         if(convertView==null)
             vi = inflater.inflate(R.layout.list_row_categories, null);
@@ -94,6 +93,7 @@ public class ListAdapterCategory extends BaseAdapter {
         else if(listItem.get(APP_NAME).equals("Media")){
         	thumb_image.setImageResource(R.drawable.media);
         }
+        
         
         return vi;
     }

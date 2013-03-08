@@ -44,14 +44,17 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
+	@Override
 	public int getCount() {
 		return data.size();
 	}
 
+	@Override
 	public Object getItem(int position) {
 		return position;
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}

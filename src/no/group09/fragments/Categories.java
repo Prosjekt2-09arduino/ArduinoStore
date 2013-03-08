@@ -34,7 +34,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class Categories extends Fragment{
 
-	private int mCurrentPage;
+//	private int mCurrentPage;
 	private ListView list;
 	private ListAdapterCategory adapter;
 
@@ -43,10 +43,10 @@ public class Categories extends Fragment{
 		super.onCreate(savedInstanceState);
 
 		/** Getting the arguments to the Bundle object */
-		Bundle data = getArguments();
+//		Bundle data = getArguments();
 
 		/** Getting integer data of the key current_page from the bundle */
-		mCurrentPage = data.getInt("current_page", 1);
+//		mCurrentPage = data.getInt("current_page", 1);
 		
 	}
 
@@ -85,6 +85,15 @@ public class Categories extends Fragment{
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 
+		
+		map = new HashMap<String, String>();
+		map.put(ListAdapterCategory.KEY_ID, "5");
+		map.put(ListAdapterCategory.APP_NAME, "All");
+		map.put(ListAdapterCategory.DISTRIBUTOR, "");
+		map.put(ListAdapterCategory.RATING, "");
+		category_list.add(map);
+
+	
 		list = (ListView)v.findViewById(R.id.list);
 
 		// Getting adapter by passing xml data ArrayList

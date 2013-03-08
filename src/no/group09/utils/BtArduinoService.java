@@ -118,6 +118,7 @@ public class BtArduinoService extends Service {
 	 */
 	private void createConnectionListener() {
 		this.connectionListener = new ConnectionListener() {
+			@Override
 			public void onConnect(BluetoothConnection bluetoothConnection) {
 				Log.d(TAG, "Connected to: " + connection.toString());
 
