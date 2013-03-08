@@ -2,13 +2,26 @@ package no.group09.database;
 
 public class Constants {
 
+	/** Select an app from the database */
+    protected final static String SELECT_APP = "select * from app where appid=?";
+    protected final static String SELECT_DEVELOPER = "select * from developer where developerid=?";
+    
+    /** Insert an app to the database */
+    protected final static String INSERT_APP = "insert or replace into app (name, rating, developerid, category) values (?, ?, ?, ?)";
+    protected final static String INSERT_DEVELOPER = "insert or replace into developer (name, website) values (?, ?)";
+
+    /** Delete an app from the database */
+    protected final static String DELETE_APP = "delete from app where name=?";
+    protected final static String DELETE_DEVELOPER = "delete from developer where name=?";
+	
 	/** app(appid, name, description, developerid, icon) */
 	protected final static String APP_TABLE="app";
 	protected final static String APP_ID="appid";
 	protected final static String APP_NAME="name"; 
-	protected final static String APP_DESCRIPTION="description"; 
+	protected final static String APP_RATING="rating"; 
 	protected final static String APP_DEVELOPERID="developerid"; 
-	protected final static String APP_ICON="icon"; 
+	protected final static String APP_CATEGORY="category"; 
+//	protected final static String APP_ICON="icon"; 
 	
 	/** version(versionid, appid, version, fileURL, filesize) */
 	protected final static String VERSION_TABLE="version";
@@ -65,12 +78,22 @@ public class Constants {
 	
 	/**	Database app creation sql statement */
 	protected static final String DATABASE_CREATE_APP = 
-			"CREATE TABLE app (" +
+			"CREATE TABLE IF NOT EXISTS app (" +
 					"appid integer primary key autoincrement, " +
 					"name varchar(160), " +
-					"description varchar(200), " +
-					"developerid int(10), " +
-					"image BLOB)";
+					"rating int(10), " +
+					"developerid int(10)," +
+					"category varchar(200))";
+	
+	
+//	/**	Database app creation sql statement */
+//	protected static final String DATABASE_CREATE_APP = 
+//			"CREATE TABLE IF NOT EXISTS app (" +
+//					"appid integer primary key autoincrement, " +
+//					"name varchar(160), " +
+//					"description varchar(200), " +
+//					"developerid int(10), " +
+//					"image BLOB)";
 
 	/** Database version creation sql statement */
 	protected static final String DATABASE_CREATE_VERSION = 

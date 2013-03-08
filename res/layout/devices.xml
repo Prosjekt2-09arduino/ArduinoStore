@@ -24,9 +24,10 @@
     android:background="@color/gray"
     android:orientation="vertical" >
 
+    <!-- height 32 dp -->
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal" 
         android:padding="6dip">
 
@@ -40,8 +41,8 @@
 
         <Button
             android:id="@+id/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
             android:layout_weight="0"
             android:text="@string/refresh"
             android:background="@drawable/refresh_button_layout"/>
@@ -50,23 +51,26 @@
             android:id="@+id/progbar"
             android:layout_width="32dp"
             android:layout_weight="0"
-            android:layout_height="wrap_content" />
+            android:layout_height="32dp" />
 
     </LinearLayout>
-
+    
     <ListView
         android:id="@+id/bluetooth_devices_list"
         android:layout_width="fill_parent"
-        android:layout_height="290dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:layout_weight="1"
         android:choiceMode="singleChoice"
         android:divider="#b5b5b5"
         android:dividerHeight="1dp"
-        android:listSelector="@drawable/list_selector" />
+        android:listSelector="@drawable/list_selector" >
+    </ListView>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="bottom"
         android:orientation="horizontal"
         android:padding="6dip" >
 
@@ -76,28 +80,37 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/explanatory_text1"
-            android:textColor="#FFF" />
+            android:textColor="#FFF"
+            android:gravity="center" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal"
         android:padding="6dip" >
 
         <Button
             android:id="@+id/add_device_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:text="@string/add_device_button_text" />
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/add_device_button_text"
+            android:background="@drawable/refresh_button_layout" />
 
         <Button
             android:id="@+id/browse_shop_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:text="@string/browse_shop_button_text" />
+			android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/browse_shop_button_text"
+            android:background="@drawable/refresh_button_layout" />
 
     </LinearLayout>
 

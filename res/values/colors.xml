@@ -26,4 +26,5 @@
     <color name="selected1">#70A667</color>
     <color name="selected2">#5E8A57</color>
     <color name="selected3">#51754B</color>
+    <color name="red">#f00</color>
 </resources>

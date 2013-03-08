@@ -22,33 +22,29 @@ package no.group09.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import no.group09.arduinoair.R;
-import no.group09.arduinoair.R.id;
-import no.group09.arduinoair.R.layout;
+import no.group09.ucsoftwarestore.MainActivity;
+import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.TabActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.SearchView;
-import android.widget.Toast;
 
-public class Categories extends MyFragment{
+public class Categories extends Fragment{
 
 	private int mCurrentPage;
 	private Activity activity;
-//	private Fragment fragment;
-	
+	//	private Fragment fragment;
+
 	private ListView list;
-    private ListAdapterCategory adapter;
-	
+	private ListAdapterCategory adapter;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,21 +53,16 @@ public class Categories extends MyFragment{
 		Bundle data = getArguments();
 
 		/** Getting integer data of the key current_page from the bundle */
-		mCurrentPage = data.getInt("current_page", 0);
-		
+		mCurrentPage = data.getInt("current_page", 1);
+
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final View v = inflater.inflate(R.layout.main, container,false);
-//        activity = (Activity) v.getContext();
-//        SharedPreferences prefs = activity.getSharedPreferences("no.group09.arduinoair", Context.MODE_PRIVATE);
-		
+
 		ArrayList<HashMap<String, String>> category_list = new ArrayList<HashMap<String, String>>();
-		
-		////////////////////////////////////////////////////////////////////////////////////
-		//TODO: change this with SQLLite or something
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "1");
@@ -79,45 +70,62 @@ public class Categories extends MyFragment{
 		map.put(ListAdapterCategory.DISTRIBUTOR, "");
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
-		
+
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "2");
 		map.put(ListAdapterCategory.APP_NAME, "Medical");
 		map.put(ListAdapterCategory.DISTRIBUTOR, "");
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
-		
+
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "3");
 		map.put(ListAdapterCategory.APP_NAME, "Tools");
 		map.put(ListAdapterCategory.DISTRIBUTOR, "");
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
-		
+
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "4");
 		map.put(ListAdapterCategory.APP_NAME, "Media");
 		map.put(ListAdapterCategory.DISTRIBUTOR, "");
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
-		
-		////////////////////////////////////////////////////////////////////////////////////
-		
-		list = (ListView)v.findViewById(R.id.list);
-		
-		// Getting adapter by passing xml data ArrayList
-        adapter = new ListAdapterCategory(v.getContext(), category_list);        
-        list.setAdapter(adapter);
 
-        // Click event for single list row
-        list.setOnItemClickListener(new OnItemClickListener() {
+		list = (ListView)v.findViewById(R.id.list);
+
+		// Getting adapter by passing xml data ArrayList
+		adapter = new ListAdapterCategory(v.getContext(), category_list);        
+		list.setAdapter(adapter);
+
+		// Click event for single list row
+		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(view.getContext(), "WOW, nice try!", Toast.LENGTH_SHORT).show();
+
+				MyFragmentPagerAdapter pageAdapter = MainActivity.pagerAdapter;
+
+				//Set the type for the #2 tab. This will edit the content and the title
+				pageAdapter.page1 = Page.getType(adapter.getName(position), 1);
+
+				//Set the type for the #3 tab. This will edit the content and the title
+				pageAdapter.page2 = Page.getType(adapter.getName(position), 2);
+
+				//Update the content on the #2 tab
+				pageAdapter.all.update();
+
+				//Update the content on the #3 tab
+				//pageAdapter.topHits.update();	//this doesnt work because the last tab is not created yet
+
+				/** Notify the page adapter that there have been some changes */
+				pageAdapter.notifyDataSetChanged();
+
+				/** Move to selected category */
+				MainActivity.pager.setCurrentItem(1);
 			}
 		});	
-		
+
 		return v;
 	}
 }

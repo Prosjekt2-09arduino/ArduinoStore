@@ -19,7 +19,7 @@ package no.group09.utils;
  * under the License.
  */
 
-import no.group09.arduinoair.R;
+import no.group09.ucsoftwarestore.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

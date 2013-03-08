@@ -34,5 +34,10 @@
             android:key="connected_device_dialog"
             android:title="@string/connected_device"
             android:summary="@string/conn_device_summary"/>
+        
+        <!-- Used to store the name of the last connected device. No need to show
+        it in the setting screen. -->
+        <Preference 
+            android:key="connected_device_name"/>
     </PreferenceCategory>
 </PreferenceScreen>

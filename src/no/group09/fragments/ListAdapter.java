@@ -22,11 +22,7 @@ package no.group09.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import no.group09.arduinoair.R;
-import no.group09.arduinoair.R.id;
-import no.group09.arduinoair.R.layout;
-
-import android.app.Activity;
+import no.group09.ucsoftwarestore.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +42,8 @@ public class ListAdapter extends BaseAdapter {
 	protected static final String APP_NAME = "title";
 	protected static final String DISTRIBUTOR = "distributor";
 	protected static final String RATING = "rating";
+	protected static final String IMAGE = "image";
+	
     
     public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
         context = a;
@@ -72,8 +70,8 @@ public class ListAdapter extends BaseAdapter {
 
         TextView appName = (TextView)vi.findViewById(R.id.app_name);
         TextView distributor = (TextView)vi.findViewById(R.id.distributor);
-        TextView rating = (TextView)vi.findViewById(R.id.rating);
-//        getRatingBar = (RatingBar) vi.findViewById(R.id.getRating);;
+//        TextView rating = (TextView)vi.findViewById(R.id.rating);
+        RatingBar getRatingBar = (RatingBar) vi.findViewById(R.id.ratingBarIndicator);;
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image);
         
         HashMap<String, String> listItem = new HashMap<String, String>();
@@ -82,9 +80,14 @@ public class ListAdapter extends BaseAdapter {
         // Setting all values in listview
         appName.setText(listItem.get(APP_NAME));
         distributor.setText(listItem.get(DISTRIBUTOR));
-        rating.setText(listItem.get(RATING));
-//        getRatingBar.setRating(Float.parseFloat(listItem.get(All.RATING)));
+//        rating.setText(listItem.get(RATING));
+//        thumb_image.setImageBitmap(Save.converteStringToBitmap(listItem.get(IMAGE)));
+        getRatingBar.setRating((float)Integer.parseInt(listItem.get(RATING)));
         
         return vi;
+    }
+    
+    public String getID(int position){
+    	return data.get(position).get(KEY_ID);
     }
 }
