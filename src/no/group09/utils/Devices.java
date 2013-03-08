@@ -65,7 +65,8 @@ import android.view.View.OnClickListener;
 public class Devices extends Activity  {
 
 	/**Should be true if only arduinos is to be showed. False otherwise */
-	private boolean ONLY_SHOW_ARDUINOS = false;
+	private boolean ONLY_SHOW_ARDUINOS = true;
+	
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
 	private static final String TAG = "DEVICES";

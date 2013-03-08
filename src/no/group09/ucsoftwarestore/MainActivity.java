@@ -136,6 +136,10 @@ public class MainActivity extends FragmentActivity {
 				//Set new text when item is clicked
 				item.setTitle("Show incompatible");
 			}
+			
+			pagerAdapter.all.update();
+			pagerAdapter.topHits.update();
+			pagerAdapter.notifyDataSetChanged();
 
 			return true;
 
@@ -169,6 +173,10 @@ public class MainActivity extends FragmentActivity {
 		case R.id.populateDatabase:
 			Save save = new Save(getBaseContext());
 			save.populateDatabase();
+			
+			pagerAdapter.all.update();
+			pagerAdapter.topHits.update();
+			pagerAdapter.notifyDataSetChanged();
 			
 		default : return false;
 		}

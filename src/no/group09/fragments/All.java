@@ -23,11 +23,14 @@ import java.util.HashMap;
 
 import no.group09.database.Save;
 import no.group09.database.entity.App;
+import no.group09.database.entity.Requirements;
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import no.group09.utils.AppView;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,65 +57,108 @@ public class All extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		/** Getting the arguments to the Bundle object */
-//		Bundle data = getArguments();
+		//		Bundle data = getArguments();
 
 		/** Getting integer data of the key current_page from the bundle */
-//		mCurrentPage = data.getInt("current_page", 2);
+		//		mCurrentPage = data.getInt("current_page", 2);
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		view = inflater.inflate(R.layout.main, container,false);
-		
+
 		update();
 
 		return view;
 	}
-	
+
 	public void update(){
 		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
 
 		//This adds elements from the database to the listview
 		Save save = new Save(this.view.getContext());
-		
+
+		//Get the preference for hide_incompatible
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+		boolean hideIncompatible = sharedPrefs.getBoolean("hide_incompatible", false);
+
 		//Iterate over all the apps from the local database
 		for(App app : save.getAllApps()){
 
-			if(app.getCategory().equals("Games") && MainActivity.pagerAdapter.page1 == Page.GAMES_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+			//Check if apps with category games shall be listed
+			if(app.getCategory().equals("Games") 
+					&& MainActivity.pagerAdapter.page1 == Page.GAMES_ALL 
+					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
+
+					//Put the app in a HashMap that will be used in ListAdapter
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
-			else if(app.getCategory().equals("Medical") && MainActivity.pagerAdapter.page1 == Page.MEDICAL_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+
+			//Check if apps with category Medical shall be listed
+			else if(app.getCategory().equals("Medical") 
+					&& MainActivity.pagerAdapter.page1 == Page.MEDICAL_ALL 
+					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
+				
+					//Put the app in a HashMap that will be used in ListAdapter
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
-			else if(app.getCategory().equals("Tools") && MainActivity.pagerAdapter.page1 == Page.TOOLS_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+
+			//Check if apps with category Tools shall be listed
+			else if(app.getCategory().equals("Tools") 
+					&& MainActivity.pagerAdapter.page1 == Page.TOOLS_ALL 
+					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
+					
+					//Put the app in a HashMap that will be used in ListAdapter
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
-			else if(app.getCategory().equals("Media") && MainActivity.pagerAdapter.page1 == Page.MEDIA_ALL || MainActivity.pagerAdapter.page1 == Page.ALL){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+
+			//Check if apps with category Media shall be listed
+			else if(app.getCategory().equals("Media") 
+					&& MainActivity.pagerAdapter.page1 == Page.MEDIA_ALL 
+					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
+					
+					//Put the app in a HashMap that will be used in ListAdapter
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
 		}
-		
+
 		list = (ListView)this.view.findViewById(R.id.list);
 
 		// Getting adapter by passing xml data ArrayList
@@ -124,16 +170,16 @@ public class All extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
+
 				//Create a new intent for the application view
 				Intent intent = new Intent(view.getContext(), AppView.class);
-				
+
 				//Fetch the application ID
 				int appID = Integer.parseInt(adapter.getID(position));
-				
+
 				//Give the intent a message (which application to retreive from the db)
 				intent.putExtra("app", appID);
-				
+
 				//Start the activity
 				startActivity(intent);
 			}

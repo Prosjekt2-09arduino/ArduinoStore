@@ -28,7 +28,9 @@ import no.group09.ucsoftwarestore.R;
 import no.group09.utils.AppView;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,7 @@ public class TopHits extends Fragment{
 		/** Getting integer data of the key current_page from the bundle */
 		mCurrentPage = data.getInt("current_page", 3);
 	}
-	
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,10 +68,10 @@ public class TopHits extends Fragment{
 		view = inflater.inflate(R.layout.main, container,false);
 
 		update();
-		
+
 		return view;
 	}
-	
+
 	/** Update the list-content */
 	public void update(){
 		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
@@ -77,40 +79,68 @@ public class TopHits extends Fragment{
 		//This adds elements from the database to the listview
 		Save save = new Save(this.view.getContext());
 
+		//Get the preference for hide_incompatible
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+		boolean hideIncompatible = sharedPrefs.getBoolean("hide_incompatible", false);
+
 		//Iterate over all the applications in the database
 		for(App app : save.getAllApps()){
 
-			if(app.getCategory().equals("Games") && MainActivity.pagerAdapter.page2 == Page.GAMES_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());	//Fetch the developer from the ID
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+			if(app.getCategory().equals("Games") 
+					&& MainActivity.pagerAdapter.page2 == Page.GAMES_MOST_POPULAR 
+					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());	//Fetch the developer from the ID
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
-			else if(app.getCategory().equals("Medical") && MainActivity.pagerAdapter.page2 == Page.MEDICAL_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+			else if(app.getCategory().equals("Medical") 
+					&& MainActivity.pagerAdapter.page2 == Page.MEDICAL_MOST_POPULAR 
+					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
-			else if(app.getCategory().equals("Tools") && MainActivity.pagerAdapter.page2 == Page.TOOLS_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+			else if(app.getCategory().equals("Tools") 
+					&& MainActivity.pagerAdapter.page2 == Page.TOOLS_MOST_POPULAR 
+					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
-			else if(app.getCategory().equals("Media") && MainActivity.pagerAdapter.page2 == Page.MEDIA_MOST_POPULAR || MainActivity.pagerAdapter.page2 == Page.TOPHITS){
-				HashMap<String, String >map = new HashMap<String, String>();
-				map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
-				map.put(ListAdapter.APP_NAME, app.getName());
-				map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
-				map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
-				application_list.add(map);
+			else if(app.getCategory().equals("Media") 
+					&& MainActivity.pagerAdapter.page2 == Page.MEDIA_MOST_POPULAR 
+					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+
+				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
+				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
+					HashMap<String, String >map = new HashMap<String, String>();
+					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
+					map.put(ListAdapter.APP_NAME, app.getName());
+					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
+					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					application_list.add(map);
+				}
 			}
 		}
 
@@ -127,13 +157,13 @@ public class TopHits extends Fragment{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				//Create a new intent for the application view
 				Intent intent = new Intent(view.getContext(), AppView.class);
-				
+
 				//Fetch the application ID
 				int appID = Integer.parseInt(adapter.getID(position));
-				
+
 				//Give the intent a message (which application to retreive from the db)
 				intent.putExtra("app", appID);
-				
+
 				//Start the activity
 				startActivity(intent);
 			}

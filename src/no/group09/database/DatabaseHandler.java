@@ -13,7 +13,7 @@ public class DatabaseHandler extends SQLiteOpenHelper  {
 	private SQLiteDatabase db;
 	public static final String DATABASE_NAME = "uCSoftwareStore.db";
 	public static final String DATABASE_PATH = "/data/data/no.group09.ucsoftwarestore/databases/";
-	public static final int DATABASE_VERSION = 2;	//If you change the database, increase this
+	public static final int DATABASE_VERSION = 18;	//If you change the database, increase this
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
