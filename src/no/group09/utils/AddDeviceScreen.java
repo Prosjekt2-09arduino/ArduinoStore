@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.support.v4.app.DialogFragment;
 
 /*
  * Licensed to UbiCollab.org under one or more contributor

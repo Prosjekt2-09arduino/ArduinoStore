@@ -51,19 +51,23 @@ public class ListAdapter extends BaseAdapter {
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public int getCount() {
+    @Override
+	public int getCount() {
         return data.size();
     }
 
-    public Object getItem(int position) {
+    @Override
+	public Object getItem(int position) {
         return position;
     }
 
-    public long getItemId(int position) {
+    @Override
+	public long getItemId(int position) {
         return position;
     }
     
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+	public View getView(int position, View convertView, ViewGroup parent) {
         View vi=convertView;
         if(convertView==null)
             vi = inflater.inflate(R.layout.list_row, null);
@@ -82,7 +86,7 @@ public class ListAdapter extends BaseAdapter {
         distributor.setText(listItem.get(DISTRIBUTOR));
 //        rating.setText(listItem.get(RATING));
 //        thumb_image.setImageBitmap(Save.converteStringToBitmap(listItem.get(IMAGE)));
-        getRatingBar.setRating((float)Integer.parseInt(listItem.get(RATING)));
+        getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
         
         return vi;
     }

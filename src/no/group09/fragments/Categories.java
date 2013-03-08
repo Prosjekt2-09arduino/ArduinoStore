@@ -26,12 +26,10 @@ import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import no.group09.utils.BtArduinoService;
 import android.app.Activity;
-import android.app.TabActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,6 +93,15 @@ public class Categories extends Fragment{
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 
+		
+		map = new HashMap<String, String>();
+		map.put(ListAdapterCategory.KEY_ID, "5");
+		map.put(ListAdapterCategory.APP_NAME, "All");
+		map.put(ListAdapterCategory.DISTRIBUTOR, "");
+		map.put(ListAdapterCategory.RATING, "");
+		category_list.add(map);
+
+	
 		list = (ListView)v.findViewById(R.id.list);
 
 		// Getting adapter by passing xml data ArrayList

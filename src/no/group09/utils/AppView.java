@@ -6,12 +6,9 @@ import no.group09.database.entity.Developer;
 import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -51,7 +48,7 @@ public class AppView extends Activity {
 		//Set the information on the UI that we fetched from the database-objects
 		appName.setText(app.getName());
 		appDeveloper.setText(developer.getName());	//TODO: Get the developer from the database on this ID
-		rating.setRating((float)app.getRating());
+		rating.setRating(app.getRating());
 		appDescription.setText(app.getDescription());
 	}
 

@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity {
 		Save save = new Save(getBaseContext());
 
 		//This populates the database: false because we dont want to use content provider
-//		save.populateDatabase(true);
+		save.populateDatabase();
 	}
 
 	@Override

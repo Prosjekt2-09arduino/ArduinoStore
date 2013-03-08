@@ -1,18 +1,13 @@
 package no.group09.utils;
 
-import java.util.List;
-
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.connection.ConnectionListener;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -126,6 +121,7 @@ public class BtArduinoService extends Service {
 	 */
 	private void createConnectionListener() {
 		this.connectionListener = new ConnectionListener() {
+			@Override
 			public void onConnect(BluetoothConnection bluetoothConnection) {
 				Log.d(TAG, "Connected to: " + connection.toString());
 
