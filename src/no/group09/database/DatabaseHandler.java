@@ -3,14 +3,11 @@ package no.group09.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper  {
 
 
-	private SQLiteDatabase db;
 	public static final String DATABASE_NAME = "uCSoftwareStore.db";
 	public static final String DATABASE_PATH = "/data/data/no.group09.ucsoftwarestore/databases/";
 	public static final int DATABASE_VERSION = 18;	//If you change the database, increase this

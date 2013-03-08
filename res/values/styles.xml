@@ -49,5 +49,9 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textSize">12sp</item>
     </style>
+    
+    <style name="PreferencesTheme">
+    <item name="android:background">@color/gray</item>
+</style>
 
 </resources>

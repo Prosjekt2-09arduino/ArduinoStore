@@ -20,13 +20,11 @@ package no.group09.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import no.group09.database.Save;
 import no.group09.database.entity.App;
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import no.group09.utils.AppView;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,7 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
@@ -45,7 +42,7 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class TopHits extends Fragment{
 
-	private int mCurrentPage;
+//	private int mCurrentPage;
 	private ListView list;
 	private ListAdapter adapter;
 	private View view;
@@ -55,10 +52,10 @@ public class TopHits extends Fragment{
 		super.onCreate(savedInstanceState);
 
 		/** Getting the arguments to the Bundle object */
-		Bundle data = getArguments();
+//		Bundle data = getArguments();
 
 		/** Getting integer data of the key current_page from the bundle */
-		mCurrentPage = data.getInt("current_page", 3);
+//		mCurrentPage = data.getInt("current_page", 3);
 	}
 
 

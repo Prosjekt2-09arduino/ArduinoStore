@@ -21,17 +21,10 @@ package no.group09.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
-import no.group09.utils.BtArduinoService;
-import android.app.Activity;
-import android.app.TabActivity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +35,6 @@ import android.widget.AdapterView.OnItemClickListener;
 public class Categories extends Fragment{
 
 	private int mCurrentPage;
-	private SharedPreferences sharedPref = null;
-
 	private ListView list;
 	private ListAdapterCategory adapter;
 
@@ -57,7 +48,6 @@ public class Categories extends Fragment{
 		/** Getting integer data of the key current_page from the bundle */
 		mCurrentPage = data.getInt("current_page", 1);
 		
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());	//FIXME: is getActivity() correct here?
 	}
 
 	@Override
@@ -107,6 +97,7 @@ public class Categories extends Fragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+				//Get the page adapter from main activity
 				MyFragmentPagerAdapter pageAdapter = MainActivity.pagerAdapter;
 
 				//Set the type for the #2 tab. This will edit the content and the title
@@ -121,13 +112,11 @@ public class Categories extends Fragment{
 				//Update the content on the #3 tab
 				//pageAdapter.topHits.update();	//this doesnt work because the last tab is not created yet
 
-				/** Notify the page adapter that there have been some changes */
+				//Notify the page adapter that there have been some changes
 				pageAdapter.notifyDataSetChanged();
 
-				/** Move to selected category */
+				//Move to selected category
 				MainActivity.pager.setCurrentItem(1);
-				
-				
 			}
 		});	
 

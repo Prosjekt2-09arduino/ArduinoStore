@@ -20,10 +20,8 @@ package no.group09.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import no.group09.database.Save;
 import no.group09.database.entity.App;
-import no.group09.database.entity.Requirements;
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import no.group09.utils.AppView;
@@ -32,13 +30,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
@@ -46,11 +42,10 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class All extends Fragment {
 
-	private int mCurrentPage;
+//	private int mCurrentPage;
 	private ListView list;
 	private ListAdapter adapter;
 	private View view;
-	private ViewGroup container;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

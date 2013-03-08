@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/gray" >
+    android:background="@color/black" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +50,8 @@
             android:id="@+id/qr_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/connect_with_qr_button_text" />
+            android:text="@string/connect_with_qr_button_text"
+            android:background="@drawable/refresh_button_layout"  />
 
     </LinearLayout>
 
@@ -79,7 +80,8 @@
             android:id="@+id/input_serial_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/input_serial_button" />
+            android:text="@string/input_serial_button" 
+            android:background="@drawable/refresh_button_layout" />
 
     </LinearLayout>
 

@@ -19,6 +19,7 @@ package no.group09.fragments;
  * under the License.
  */
 
+import no.group09.ucsoftwarestore.MainActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -43,10 +44,13 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 	public TopHits topHits;
 	
 	public Categories categories;
+	
+	MainActivity main;
 
 	/** Constructor of the class */
-	public MyFragmentPagerAdapter(FragmentManager fm) {
+	public MyFragmentPagerAdapter(FragmentManager fm, MainActivity main) {
 		super(fm);
+		this.main = main;
 	}
 	
 	/** This method will be invoked when a page is requested to create */
@@ -94,6 +98,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 		case 2: tab = getTitleForPage2(); break;
 		default: tab = "";
 		}
+		
+		main.setActivityTitle();	//FIXME: remove this if it doesnt set the title in mainActivity when connected to a device
 		
 		return tab;
 	}

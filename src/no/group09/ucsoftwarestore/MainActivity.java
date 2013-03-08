@@ -39,14 +39,16 @@ import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity {
 
-	private String TAG = "MainActivity";
-
+	/** The fragment adapter for the tabs */
 	public static MyFragmentPagerAdapter pagerAdapter;
+
+	/** The ViewPager from xml */
 	public static ViewPager pager;
 
-	//Name of the preference file
+	/** Name of the preference file */
 	public static final String PREFS_NAME = "PreferenceFile";
 
+	/** The shared preference object */
 	private SharedPreferences sharedPref = null;
 
 	@Override
@@ -54,31 +56,22 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		/** Getting a reference to the ViewPager defined the layout file */
+		//Getting a reference to the ViewPager defined the layout file
 		pager = (ViewPager) findViewById(R.id.pager);
 
-		/** Getting fragment manager */
+		//Getting fragment manager
 		FragmentManager fm = getSupportFragmentManager();
 
-		/** Instantiating FragmentPagerAdapter */
-		pagerAdapter = new MyFragmentPagerAdapter(fm);
+		//Instantiating FragmentPagerAdapter
+		pagerAdapter = new MyFragmentPagerAdapter(fm, this);
 
-		/** Setting the pagerAdapter to the pager object */
+		//Setting the pagerAdapter to the pager object
 		pager.setAdapter(pagerAdapter);
 
 		//Initializing the settings for the application
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		//This clears the database
-//		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
-
-		/** Create the database if it does not excist, or copy it into the application */
-		Save save = new Save(getBaseContext());
-
-		//This populates the database: false because we dont want to use content provider
-//		save.populateDatabase(true);
 	}
 
 	@Override
@@ -124,7 +117,7 @@ public class MainActivity extends FragmentActivity {
 				//Set new text when item is clicked
 				item.setTitle("Hide incompatible");
 			}
-			
+
 			else{
 
 				//Changes the value and commits the changes
@@ -136,7 +129,7 @@ public class MainActivity extends FragmentActivity {
 				//Set new text when item is clicked
 				item.setTitle("Show incompatible");
 			}
-			
+
 			pagerAdapter.all.update();
 			pagerAdapter.topHits.update();
 			pagerAdapter.notifyDataSetChanged();
@@ -169,36 +162,36 @@ public class MainActivity extends FragmentActivity {
 			//		}
 			//
 			//		//The item was none of the following
-			
+
 		case R.id.populateDatabase:
 			Save save = new Save(getBaseContext());
 			save.populateDatabase();
-			
+
 			pagerAdapter.all.update();
 			pagerAdapter.topHits.update();
 			pagerAdapter.notifyDataSetChanged();
-			
+
 		default : return false;
 		}
 	}
-	
+
 	/** Add the connected device name to the title if connected */
 	public void setActivityTitle(){
 		String appName = sharedPref.getString("connected_device_name", "null");
-		
+
 		//Get the enum type for what type (category) is selected
 		MyFragmentPagerAdapter pageAdapter = MainActivity.pagerAdapter;
 
 		//Get the name of the selected category
 		String category = Page.getCategoryFromType(pageAdapter.page1);
-		
+
 		if(BtArduinoService.getBtService() != null){
-				if(BtArduinoService.getBtService().getBluetoothConnection() != null){
-					setTitle(category + " - " + appName);
-				}
-				else{
-					setTitle(category);
-				}
+			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+				setTitle(category + " - " + appName);
+			}
+			else{
+				setTitle(category);
+			}
 		}
 		else{
 			setTitle(category);

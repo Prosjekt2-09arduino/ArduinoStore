@@ -24,13 +24,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
@@ -73,8 +72,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 			public boolean onPreferenceClick(Preference preference) {
 				String lastConnMessage = sharedPref.getString(CONN_DEVICE_KEY, "No device found");
 				adb.setTitle("Last connected device");
-				adb.setMessage(lastConnMessage)
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				adb.setMessage(lastConnMessage);
+				adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 					}
@@ -83,6 +82,16 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 				return true;
 			}
 		});
+		String deviceName = sharedPref.getString("connected_device_name", "");
+		ps.findPreference("connected_device_dialog").setSummary("Last connected: " + deviceName);
+		
+		//Get the device name preference
+		Preference mCheckBoxPref = (Preference) findPreference("connected_device_name");	
+		//get the preferencecategory to the device_name
+		PreferenceCategory mCategory = (PreferenceCategory) findPreference("device_name_category");	
+		//remove this category from the settings-view
+		mCategory.removePreference(mCheckBoxPref);	
+		
 	}
 	
 	/**

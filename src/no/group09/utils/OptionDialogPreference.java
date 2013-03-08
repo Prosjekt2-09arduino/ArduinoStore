@@ -1,9 +1,5 @@
 package no.group09.utils;
 
-import javax.crypto.spec.PSource;
-
-import no.group09.ucsoftwarestore.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;

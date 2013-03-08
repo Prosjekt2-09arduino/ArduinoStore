@@ -24,12 +24,10 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
-
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
-import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,7 +46,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -85,8 +82,6 @@ public class Devices extends Activity  {
 	private MyBroadcastReceiver actionFoundReceiver;
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
 	static Context context;
-	private ProgressDialogTask progressDialogThread;
-	private volatile boolean showProgressDialog = false;
 
 	private BtArduinoService bluetoothService;
 	private BluetoothConnection connection;
