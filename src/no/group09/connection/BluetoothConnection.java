@@ -154,7 +154,7 @@ public class BluetoothConnection extends Protocol {
 	 * Changes the connection state of this BluetoothConnection. Package visible.
 	 * @param setState the new ConnectionState of this BluetoothConnection
 	 */
-	void setConnectionState(ConnectionState setState) {
+	public void setConnectionState(ConnectionState setState) {
 		//Nothing to change?
 		if(connectionState == setState) return;
 
@@ -321,6 +321,10 @@ public class BluetoothConnection extends Protocol {
         }
         
     };
+    
+//    public ConnectionState getConnectionState(){
+//    	return connectionState;
+//    }
 
 
 	protected void sendBytes(byte[] data) throws IOException {

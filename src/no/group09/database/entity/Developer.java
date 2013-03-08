@@ -1,4 +1,4 @@
-package no.group09.database.objects;
+package no.group09.database.entity;
 
 public class Developer {
 

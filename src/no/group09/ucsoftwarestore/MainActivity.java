@@ -19,20 +19,10 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
-import java.util.concurrent.TimeoutException;
-
 import no.group09.ucsoftwarestore.R;
-import no.group09.ucsoftwarestore.R.id;
-import no.group09.ucsoftwarestore.R.layout;
-import no.group09.ucsoftwarestore.R.menu;
-import no.group09.ucsoftwarestore.R.xml;
-import no.group09.connection.BluetoothConnection;
-import no.group09.database.Db;
 import no.group09.database.Save;
-import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
-import no.group09.utils.AddDeviceScreen;
-import no.group09.utils.AppView;
+import no.group09.fragments.Page;
 import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
@@ -44,11 +34,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -56,7 +43,6 @@ public class MainActivity extends FragmentActivity {
 
 	public static MyFragmentPagerAdapter pagerAdapter;
 	public static ViewPager pager;
-	private Save save;
 
 	//Name of the preference file
 	public static final String PREFS_NAME = "PreferenceFile";
@@ -85,35 +71,24 @@ public class MainActivity extends FragmentActivity {
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		/** Create the database if it does not excist, or copy it into the application */
-		save = new Save(getBaseContext());
-		save.open();
-
 		//This clears the database
-//		getBaseContext().deleteDatabase(Db.DATABASE_NAME);
+//		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
 
-		//This populates the database
-//		save.populateDatabase();
+		/** Create the database if it does not excist, or copy it into the application */
+		Save save = new Save(getBaseContext());
+
+		//This populates the database: false because we dont want to use content provider
+//		save.populateDatabase(true);
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
 	}
-	
-//	@Override
-//	public void onDestroy() {
-//		super.onDestroy();
-//		Log.d(TAG, "MainActivity is now beeing destroyed");
-//		BtArduinoService service = BtArduinoService.getBtService();
-//		service.onDestroy();
-//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
-
-		Editor edit = sharedPref.edit();
 
 		//When the menu is created, check the preferences and set the correct text
 		if(sharedPref.getBoolean("hide_incompatible", false)){
@@ -145,7 +120,7 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(false);
-				
+
 				//Set new text when item is clicked
 				item.setTitle("Hide incompatible");
 			}
@@ -157,7 +132,7 @@ public class MainActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(true);
-				
+
 				//Set new text when item is clicked
 				item.setTitle("Show incompatible");
 			}
@@ -190,13 +165,41 @@ public class MainActivity extends FragmentActivity {
 			//		}
 			//
 			//		//The item was none of the following
+			
+		case R.id.populateDatabase:
+			Save save = new Save(getBaseContext());
+			save.populateDatabase();
+			
 		default : return false;
+		}
+	}
+	
+	/** Add the connected device name to the title if connected */
+	public void setActivityTitle(){
+		String appName = sharedPref.getString("connected_device_name", "null");
+		
+		//Get the enum type for what type (category) is selected
+		MyFragmentPagerAdapter pageAdapter = MainActivity.pagerAdapter;
+
+		//Get the name of the selected category
+		String category = Page.getCategoryFromType(pageAdapter.page1);
+		
+		if(BtArduinoService.getBtService() != null){
+				if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+					setTitle(category + " - " + appName);
+				}
+				else{
+					setTitle(category);
+				}
+		}
+		else{
+			setTitle(category);
 		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		//		save.open();
+		setActivityTitle();
 	}
 }

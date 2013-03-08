@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/LCD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LCD" />
+
+    <Button
+        android:id="@+id/SPEAKER"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SPEAKER" />
+
+    <Button
+        android:id="@+id/VIBRATE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VIBRATE" />
+
+    <Button
+        android:id="@+id/LED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LED" />
+
+</LinearLayout>

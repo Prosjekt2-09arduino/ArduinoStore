@@ -55,4 +55,14 @@ public enum Page {
 			}
 		}
 	}
+	
+	public static String getCategoryFromType(Page page){
+		switch(page){
+		case GAMES_ALL: return "Games";
+		case MEDICAL_ALL: return "Medical";
+		case TOOLS_ALL: return "Tools";
+		case MEDIA_ALL: return "Media";
+		default: return "All";
+		}
+	}
 }
