@@ -71,7 +71,7 @@ public abstract class Protocol implements Runnable {
 	/**
 	 * Number of milliseconds to wait for a response before throwing a TimeoutException
 	 */
-	protected static final int TIMEOUT = 2000;
+	protected static final int TIMEOUT = 8000;
 
 	/**
 	 * Package private enumeration for all Commands supported by the Protocol standard
@@ -156,15 +156,18 @@ public abstract class Protocol implements Runnable {
 		long timeout = System.currentTimeMillis() + TIMEOUT;
 		
 		Log.d(TAG, "trying handshakeConnection()");
-		
-		while (waitingForAck != null) {
 
-			//Timeout?
-			if (System.currentTimeMillis() > timeout) 
-//				Log.d(TAG, "handshakeConnection() has timed out (did not recieve all data)");
+		while (waitingForAck != null) {
+			
+			//Waits 'timeout' seconds before it gives up
+			if (System.currentTimeMillis() > timeout) {
+				Log.d(TAG, "handshakeConnection() has timed out (did not recieve all data)");
+				throw new TimeoutException();
+			}
 
 			//Wait 10 ms for a resonse
-			try { Thread.sleep(10); } catch (InterruptedException ex) {}				
+			try { Thread.sleep(10); 
+			} catch (InterruptedException ex) {}				
 		}
 
 		//Build a string from the byte array

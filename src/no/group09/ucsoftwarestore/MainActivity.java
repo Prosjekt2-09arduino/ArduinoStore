@@ -19,17 +19,21 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
+import java.util.concurrent.TimeoutException;
+
 import no.group09.ucsoftwarestore.R;
 import no.group09.ucsoftwarestore.R.id;
 import no.group09.ucsoftwarestore.R.layout;
 import no.group09.ucsoftwarestore.R.menu;
 import no.group09.ucsoftwarestore.R.xml;
+import no.group09.connection.BluetoothConnection;
 import no.group09.database.Db;
 import no.group09.database.Save;
 import no.group09.database.objects.App;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.utils.AddDeviceScreen;
 import no.group09.utils.AppView;
+import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.content.Intent;
@@ -95,8 +99,15 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onPause(){
 		super.onPause();
-		//		save.close();
 	}
+	
+//	@Override
+//	public void onDestroy() {
+//		super.onDestroy();
+//		Log.d(TAG, "MainActivity is now beeing destroyed");
+//		BtArduinoService service = BtArduinoService.getBtService();
+//		service.onDestroy();
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,6 +149,7 @@ public class MainActivity extends FragmentActivity {
 				//Set new text when item is clicked
 				item.setTitle("Hide incompatible");
 			}
+			
 			else{
 
 				//Changes the value and commits the changes

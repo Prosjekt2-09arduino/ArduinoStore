@@ -149,7 +149,7 @@ class ConnectionThread extends Thread {
 		}
 
 		//We are now connected!
-		connection.setConnectionState(ConnectionState.STATE_CONNECTED);						
+		connection.setConnectionState(ConnectionState.STATE_CONNECTED);	
 	}
 
 }
