@@ -44,9 +44,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
+            
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
@@ -93,6 +91,23 @@
    		
         </activity>
 
+        <activity
+            android:name="no.group09.utils.SearchResults"
+            android:label="@string/app_view_title"
+            android:parentActivityName="no.group09.ucsoftwarestore.MainActivity" 
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="no.group09.ucsoftwarestore.MainActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+   		
+        </activity>
+        
         <!-- Service used to run the bluetooth connection -->
         <service android:name="no.group09.utils.BtArduinoService" />
         
