@@ -79,14 +79,12 @@ public class MainActivity extends FragmentActivity {
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-<<<<<<< HEAD
-=======
+
 
 		//This clears the database
 		//		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
 
 		/** Create the database if it does not excist, or copy it into the application */
-		save = new Save(getBaseContext());
 
 		//This populates the database: false because we dont want to use content provider
 		// save.populateDatabase();
@@ -100,7 +98,6 @@ public class MainActivity extends FragmentActivity {
 		}
 
 
->>>>>>> Adding search functionality
 	}
 
 	@Override

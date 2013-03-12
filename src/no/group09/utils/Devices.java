@@ -564,6 +564,7 @@ public class Devices extends Activity  {
 							@Override
 							public void onClick(View v) {
 								timer.schedule(new TimerTask(){
+									@Override
 									public void run(){
 										try {
 

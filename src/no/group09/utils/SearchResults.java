@@ -1,6 +1,5 @@
 package no.group09.utils;
 
-import no.group09.ucsoftwarestore.R;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
