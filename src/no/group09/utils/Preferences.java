@@ -86,7 +86,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		ps.findPreference("connected_device_dialog").setSummary("Last connected: " + deviceName);
 		
 		//Get the device name preference
-		Preference mCheckBoxPref = (Preference) findPreference("connected_device_name");	
+		Preference mCheckBoxPref = findPreference("connected_device_name");	
 		//get the preferencecategory to the device_name
 		PreferenceCategory mCategory = (PreferenceCategory) findPreference("device_name_category");	
 		//remove this category from the settings-view

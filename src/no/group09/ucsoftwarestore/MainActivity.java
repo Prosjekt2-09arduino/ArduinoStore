@@ -26,6 +26,9 @@ import no.group09.fragments.Page;
 import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
+import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -36,6 +39,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -72,6 +79,25 @@ public class MainActivity extends FragmentActivity {
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+		//This clears the database
+		//		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
+
+		/** Create the database if it does not excist, or copy it into the application */
+
+		//This populates the database: false because we dont want to use content provider
+		// save.populateDatabase();
+
+		//		sets up search with search dialog. For older versions!
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			//	      Do the search here
+			Toast.makeText(getBaseContext(), "You searched for " + query, Toast.LENGTH_SHORT).show();
+		}
+
+
 	}
 
 	@Override
@@ -79,6 +105,7 @@ public class MainActivity extends FragmentActivity {
 		super.onPause();
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -91,12 +118,28 @@ public class MainActivity extends FragmentActivity {
 			menu.getItem(1).setTitle("Hide incompatible");
 		}
 
+		//		Search bar for versions over API level 11
+		int SDK_INT = android.os.Build.VERSION.SDK_INT; //gets the version of the device
+		if(SDK_INT >= 11){ 
+			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+			SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+			searchView.setSubmitButtonEnabled(true);
+
+
+		}
+
 		return true;
 	}
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+
+//		Makes sure search works for older versions
+		case R.id.menu_search:
+            onSearchRequested();
 
 		case R.id.toggle_incompitable:
 

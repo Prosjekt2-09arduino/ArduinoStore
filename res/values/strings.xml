@@ -34,7 +34,7 @@
     <string name="title_activity_main">Main</string>
     <string name="layout.activity_main">Main</string>
     
-    <string name="search_hint">Search Hint</string>
+    <string name="search_hint">Search Apps by Name</string>
     <string name="search_label">Search Label</string>
     <string name="menu_search">Menu Search</string>
     
