@@ -3,6 +3,7 @@ package no.group09.utils;
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.connection.ConnectionListener;
+import no.group09.protocol.STK500;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -25,6 +26,13 @@ public class BtArduinoService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		sendData();
+	}
+
+	public void sendData(){
+		//FIXME This is just to create the UML remove and replace with real STK500 later
+		STK500 stk = new STK500();
+		stk.transfer("");
 	}
 
 	private void connect() {
@@ -70,17 +78,17 @@ public class BtArduinoService extends Service {
 
 		Log.d(TAG, "onStartCommand called");
 		this.macAddress = intent.getStringExtra(Devices.MAC_ADDRESS);
-		
+
 		//Disconnect from the previous device before creating a new connection
 		if (getBluetoothConnection() != null) {
 			Log.d(TAG, "The connection was not null");
-			
+
 			if(connection.getConnectionState() != ConnectionState.STATE_DISCONNECTED){
 				Log.d(TAG, "State was not disconnected (onStartCommand())\nSetting state to Disconnected.");
-//				connection.setConnectionState(ConnectionState.STATE_DISCONNECTED); //This made some other bugs, but got rid of the socket error
+				//				connection.setConnectionState(ConnectionState.STATE_DISCONNECTED); //This made some other bugs, but got rid of the socket error
 				connection.disconnect();	//FIXME: it is instant connection failed when connection from arduino to another device
 			}
-			
+
 			Log.d(TAG, "Connection state: " + connection.getConnectionState());
 		}
 
@@ -122,23 +130,23 @@ public class BtArduinoService extends Service {
 			public void onConnect(BluetoothConnection bluetoothConnection) {
 				Log.d(TAG, "Connected to: " + connection.toString());
 
-//				//Add a button for every service found
-//				ConnectionMetadata meta = connection.getConnectionData();
-//				for(String service : meta.getServicesSupported()) {
-//					Integer pins[] = meta.getServicePins(service);
-//
-//					//Pin controlled button
-//					if(pins.length > 0) {
-//						if(service.equals(DefaultServices.SERVICE_LED_LAMP.name()))  for(int pin : pins) Log.d(TAG, "LED pin: " + pin);
-//						if(service.equals(DefaultServices.SERVICE_VIBRATION.name()))  for(int pin : pins) Log.d(TAG, "VIBRATION pin " + pin);
-//						if(service.equals(DefaultServices.SERVICE_SPEAKER.name())) Log.d(TAG, "SPEAKER");
-//					}
-//
-//					//LCD print screen
-//					else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())) Log.d(TAG, "LCD");
-//				}
-				
-				
+				//				//Add a button for every service found
+				//				ConnectionMetadata meta = connection.getConnectionData();
+				//				for(String service : meta.getServicesSupported()) {
+				//					Integer pins[] = meta.getServicePins(service);
+				//
+				//					//Pin controlled button
+				//					if(pins.length > 0) {
+				//						if(service.equals(DefaultServices.SERVICE_LED_LAMP.name()))  for(int pin : pins) Log.d(TAG, "LED pin: " + pin);
+				//						if(service.equals(DefaultServices.SERVICE_VIBRATION.name()))  for(int pin : pins) Log.d(TAG, "VIBRATION pin " + pin);
+				//						if(service.equals(DefaultServices.SERVICE_SPEAKER.name())) Log.d(TAG, "SPEAKER");
+				//					}
+				//
+				//					//LCD print screen
+				//					else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())) Log.d(TAG, "LCD");
+				//				}
+
+
 
 			}
 
