@@ -68,13 +68,16 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 			vi = LayoutInflater.from(context).inflate(R.layout.bluetooth_device_list_row, null);
 		}
 			
-		TextView appName = (TextView)vi.findViewById(R.id.bluetooth_device);
+		TextView deviceName = (TextView)vi.findViewById(R.id.bluetooth_device_name);
+		
+		TextView deviceMac = (TextView)vi.findViewById(R.id.bluetooth_device_mac);
 
 		HashMap<String, String> listItem = new HashMap<String, String>();
 		listItem = data.get(position);
 
 		// Setting all values in listview
-		appName.setText(listItem.get("name") + ", " + listItem.get("mac"));
+		deviceName.setText(listItem.get("name"));
+		deviceMac.setText(listItem.get("mac"));
 
 		return vi;
 	}

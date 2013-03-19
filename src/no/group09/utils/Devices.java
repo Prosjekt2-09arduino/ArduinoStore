@@ -62,8 +62,8 @@ import android.view.View.OnClickListener;
 public class Devices extends Activity  {
 
 	/**Should be true if only arduinos is to be showed. False otherwise */
-	private boolean ONLY_SHOW_ARDUINOS = true;
-	
+	private boolean ONLY_SHOW_ARDUINOS = false;
+
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
 	private static final String TAG = "DEVICES";
@@ -87,7 +87,7 @@ public class Devices extends Activity  {
 	private BluetoothConnection connection;
 
 	private boolean secondClick = false;
-	
+
 	private int savedPosition;
 
 	@Override
@@ -203,8 +203,12 @@ public class Devices extends Activity  {
 				//Notify the adapter that the list is now empty
 				listAdapter.notifyDataSetChanged();
 
-				if(!BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
-					setTitle("Devices");
+				if(BtArduinoService.getBtService() != null){
+					if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+						if(!BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
+							setTitle("Devices");
+						}
+					}
 				}
 
 				//Scan for new BT devices
@@ -230,12 +234,12 @@ public class Devices extends Activity  {
 			}
 		});
 	}
-	
+
 	//Disse to er en del av en stygg hack, men det funker. Fix senere.
 	private void setContext(Context context) {
 		Devices.context = context;
 	}
-	
+
 	public static Context getContext() {
 		return context;
 	}
@@ -486,7 +490,7 @@ public class Devices extends Activity  {
 			if (success && connection.isConnected()) {
 				message = "The connection was successful.";
 				title = "Devices - " + appName;
-				
+
 				String lastConnectedDevice = "Device name: " + listAdapter.getName(savedPosition)
 						+ "\nMAC Address: " + listAdapter.getMacAddress(savedPosition);
 
@@ -501,7 +505,7 @@ public class Devices extends Activity  {
 
 				edit.commit();
 				Log.d(TAG, "The information about the last connected device was written to shared preferences");
-				
+
 			}
 			else {
 				message = "The connection was not successfull." + "\nPlease try again.";

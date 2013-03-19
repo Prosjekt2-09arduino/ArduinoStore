@@ -44,19 +44,31 @@
             android:src="@drawable/arduino" />
     </LinearLayout>
 
-    <!-- Device -->
-    
-    <TextView
-        android:id="@+id/bluetooth_device"
+    <!-- Device Name -->
+	<TextView
+        android:id="@+id/bluetooth_device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
         android:textColor="@color/blue"
         android:textSize="15dip"
         android:textStyle="bold"
-        android:typeface="sans" />
+        android:typeface="sans" 
+        android:text="Application name"/>
+
+    <!-- Device Mac -->
+
+    <TextView
+        android:id="@+id/bluetooth_device_mac"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bluetooth_device_name"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:textColor="#33b5e5"
+        android:textSize="10dip"
+        android:text="10.0.02.02.02"/>
 
     <ImageView
         android:id="@+id/imageView1"
