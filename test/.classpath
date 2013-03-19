@@ -3,16 +3,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/uCSoftwareStore"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-<<<<<<< HEAD
-	<classpathentry kind="lib" path="C:/Users/tordly/AppData/Local/Android/android-sdk/platforms/android-16/android.jar"/>
-	<classpathentry kind="lib" path="C:/Users/tordly/AppData/Local/Android/android-sdk/add-ons/addon-google_apis-google-16/libs/maps.jar"/>
-	<classpathentry kind="lib" path="libs/robotium-solo-4.0-javadoc.jar"/>
-	<classpathentry kind="lib" path="libs/robotium-solo-4.0.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-=======
-	<classpathentry kind="lib" path="libs/robotium-solo-4.0-javadoc.jar"/>
-	<classpathentry kind="lib" path="libs/robotium-solo-4.0.jar"/>
->>>>>>> testing
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
