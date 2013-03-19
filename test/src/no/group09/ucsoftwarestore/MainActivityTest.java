@@ -25,6 +25,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testSettings() throws Exception{
-		solo.clickOnMenuItem("Settings");
+		solo.clickOnActionBarItem(R.id.settings);
+
 	}
 }
