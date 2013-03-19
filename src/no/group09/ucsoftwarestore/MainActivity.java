@@ -26,6 +26,7 @@ import no.group09.fragments.Page;
 import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
+import no.group09.utils.SearchResults;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
@@ -90,12 +91,7 @@ public class MainActivity extends FragmentActivity {
 		// save.populateDatabase();
 
 		//		sets up search with search dialog. For older versions!
-		Intent intent = getIntent();
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			//	      Do the search here
-			Toast.makeText(getBaseContext(), "You searched for " + query, Toast.LENGTH_SHORT).show();
-		}
+		
 
 
 	}
@@ -140,7 +136,8 @@ public class MainActivity extends FragmentActivity {
 //		Makes sure search works for older versions
 		case R.id.menu_search:
             onSearchRequested();
-
+            return true;
+            
 		case R.id.toggle_incompitable:
 
 			//Prepare to edit the setting
