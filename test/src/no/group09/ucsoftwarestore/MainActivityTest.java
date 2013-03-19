@@ -26,6 +26,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	
 	public void testSettings() throws Exception{
 		solo.clickOnActionBarItem(R.id.settings);
-
+		
 	}
+	public void testHideShowCompatible() throws Exception{
+		/**
+		 * check what apps are shown, and if they are compatible or not
+		 * open action overflow
+		 * click hide/show compatible
+		 * check if the correct apps are hidden
+		 */
+	}
+	//	Test all filtrations, games, medical, etc. try different variations in order to try to bug it out.
+//		Have crashed the app from the category view, not sure what happened.
 }
