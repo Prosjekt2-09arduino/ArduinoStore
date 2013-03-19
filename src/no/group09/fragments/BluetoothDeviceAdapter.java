@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class BluetoothDeviceAdapter extends BaseAdapter{
@@ -78,6 +79,11 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 		// Setting all values in listview
 		deviceName.setText(listItem.get("name"));
 		deviceMac.setText(listItem.get("mac"));
+		
+		if(!listItem.get("pager").equals("708")){
+			ImageView image = (ImageView)vi.findViewById(R.id.list_image);
+			image.setImageResource(R.drawable.bluetooth);
+		}
 
 		return vi;
 	}
