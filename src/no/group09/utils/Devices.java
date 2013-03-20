@@ -228,10 +228,6 @@ public class Devices extends Activity  {
 			@Override
 			public void onClick(View v) {
 				
-				if(android.os.Build.VERSION.RELEASE.startsWith("2.2")){
-					Intent intent = new Intent(Devices.this, MainActivity.class);
-					startActivity(intent);
-				}
 				//Finishes this activity and goes back to the parent
 				finish();
 
