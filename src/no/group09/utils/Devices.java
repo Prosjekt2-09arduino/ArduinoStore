@@ -28,6 +28,7 @@ import no.group09.connection.BluetoothConnection;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
+import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -226,11 +227,18 @@ public class Devices extends Activity  {
 		browseShowButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
+				if(android.os.Build.VERSION.RELEASE.startsWith("2.2")){
+					Intent intent = new Intent(Devices.this, MainActivity.class);
+					startActivity(intent);
+				}
 				//Finishes this activity and goes back to the parent
-				//				finish();
+				finish();
 
 				//TODO: use finish() and delete this call when you want to browse shop instead for debug
-				dialogBoxForTestingPurposes();
+//				dialogBoxForTestingPurposes();
+
+				
 			}
 		});
 	}
