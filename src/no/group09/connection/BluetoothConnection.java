@@ -22,6 +22,8 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.UUID;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -42,6 +44,8 @@ public class BluetoothConnection extends Protocol {
 
 	/** Unique requestResult ID when using startActivityForResult in the parentActivity to enable the Bluetooth Adapter*/
 	public static int REQUEST_ENABLE_BT = 374370074;
+	
+	 private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	
 	private static final String TAG = "BT_CONNECTION";
 
@@ -126,7 +130,8 @@ public class BluetoothConnection extends Protocol {
 		try {
 			Method m  = device.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
 			if(m == null) Log.d(TAG, "method is null!");
-			socket = (BluetoothSocket) m.invoke(device, Integer.valueOf(1));
+//			socket = (BluetoothSocket) m.invoke(device, Integer.valueOf(1));
+			socket = (BluetoothSocket) m.invoke(device, MY_UUID);
 		}
 		catch(InvocationTargetException ex){
 			Log.d(TAG, getClass().getSimpleName()+ " Unable to create socket: " + ex.getTargetException());
