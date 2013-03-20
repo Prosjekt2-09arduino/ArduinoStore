@@ -1,6 +1,7 @@
 package no.group09.ucsoftwarestore;
 
 import no.group09.ucsoftwarestore.MainActivity;
+
 import com.jayway.android.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -13,6 +14,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 		super(MainActivity.class);
 	}
 
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 		//takes in the instrumentation and the start activity.
@@ -25,7 +27,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testSettings() throws Exception{
+<<<<<<< HEAD:test/src/no/group09/ucsoftwarestore/MainActivityTest.java
 		solo.clickOnActionBarItem(R.id.settings);
+<<<<<<< HEAD
 		
 	}
 	public void testHideShowCompatible() throws Exception{
@@ -38,4 +42,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	//	Test all filtrations, games, medical, etc. try different variations in order to try to bug it out.
 //		Have crashed the app from the category view, not sure what happened.
+=======
+
+=======
+		solo.clickOnMenuItem("Settings");
+		solo.
+>>>>>>> Searching now works and returns a toast.:test/src/no/group09/ucsoftwarestore/test/MainActivityTest.java
+	}
+	
+>>>>>>> master
 }

@@ -28,4 +28,5 @@
     <color name="selected3">#51754B</color>
     <color name="red">#f00</color>
     <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
