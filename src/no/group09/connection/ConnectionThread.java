@@ -100,7 +100,7 @@ class ConnectionThread extends Thread {
 			try { 
 				wait(250); 
 			}catch (Exception e) {
-//				Log.d(TAG, "error waiting for respond");
+				//				Log.d(TAG, "error waiting for respond");
 			}
 		}
 
@@ -108,12 +108,14 @@ class ConnectionThread extends Thread {
 		Thread socketThread = new Thread(){
 			@Override
 			public void run() {
-				try {
-					connection.socket.connect();
-					connectionSuccessful = true;
-				} catch (IOException ex) {
-					Log.d(TAG, "Unable to open socket: " + ex);
-					connection.disconnect();
+				for(int i = 0; i<2; i++){
+					try {
+						connection.socket.connect();
+						connectionSuccessful = true;
+					} catch (IOException ex) {
+						Log.d(TAG, "Unable to open socket: " + ex);
+						connection.disconnect();
+					}
 				}
 			}
 		};

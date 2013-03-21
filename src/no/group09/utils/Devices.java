@@ -200,6 +200,9 @@ public class Devices extends Activity  {
 
 				//Clear the list of BT devices
 				device_list.clear();
+				
+				//Clear the list of BT device objects
+				btDeviceList.clear();
 
 				//Notify the adapter that the list is now empty
 				listAdapter.notifyDataSetChanged();
@@ -227,14 +230,14 @@ public class Devices extends Activity  {
 		browseShowButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 				//Finishes this activity and goes back to the parent
 				finish();
 
 				//TODO: use finish() and delete this call when you want to browse shop instead for debug
-//				dialogBoxForTestingPurposes();
+				//				dialogBoxForTestingPurposes();
 
-				
+
 			}
 		});
 	}
@@ -259,6 +262,7 @@ public class Devices extends Activity  {
 		filter.addAction(BluetoothDevice.ACTION_UUID);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);		//connected devices
 
 		actionFoundReceiver = new MyBroadcastReceiver();
 		//Registers the BT receiver with the requested filters
@@ -304,6 +308,9 @@ public class Devices extends Activity  {
 
 		//Clear the list of BT devices
 		device_list.clear();
+		
+		//Clear the list of BT device objects
+		btDeviceList.clear();
 
 		//Notify the adapter that the list is now empty
 		listAdapter.notifyDataSetChanged();
@@ -403,25 +410,50 @@ public class Devices extends Activity  {
 			}
 
 			//If a device is found
-			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+			if (BluetoothDevice.ACTION_FOUND.equals(action)){
+
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
 				//If the bluetooth class is named 708 that we made as a 'standard' for recognizing arduinos
-				if(onlyShowArduinos(device)){
+				if(onlyShowArduinos(device) || !btDeviceList.contains(device)){
 
 					//Adding found device
 					HashMap<String, String> map = new HashMap<String, String>();
-					map = new HashMap<String, String>();
 					map.put("name", device.getName());
 					map.put("mac", device.getAddress());
 					map.put("pager", device.getBluetoothClass().toString());
 					device_list.add(map);
 
-					btDeviceList.add(device);	//FIXME: debugging
+					//List of device objects
+					btDeviceList.add(device);
 
 					listAdapter.notifyDataSetChanged();
 				}
 			}
+
+			//If the device is connected
+			if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)){
+				
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				HashMap<String, String> map = new HashMap<String, String>();
+				
+				//Check if it is in the list already
+				if(!btDeviceList.contains(device)){
+					map.put("name", device.getName());
+					map.put("mac", device.getAddress());
+					map.put("pager", device.getBluetoothClass().toString());
+					
+					device_list.add(map);
+					btDeviceList.add(device);
+					
+					//Notify the adapter about the changes
+					listAdapter.notifyDataSetChanged();
+					
+					//Set the device as connected (selected)
+//					deviceList.setItemChecked(listAdapter.getCount() -1, true);
+				}
+			}
+
 			//If discovery finished
 			if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 
@@ -488,7 +520,6 @@ public class Devices extends Activity  {
 			BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
 			progressDialog.dismiss();
 			String message, title;
-
 			String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
 
 			if (success && connection.isConnected()) {
@@ -498,15 +529,10 @@ public class Devices extends Activity  {
 				String lastConnectedDevice = "Device name: " + listAdapter.getName(savedPosition)
 						+ "\nMAC Address: " + listAdapter.getMacAddress(savedPosition);
 
-				Editor edit = sharedPref.edit();
-
 				//Saves the full information about the last connected device to sharedPreferences
+				Editor edit = sharedPref.edit();
 				edit.putString("connected_device_dialog", lastConnectedDevice);
-
-				//Save the name of the BT device as a separate setting. Used
-				//to show the name of last connected device in title bar.
 				edit.putString("connected_device_name", listAdapter.getName(savedPosition));
-
 				edit.commit();
 				Log.d(TAG, "The information about the last connected device was written to shared preferences");
 

@@ -107,4 +107,10 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 	public String getPager(int id){
 		return data.get(id).get("pager");
 	}
+	
+	public void addItemToMap(String key, String value){
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put(key, value);
+		data.add(map);
+	}
 }

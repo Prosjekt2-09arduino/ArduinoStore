@@ -130,8 +130,8 @@ public class BluetoothConnection extends Protocol {
 		try {
 			Method m  = device.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
 			if(m == null) Log.d(TAG, "method is null!");
-//			socket = (BluetoothSocket) m.invoke(device, Integer.valueOf(1));
-			socket = (BluetoothSocket) m.invoke(device, MY_UUID);
+			socket = (BluetoothSocket) m.invoke(device, Integer.valueOf(1));
+//			socket = (BluetoothSocket) m.invoke(device, MY_UUID);
 		}
 		catch(InvocationTargetException ex){
 			Log.d(TAG, getClass().getSimpleName()+ " Unable to create socket: " + ex.getTargetException());
