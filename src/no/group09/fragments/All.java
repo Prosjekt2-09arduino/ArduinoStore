@@ -42,7 +42,7 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class All extends Fragment {
 
-//	private int mCurrentPage;
+	//	private int mCurrentPage;
 	private ListView list;
 	private ListAdapter adapter;
 	private View view;
@@ -67,7 +67,9 @@ public class All extends Fragment {
 
 		return view;
 	}
-
+	/**
+	 * Update view with currently selected category of apps
+	 */
 	public void update(){
 		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
 
@@ -106,7 +108,7 @@ public class All extends Fragment {
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
-				
+
 					//Put the app in a HashMap that will be used in ListAdapter
 					HashMap<String, String >map = new HashMap<String, String>();
 					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
@@ -124,7 +126,7 @@ public class All extends Fragment {
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
-					
+
 					//Put the app in a HashMap that will be used in ListAdapter
 					HashMap<String, String >map = new HashMap<String, String>();
 					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));
@@ -142,7 +144,7 @@ public class All extends Fragment {
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
-					
+
 					//Put the app in a HashMap that will be used in ListAdapter
 					HashMap<String, String >map = new HashMap<String, String>();
 					map.put(ListAdapter.KEY_ID, String.valueOf(app.getID()));

@@ -1,9 +1,9 @@
 package no.group09.utils;
+import no.group09.ucsoftwarestore.R;
 
 import no.group09.database.Save;
 import no.group09.database.entity.App;
 import no.group09.database.entity.Developer;
-import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,6 +14,11 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.content.DialogInterface;
 
+/**
+ * The informational view of an app in the shop.
+ * @author Wschive
+ *
+ */
 public class AppView extends Activity {
 
 	ProgressDialog progressBar;
@@ -52,7 +57,8 @@ public class AppView extends Activity {
 		appDescription.setText(app.getDescription());
 	}
 
-	//	method for handling click of the review button
+	/**	method for handling click of the review button*/
+	
 	public void reviewClicked(View view){
 		//		
 		//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -60,7 +66,7 @@ public class AppView extends Activity {
 		//		builder.setTitle("Review the app").setItem()
 		//
 	}
-	//	method for handling the click of the install button
+	/**	method for handling the click of the install button */
 	public void installClicked(View view){
 
 		//		creates an alertdialog builder
@@ -97,6 +103,9 @@ public class AppView extends Activity {
 		builder.show();
 
 	}
+	/**
+	 * Dialog for displaying progressbar for installation purposes.
+	 */
 	public void installingDialog(){
 
 		//			preparing progress bar dialog
@@ -120,7 +129,7 @@ public class AppView extends Activity {
 				while(progressStatus < 100){
 					//					TODO: call method to update progressStatus
 
-					progressStatus++;
+					progressStatus += 10;
 					//				to make sure thread doesnt use up too much resources
 					try {
 						Thread.sleep(10);
@@ -155,6 +164,10 @@ public class AppView extends Activity {
 
 		//			TODO: create progressbar, or cancel after feedback from device
 	}
+	/**
+	 * Get the name for the connected device
+	 * @return String with name of the connected device
+	 */
 	private String getDeviceName(){
 		//			TODO: implement this method of getting the connected device name
 

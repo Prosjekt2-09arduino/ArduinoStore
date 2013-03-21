@@ -4,7 +4,9 @@ package no.group09.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+/**
+ * Class for handling the database
+ */
 public class DatabaseHandler extends SQLiteOpenHelper  {
 
 

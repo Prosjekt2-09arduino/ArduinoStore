@@ -1,5 +1,7 @@
 package no.group09.database.entity;
-
+/**
+ * Main app information in the database
+ */
 public class App {
 
 	private int ID;

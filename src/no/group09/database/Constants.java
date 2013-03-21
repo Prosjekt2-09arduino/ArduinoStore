@@ -3,7 +3,10 @@ package no.group09.database;
 import no.group09.database.entity.App;
 import no.group09.database.entity.Developer;
 import no.group09.database.entity.Requirements;
-
+/**
+ * Constants for use in the database.
+ * Strings which contain the extended SQL queries
+ */
 public class Constants {
 
 	/** Select an app from the database */

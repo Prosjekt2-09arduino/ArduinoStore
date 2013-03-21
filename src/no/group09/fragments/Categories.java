@@ -32,6 +32,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * Fragment with Category view
+ */
 public class Categories extends Fragment{
 
 //	private int mCurrentPage;

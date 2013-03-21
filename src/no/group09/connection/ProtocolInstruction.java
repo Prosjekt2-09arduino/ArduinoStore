@@ -30,21 +30,36 @@ public class ProtocolInstruction {
 	private byte[] content;
 
 	private boolean response;
-
+/**
+ * Constructor for communication through protocol standard.
+ * 
+ * @param opcode
+ * @param flag
+ * @param content
+ */
 	public ProtocolInstruction(OpCode opcode, byte flag, byte[] content){
 		this.opcode = opcode;
 		this.flag = flag;
 		this.content = content;
 		response = false;
 	}
-
+/**
+ * Constructor for communication through protocol standard.
+ * @param opcode
+ * @param flag
+ * @param content
+ * @param response
+ */
 	public ProtocolInstruction(OpCode opcode, byte flag, byte[] content, boolean response){
 		this.opcode = opcode;
 		this.flag = flag;
 		this.content = content;
 		this.response = response;
 	}
-
+/**
+ * 
+ * @return byte[] with instructionset
+ */
 	public byte[] getInstructionBytes(){
 		int size = content.length;
 

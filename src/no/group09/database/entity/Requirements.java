@@ -1,5 +1,8 @@
 package no.group09.database.entity;
 
+/**
+ * Requirements for specific app
+ */
 public class Requirements {
 
 	private int id;

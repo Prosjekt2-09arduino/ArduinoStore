@@ -19,7 +19,6 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
-import no.group09.ucsoftwarestore.R;
 import no.group09.database.Save;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.fragments.Page;
@@ -44,7 +43,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.SearchView;
 import android.widget.Toast;
-
+/**
+ * 
+ * The main store activity for the app.
+ *
+ */
 public class MainActivity extends FragmentActivity {
 
 	/** The fragment adapter for the tabs */
@@ -59,7 +62,11 @@ public class MainActivity extends FragmentActivity {
 	/** The shared preference object */
 	private SharedPreferences sharedPref = null;
 
+	
 	@Override
+	/**
+	 * Takes state and creates the app
+	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -97,12 +104,18 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
+	/**
+	 * pauses current activity
+	 */
 	public void onPause(){
 		super.onPause();
 	}
 
 	@SuppressLint("NewApi")
 	@Override
+	/**
+	 * Creates options menus
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 
@@ -130,6 +143,10 @@ public class MainActivity extends FragmentActivity {
 	
 
 	@Override
+	/**
+	 * Returns true as long as item corresponds with a proper options action.
+	 * 
+	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
@@ -239,6 +256,9 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
+	/**
+	 * Resumes previous activity
+	 */
 	public void onResume() {
 		super.onResume();
 		setActivityTitle();

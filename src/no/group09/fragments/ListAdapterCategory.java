@@ -18,11 +18,10 @@ package no.group09.fragments;
  * specific language governing permissions and limitations
  * under the License.
  */
-
+import no.group09.ucsoftwarestore.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import no.group09.ucsoftwarestore.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Adapter for the list of categories
+ */
 public class ListAdapterCategory extends BaseAdapter {
     
     private Context context;
@@ -49,6 +51,9 @@ public class ListAdapterCategory extends BaseAdapter {
     }
 
     @Override
+    /**
+     * Get number of apps
+     */
 	public int getCount() {
         return data.size();
     }

@@ -15,7 +15,11 @@ import android.util.AttributeSet;
 public class OptionDialogPreference extends DialogPreference {
 	
 	SharedPreferences sharedPref = null;
-
+/**
+ * Constructor for OptionDialogPreference
+ * @param context - Context
+ * @param attrs - AttributeSet
+ */
     public OptionDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 //        this.setSummary(sharedPref.getString("conn_device_dialog", "None"));

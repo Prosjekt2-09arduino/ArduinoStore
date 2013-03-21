@@ -27,13 +27,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testSettings() throws Exception{
-<<<<<<< HEAD:test/src/no/group09/ucsoftwarestore/MainActivityTest.java
 		solo.clickOnActionBarItem(R.id.settings);
 
-=======
 		solo.clickOnMenuItem("Settings");
-		solo.
->>>>>>> Searching now works and returns a toast.:test/src/no/group09/ucsoftwarestore/test/MainActivityTest.java
 	}
 	
 }

@@ -1,5 +1,7 @@
 package no.group09.database.entity;
-
+/**
+ * Contains information about the developer of an app
+ */
 public class Developer {
 
 	private int id;

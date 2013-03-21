@@ -1,5 +1,9 @@
 package no.group09.fragments;
 
+/**
+ * Names for the pages in the shop
+ *
+ */
 public enum Page {
 
 	ALL,
@@ -55,7 +59,11 @@ public enum Page {
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * @param Page page
+	 * @return String with what category a page belongs to
+	 */
 	public static String getCategoryFromType(Page page){
 		switch(page){
 		case GAMES_ALL: return "Games";

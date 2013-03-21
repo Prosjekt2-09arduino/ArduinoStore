@@ -1,6 +1,6 @@
 package no.group09.utils;
-
 import no.group09.ucsoftwarestore.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -30,7 +30,10 @@ import android.widget.EditText;
  * under the License.
  */
 
-
+/**
+ * Screen for adding a device connection not shown in the devicelist.
+ * 
+ */
 
 public class AddDeviceScreen extends Activity {
 

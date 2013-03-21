@@ -18,12 +18,12 @@
  */
 package no.group09.fragments;
 
+import no.group09.ucsoftwarestore.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import no.group09.database.Save;
 import no.group09.database.entity.App;
 import no.group09.ucsoftwarestore.MainActivity;
-import no.group09.ucsoftwarestore.R;
 import no.group09.utils.AppView;
 import android.content.Intent;
 import android.content.SharedPreferences;

@@ -11,7 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-
+/**
+ * Class for simpel communication with the database
+ */
 public class Save{
 
 	private static final String TAG = "Save";

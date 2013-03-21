@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.group09.ucsoftwarestore.R;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Adapter for Bluetooth Device
+ */
 public class BluetoothDeviceAdapter extends BaseAdapter{
 
 	private Context context;

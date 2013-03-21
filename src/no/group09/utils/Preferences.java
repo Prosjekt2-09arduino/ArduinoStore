@@ -18,8 +18,8 @@ package no.group09.utils;
  * specific language governing permissions and limitations
  * under the License.
  */
-
 import no.group09.ucsoftwarestore.R;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,7 +33,9 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
-
+/**
+ * Creates preferences menu
+ */
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener{
 
 	private String TAG = "Preferences.java";

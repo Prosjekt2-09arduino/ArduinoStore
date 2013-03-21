@@ -18,6 +18,7 @@ package no.group09.utils;
  * specific language governing permissions and limitations
  * under the License.
  */
+import no.group09.ucsoftwarestore.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,6 @@ import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import no.group09.ucsoftwarestore.MainActivity;
-import no.group09.ucsoftwarestore.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -271,7 +271,7 @@ public class Devices extends Activity  {
 	}
 
 
-	/* This routine is called when an activity completes.*/
+	/** This routine is called when an activity completes.*/
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);

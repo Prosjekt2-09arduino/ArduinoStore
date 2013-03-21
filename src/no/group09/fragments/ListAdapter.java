@@ -19,10 +19,10 @@ package no.group09.fragments;
  * under the License.
  */
 
+import no.group09.ucsoftwarestore.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import no.group09.ucsoftwarestore.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +31,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
+/**
+ * basic ListAdapter for apps
+ */
 public class ListAdapter extends BaseAdapter {
     
     private Context context;

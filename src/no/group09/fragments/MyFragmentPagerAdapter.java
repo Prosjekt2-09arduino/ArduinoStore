@@ -24,7 +24,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
- 
+ /**
+  * Adapter for fragment pages
+  */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
  
 	private final int PAGE_COUNT = 3;
