@@ -26,6 +26,7 @@
 
     <!-- height 32 dp -->
     <LinearLayout
+        android:id="@+id/device_top_horizontal_linearlayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" 
@@ -51,6 +52,7 @@
             android:id="@+id/progbar"
             android:layout_width="32dp"
             android:layout_weight="0"
+            style="?android:attr/progressBarStyleLarge"
             android:layout_height="32dp" />
 
     </LinearLayout>

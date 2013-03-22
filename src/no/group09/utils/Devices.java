@@ -49,12 +49,16 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 /**
@@ -82,6 +86,8 @@ public class Devices extends Activity  {
 	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
 	private MyBroadcastReceiver actionFoundReceiver;
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
+	private View linearLayout;
+	private TextView workingText;
 	static Context context;
 
 	private BtArduinoService bluetoothService;
@@ -135,6 +141,14 @@ public class Devices extends Activity  {
 		refresh = (Button) findViewById(R.id.refresh);
 
 		refresh.setVisibility(View.GONE);
+		
+		//Layout on top, used by textView
+		linearLayout =  findViewById(R.id.device_top_horizontal_linearlayout);
+		workingText = new TextView(this);
+		workingText.setText("Working...");
+		workingText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+		workingText.setTextColor(getResources().getColor(R.color.white));
+
 
 		//Check the BT state
 		checkBTState();
@@ -200,7 +214,7 @@ public class Devices extends Activity  {
 
 				//Clear the list of BT devices
 				device_list.clear();
-				
+
 				//Clear the list of BT device objects
 				btDeviceList.clear();
 
@@ -308,7 +322,7 @@ public class Devices extends Activity  {
 
 		//Clear the list of BT devices
 		device_list.clear();
-		
+
 		//Clear the list of BT device objects
 		btDeviceList.clear();
 
@@ -342,6 +356,7 @@ public class Devices extends Activity  {
 	 * Android device. If bluetooth is disabled, it asks the user if he wants to 
 	 * enable it.
 	 */
+	@SuppressWarnings("deprecation")
 	private void checkBTState() {
 
 		//Check if the Android support bluetooth
@@ -354,6 +369,10 @@ public class Devices extends Activity  {
 				//Show the progress bar
 				progressBar.setVisibility(View.VISIBLE);
 				refresh.setVisibility(View.GONE);
+
+				int SDK_INT = android.os.Build.VERSION.SDK_INT;
+				if(SDK_INT < 11)
+					showTextView(true);
 
 				// Starting the device discovery
 				btAdapter.startDiscovery();
@@ -392,6 +411,22 @@ public class Devices extends Activity  {
 		return true;
 	}
 
+	/**
+	 * checks if it should show textview in place of progressbar
+	 * @param show
+	 */
+	private void showTextView(boolean show){
+
+
+
+		if(show){
+			((LinearLayout) linearLayout).addView(workingText);
+		}
+		else if(!show){
+			((LinearLayout) linearLayout).removeView(workingText);
+		}
+
+	}
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
 	 * 
@@ -433,24 +468,24 @@ public class Devices extends Activity  {
 
 			//If the device is connected
 			if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)){
-				
+
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				HashMap<String, String> map = new HashMap<String, String>();
-				
+
 				//Check if it is in the list already
 				if(!btDeviceList.contains(device)){
 					map.put("name", device.getName());
 					map.put("mac", device.getAddress());
 					map.put("pager", device.getBluetoothClass().toString());
-					
+
 					device_list.add(map);
 					btDeviceList.add(device);
-					
+
 					//Notify the adapter about the changes
 					listAdapter.notifyDataSetChanged();
-					
+
 					//Set the device as connected (selected)
-//					deviceList.setItemChecked(listAdapter.getCount() -1, true);
+					//					deviceList.setItemChecked(listAdapter.getCount() -1, true);
 				}
 			}
 
@@ -459,8 +494,15 @@ public class Devices extends Activity  {
 
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
+
+				int SDK_INT = android.os.Build.VERSION.SDK_INT;
+				
+
 				refresh.setVisibility(View.VISIBLE);
 				Log.d(TAG, "\nDiscovery Finished");
+				
+				if(SDK_INT < 11)
+					showTextView(false);
 			}
 		}
 	}
