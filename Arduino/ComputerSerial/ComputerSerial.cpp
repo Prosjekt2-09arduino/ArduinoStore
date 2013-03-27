@@ -24,14 +24,14 @@ void* ComputerSerial::placeHolder(uint8_t flag, uint8_t content[], word contentS
 }
 
 // Start serial connection
-ComputerSerial::ComputerSerial(int baud)
+ComputerSerial::ComputerSerial(long baud)
 {
 	// Initialize with baudrate if requested
 	if(baud != 0) begin(baud);
 }
 
 // Start serial communication and attach OPCODES to functions
-void ComputerSerial::begin(int baud)
+void ComputerSerial::begin(long baud)
 {
 	Serial.begin(baud);
 	
@@ -266,7 +266,7 @@ void ComputerSerial::reset()
 
 // Access prorgamming mode on BT
 // Baud should be only the first 4 characters
-void ComputerSerial::atMode(int baud)
+void ComputerSerial::atMode(long baud)
 {
 	// Enter command mode on BT
 	Serial.print("$$$");

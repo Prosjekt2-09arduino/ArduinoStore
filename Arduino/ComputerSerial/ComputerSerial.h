@@ -40,12 +40,12 @@ class ComputerSerial
 	unsigned int bytesReceived;
 
 	public:
-		ComputerSerial(int baud = 0);
+		ComputerSerial(long baud = 0);
 		static void* placeHolder(uint8_t flag, uint8_t content[], word contentSize);
 		void serialEvent();
-		void begin(int baud);
+		void begin(long baud);
 		void attachFunction(uint8_t opcode, void* (*handler)(uint8_t flag, uint8_t content[], word contentSize));
-		void atMode(int baud);
+		void atMode(long baud);
 
 		// Device info functions
 		void getDeviceInfo();
