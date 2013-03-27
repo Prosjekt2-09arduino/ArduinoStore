@@ -93,7 +93,7 @@ void* reset(byte flag, byte data[], word dataSize)
 void setup()
 {
 	//Initialize computer serial class
-	comp.begin(9600);
+	comp.begin(115200);
 	
 	// If programming mode is enabled, restart device
 	pinMode(4,OUTPUT);

@@ -39,56 +39,61 @@ class ComputerSerial{
 
 	unsigned int bytesReceived;
 
-public:
-	ComputerSerial(long baud = 0);
-	static void* placeHolder(uint8_t flag, uint8_t content[], word contentSize);
-	void serialEvent();
-	void begin(int baud);
-	void attachFunction(uint8_t opcode, void* (*handler)(uint8_t flag, uint8_t content[], word contentSize));
 
-	//device info functions
-	void getDeviceInfo();
-	void setDeviceName(const String &name);
-	void setDeviceVersion(const String &version);
-	void addDeviceService(const char service[], const char pin[]);
-	void addDeviceDownloadLink(const char link[], const char platform[] = "DEFUALT");
+	public:
+		ComputerSerial(long baud = 0);
+		static void* placeHolder(uint8_t flag, uint8_t content[], word contentSize);
+		void serialEvent();
+		void begin(long baud);
+		void attachFunction(uint8_t opcode, void* (*handler)(uint8_t flag, uint8_t content[], word contentSize));
+		void atMode(long baud);
 
-	unsigned int getBytesReceived();
+		// Device info functions
+		void getDeviceInfo();
+		void setDeviceName(const String &name);
+		void setDeviceVersion(const String &version);
+		void addDeviceService(const char service[], const char pin[]);
+		void addDeviceDownloadLink(const char link[], const char platform[] = "DEFUALT");
 
-	// Enum for protocol OPCodes
-	typedef enum uint_8 {
-		OPCODE_PING, 	            // 0
-		OPCODE_TEXT, 	            // 1
-		OPCODE_SENSOR, 	            // 2
-		OPCODE_DATA, 	            // 3
-		OPCODE_PIN_R, 	            // 4
-		OPCODE_PIN_W, 	            // 5
-		OPCODE_DEVICE_INFO,         // 6
-		OPCODE_RESPONSE = 0xFE,
-		OPCODE_RESET = 0xFF
+		unsigned int getBytesReceived();
+
+		// Enum for protocol OPCodes
+		// Remember to change NUM_OPCODES
+		typedef enum uint_8 {
+			OPCODE_PING, 	            // 0
+			OPCODE_TEXT, 	            // 1
+			OPCODE_SENSOR, 	            // 2
+			OPCODE_DATA, 	            // 3
+			OPCODE_PIN_R, 	            // 4
+			OPCODE_PIN_W, 	            // 5
+			OPCODE_DEVICE_INFO,         // 6
+			OPCODE_SPEAKER,				// 7
+			OPCODE_RESPONSE = 0xFE,
+			OPCODE_RESET = 0xFF
+		};
+
+	private:
+		// SerialEvent state enum
+		typedef enum
+		{
+			STATE_START,
+			STATE_SIZE_HIGH,
+			STATE_SIZE_LOW,
+			STATE_OPCODE,
+			STATE_FLAG,
+			STATE_CONTENT
+		};
+	
+		// Number of OPCODES
+		static const uint8_t NUM_OPCODES = 8;
+	
+		void* (*functions[NUM_OPCODES]) (uint8_t flag, uint8_t content[], word contentSize);
+	
+		// Device info variables
+		String deviceName;
+		String deviceVersion;
+		String deviceServices;
+		String deviceDownloadLinks;
 	};
-
-private:
-
-	// SerialEvent state enum
-	typedef enum
-	{
-		STATE_START,
-		STATE_SIZE_HIGH,
-		STATE_SIZE_LOW,
-		STATE_OPCODE,
-		STATE_FLAG,
-		STATE_CONTENT
-	};
-
-	static const uint8_t NUM_OPCODES = 7;
-	void* (*functions[NUM_OPCODES]) (uint8_t flag, uint8_t content[], word contentSize);
-
-	//Device info variables
-	String deviceName;
-    String deviceVersion;
-    String deviceServices;
-    String deviceDownloadLinks;
-};
 
 #endif

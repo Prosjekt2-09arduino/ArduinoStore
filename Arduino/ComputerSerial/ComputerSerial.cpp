@@ -23,13 +23,16 @@ void* ComputerSerial::placeHolder(uint8_t flag, uint8_t content[], word contentS
 	return NULL;
 }
 
+// Start serial connection
 ComputerSerial::ComputerSerial(long baud)
 {
     //Initialize with baudrate if requested
     if(baud != 0) begin(baud);
 }
 
-void ComputerSerial::begin(long baud){
+// Start serial communication and attach OPCODES to functions
+void ComputerSerial::begin(long baud)
+{
 	Serial.begin(baud);
 
 	for (int i = 0; i < NUM_OPCODES; ++i)
@@ -220,6 +223,24 @@ void ComputerSerial::reset() {
 	// Reset arduino
 }
 
+// Access prorgamming mode on BT
+// Baud should be only the first 4 characters
+void ComputerSerial::atMode(long baud)
+{
+	// Enter command mode on BT
+	Serial.print("$$$");
+	
+	// IMPORTANT DELAY!
+	delay(50);
+	
+	// Temporaily change baudrate, no parity
+	Serial.print("U,");
+	Serial.print(baud);
+	Serial.println(",N");
+	delay(50);
+}
+
+// Attach OPCODE to function
 void ComputerSerial::attachFunction(uint8_t opcode,
 	void* (*handler)(uint8_t flag, uint8_t content[], word contentSize))
 {
