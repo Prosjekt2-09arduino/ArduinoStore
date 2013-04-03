@@ -98,15 +98,7 @@ public class BtArduinoService extends Service {
 		}
 
 		setBtService(this);
-		if(!connect()){
-			Log.d(TAG, "trying connection for second time");
-			try{
-				Thread.sleep(10);
-				connect();
-			}catch(Exception e){
-				
-			}
-		}
+		connect();
 
 		//START_NOT_STICKY makes sure the service dies when the app is killed
 		return START_NOT_STICKY;
