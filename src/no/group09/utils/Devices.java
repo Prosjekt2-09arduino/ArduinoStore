@@ -19,7 +19,6 @@ package no.group09.utils;
  * under the License.
  */
 import no.group09.ucsoftwarestore.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
@@ -29,7 +28,6 @@ import no.group09.connection.BluetoothConnection;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
-import no.group09.ucsoftwarestore.MainActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -49,7 +47,6 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -143,11 +140,11 @@ public class Devices extends Activity  {
 		refresh.setVisibility(View.GONE);
 		
 		//Layout on top, used by textView
-		linearLayout =  findViewById(R.id.device_top_horizontal_linearlayout);
-		workingText = new TextView(this);
-		workingText.setText("Working...");
-		workingText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-		workingText.setTextColor(getResources().getColor(R.color.white));
+//		linearLayout =  findViewById(R.id.device_top_horizontal_linearlayout);
+//		workingText = new TextView(this);
+//		workingText.setText("Working...");
+//		workingText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+//		workingText.setTextColor(getResources().getColor(R.color.white));
 
 
 		//Check the BT state
@@ -370,9 +367,9 @@ public class Devices extends Activity  {
 				progressBar.setVisibility(View.VISIBLE);
 				refresh.setVisibility(View.GONE);
 
-				int SDK_INT = android.os.Build.VERSION.SDK_INT;
-				if(SDK_INT < 11)
-					showTextView(true);
+//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
+//				if(SDK_INT < 11)
+//					showTextView(true);
 
 				// Starting the device discovery
 				btAdapter.startDiscovery();
@@ -415,18 +412,18 @@ public class Devices extends Activity  {
 	 * checks if it should show textview in place of progressbar
 	 * @param show
 	 */
-	private void showTextView(boolean show){
-
-
-
-		if(show){
-			((LinearLayout) linearLayout).addView(workingText);
-		}
-		else if(!show){
-			((LinearLayout) linearLayout).removeView(workingText);
-		}
-
-	}
+//	private void showTextView(boolean show){
+//
+//
+//
+//		if(show){
+//			((LinearLayout) linearLayout).addView(workingText);
+//		}
+//		else if(!show){
+//			((LinearLayout) linearLayout).removeView(workingText);
+//		}
+//
+//	}
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
 	 * 
@@ -496,14 +493,14 @@ public class Devices extends Activity  {
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
 
-				int SDK_INT = android.os.Build.VERSION.SDK_INT;
+//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
 				
 
 				refresh.setVisibility(View.VISIBLE);
 				Log.d(TAG, "\nDiscovery Finished");
 				
-				if(SDK_INT < 11)
-					showTextView(false);
+//				if(SDK_INT < 11)
+//					showTextView(false);
 			}
 		}
 	}
