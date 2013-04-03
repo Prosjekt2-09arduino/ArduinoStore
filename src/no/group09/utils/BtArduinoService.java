@@ -26,7 +26,7 @@ public class BtArduinoService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		sendData();
+//		sendData();
 	}
 
 	public void sendData(){
