@@ -18,8 +18,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	// this is Robotium class used to support test cases that span over multiple activities.
 	private Solo solo; 
 	private ArrayList<App> allApps = new ArrayList<App>();
-	private Save save = new Save(getActivity().getBaseContext());
-
 
 	public MainActivityTest() {
 		super(MainActivity.class);
@@ -39,11 +37,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 	}
 	public void testPopulateDB() throws Exception{
-
+		Save save = new Save(getActivity());
 		save.populateDatabase();
 		allApps = save.getAllApps();
 
-		Assert.assertEquals(15, allApps.size());
+		assertEquals(15, allApps.size());
 
 	}
 	/**
@@ -58,7 +56,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 		ArrayList<App> allMedia = new ArrayList<App>();
 		ArrayList<App> allCompatible = new ArrayList<App>();
 
-
+		Save save = new Save(getActivity());
+		
 		for (App app : allApps) {
 
 			String category = app.getCategory();
