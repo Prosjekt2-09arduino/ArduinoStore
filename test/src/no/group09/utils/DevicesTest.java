@@ -26,6 +26,5 @@ public class DevicesTest extends ActivityInstrumentationTestCase2<Devices>{
 	
 	public void testDeviceList() throws Exception {
 		
-		
 	}
 }
