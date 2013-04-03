@@ -138,13 +138,13 @@ public class Devices extends Activity  {
 		refresh = (Button) findViewById(R.id.refresh);
 
 		refresh.setVisibility(View.GONE);
-		
+
 		//Layout on top, used by textView
-//		linearLayout =  findViewById(R.id.device_top_horizontal_linearlayout);
-//		workingText = new TextView(this);
-//		workingText.setText("Working...");
-//		workingText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-//		workingText.setTextColor(getResources().getColor(R.color.white));
+		//		linearLayout =  findViewById(R.id.device_top_horizontal_linearlayout);
+		//		workingText = new TextView(this);
+		//		workingText.setText("Working...");
+		//		workingText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+		//		workingText.setTextColor(getResources().getColor(R.color.white));
 
 
 		//Check the BT state
@@ -270,7 +270,7 @@ public class Devices extends Activity  {
 	private void registerBroadcastReceiver() {
 		//Register the BroadcastReceiver
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		filter.addAction(BluetoothDevice.ACTION_UUID);
+//		filter.addAction(BluetoothDevice.ACTION_UUID);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);		//connected devices
@@ -367,9 +367,9 @@ public class Devices extends Activity  {
 				progressBar.setVisibility(View.VISIBLE);
 				refresh.setVisibility(View.GONE);
 
-//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
-//				if(SDK_INT < 11)
-//					showTextView(true);
+				//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
+				//				if(SDK_INT < 11)
+				//					showTextView(true);
 
 				// Starting the device discovery
 				btAdapter.startDiscovery();
@@ -412,23 +412,21 @@ public class Devices extends Activity  {
 	 * checks if it should show textview in place of progressbar
 	 * @param show
 	 */
-//	private void showTextView(boolean show){
-//
-//
-//
-//		if(show){
-//			((LinearLayout) linearLayout).addView(workingText);
-//		}
-//		else if(!show){
-//			((LinearLayout) linearLayout).removeView(workingText);
-//		}
-//
-//	}
+	//	private void showTextView(boolean show){
+	//
+	//
+	//
+	//		if(show){
+	//			((LinearLayout) linearLayout).addView(workingText);
+	//		}
+	//		else if(!show){
+	//			((LinearLayout) linearLayout).removeView(workingText);
+	//		}
+	//
+	//	}
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
 	 * 
-	 * @author JeppeE
-	 *
 	 */
 	private class MyBroadcastReceiver extends BroadcastReceiver {
 
@@ -480,10 +478,6 @@ public class Devices extends Activity  {
 
 					//Notify the adapter about the changes
 					listAdapter.notifyDataSetChanged();
-
-					//Set the device as connected (selected)
-//					deviceList.setItemChecked(listAdapter.getCount() - 1, true);
-//					deviceList.requestFocus(listAdapter.getCount() -1);	//TODO: check if this selects the connected devices
 				}
 			}
 
@@ -493,14 +487,14 @@ public class Devices extends Activity  {
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
 
-//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
-				
+				//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
+
 
 				refresh.setVisibility(View.VISIBLE);
 				Log.d(TAG, "\nDiscovery Finished");
-				
-//				if(SDK_INT < 11)
-//					showTextView(false);
+
+				//				if(SDK_INT < 11)
+				//					showTextView(false);
 			}
 		}
 	}
