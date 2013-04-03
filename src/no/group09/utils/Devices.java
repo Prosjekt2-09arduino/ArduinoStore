@@ -485,7 +485,8 @@ public class Devices extends Activity  {
 					listAdapter.notifyDataSetChanged();
 
 					//Set the device as connected (selected)
-					//					deviceList.setItemChecked(listAdapter.getCount() -1, true);
+//					deviceList.setItemChecked(listAdapter.getCount() - 1, true);
+//					deviceList.requestFocus(listAdapter.getCount() -1);	//TODO: check if this selects the connected devices
 				}
 			}
 

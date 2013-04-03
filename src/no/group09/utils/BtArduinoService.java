@@ -91,22 +91,13 @@ public class BtArduinoService extends Service {
 
 			if(connection.getConnectionState() != ConnectionState.STATE_DISCONNECTED){
 				Log.d(TAG, "State was not disconnected (onStartCommand())\nSetting state to Disconnected.");
-				connection.disconnect();
 			}
 
 			Log.d(TAG, "Connection state: " + connection.getConnectionState());
 		}
 
 		setBtService(this);
-		if(!connect()){
-			Log.d(TAG, "trying connection for second time");
-			try{
-				Thread.sleep(10);
-				connect();
-			}catch(Exception e){
-				
-			}
-		}
+		connect();
 
 		//START_NOT_STICKY makes sure the service dies when the app is killed
 		return START_NOT_STICKY;
