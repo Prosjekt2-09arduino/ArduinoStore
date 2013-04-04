@@ -3,6 +3,7 @@ import no.group09.ucsoftwarestore.R;
 
 import no.group09.database.Save;
 import no.group09.database.entity.App;
+import no.group09.database.entity.BinaryFile;
 import no.group09.database.entity.Developer;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,8 +11,11 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.content.DialogInterface;
 
 /**
@@ -43,7 +47,8 @@ public class AppView extends Activity {
 		//Fetch the application from the database
 		App app = save.getAppByID(appID);
 		Developer developer = save.getDeveloperByID(app.getDeveloperID());
-		
+		BinaryFile binaryfile = save.getBinaryFileByAppID(appID);
+		final String blob = binaryfile.getBinaryFileAsString();
 		//Get the objects from xml
 		TextView appName = (TextView) findViewById(R.id.app_view_app_name);
 		TextView appDeveloper = (TextView) findViewById(R.id.app_view_developer);
@@ -55,17 +60,18 @@ public class AppView extends Activity {
 		appDeveloper.setText(developer.getName());	//TODO: Get the developer from the database on this ID
 		rating.setRating(app.getRating());
 		appDescription.setText(app.getDescription());
+		
+		
+		Button reviewButton = (Button) findViewById(R.id.reviewButton);
+		reviewButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getBaseContext(), blob, Toast.LENGTH_LONG).show();
+			}
+		});
 	}
 
-	/**	method for handling click of the review button*/
-	
-	public void reviewClicked(View view){
-		//		
-		//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		//		
-		//		builder.setTitle("Review the app").setItem()
-		//
-	}
 	/**	method for handling the click of the install button */
 	public void installClicked(View view){
 

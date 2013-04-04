@@ -12,7 +12,7 @@ public class DatabaseHandler extends SQLiteOpenHelper  {
 
 	public static final String DATABASE_NAME = "uCSoftwareStore.db";
 	public static final String DATABASE_PATH = "/data/data/no.group09.ucsoftwarestore/databases/";
-	public static final int DATABASE_VERSION = 18;	//If you change the database, increase this
+	public static final int DATABASE_VERSION = 19;	//If you change the database, increase this
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -27,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper  {
 		database.execSQL(Constants.DATABASE_CREATE_DEVELOPER);
 		database.execSQL(Constants.DATABASE_CREATE_PICTURES);
 		database.execSQL(Constants.DATABASE_CREATE_REQUIREMENTS);
+		database.execSQL(Constants.DATABASE_CREATE_BINARYFILES);
 //		database.execSQL(Constants.DATABASE_CREATE_APPUSESPINS);
 		
 	}
@@ -39,6 +40,7 @@ public class DatabaseHandler extends SQLiteOpenHelper  {
 		database.execSQL("DROP TABLE IF EXISTS developer");
 		database.execSQL("DROP TABLE IF EXISTS pictures");
 		database.execSQL("DROP TABLE IF EXISTS requirements");
+		database.execSQL("DROP TABLE IF EXISTS binaryfiles");
 //		database.execSQL("DROP TABLE IF EXISTS appUsesPins");
 
 		onCreate(database);

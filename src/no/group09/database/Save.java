@@ -3,6 +3,7 @@ package no.group09.database;
 import java.util.ArrayList;
 import java.util.HashMap;
 import no.group09.database.entity.App;
+import no.group09.database.entity.BinaryFile;
 import no.group09.database.entity.Developer;
 import no.group09.database.entity.Requirements;
 import android.content.Context;
@@ -84,6 +85,29 @@ public class Save{
 		
 		return apps;
 	}
+	
+	/** Get the binary file from the local database by the appid */
+	public  synchronized BinaryFile getBinaryFileByAppID(int id){
+		db = dbHelper.getWritableDatabase();
+		Cursor c = null;
+		BinaryFile binaryfile = null;
+		
+		try{
+			c = db.rawQuery(Constants.SELECT_BINARYFILES, new String[] {String.valueOf(id)});
+			
+			//if there is records from the query
+			if(c.moveToFirst()){
+				binaryfile = new BinaryFile(
+						c.getInt(1), 		//appid
+						c.getBlob(2));		//blob (the binary file)
+			}
+		}
+		catch (SQLiteException e){ Log.e(TAG, e.getMessage());}
+		catch (IllegalStateException e){ Log.e(TAG, e.getMessage());}
+		finally { db.close(); if (c != null) c.close();}
+		
+		return binaryfile;
+	}
 
 	/** Get the Developer from the local database by its ID */
 	public synchronized Developer getDeveloperByID(int id){
@@ -154,7 +178,24 @@ public class Save{
 		catch (SQLiteException e) { Log.e(TAG, e.getMessage()); }
 		finally { db.close(); }
 	}
-
+	
+	/** Inserts a binaryfile to the local database */
+	public void insertBinaryFile(BinaryFile bf){
+		db = dbHelper.getWritableDatabase();
+		
+		try{
+			if(db.isOpen()){
+				SQLiteStatement insertStmt = db.compileStatement(Constants.INSERT_BINARYFILES);
+				insertStmt.clearBindings();
+				insertStmt.bindString(1, String.valueOf(bf.getAppID()));
+				insertStmt.bindBlob(2, bf.getBinaryFile());
+				insertStmt.executeInsert();
+			}
+		}
+		catch (SQLiteException e) { Log.e(TAG, e.getMessage()); }
+		finally { db.close(); }
+	}
+	
 	/** Inserts a developer to the local database */
 	public void insertDeveloper(Developer developer) {
 		db = dbHelper.getWritableDatabase();
