@@ -30,12 +30,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
-
-
-	public void testSettings() throws Exception{
-		solo.clickOnActionBarItem(R.id.settings);
-
-	}
 	public void testPopulateDB() throws Exception{
 		Save save = new Save(getActivity());
 		save.populateDatabase();
@@ -101,7 +95,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	public void tearDown() throws Exception {
 		solo.finishOpenedActivities();
 	}
-<<<<<<< HEAD
 	
 	public void testSettings() throws Exception{
 		solo.clickOnActionBarItem(R.id.settings);
@@ -110,8 +103,3 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 }
-=======
-
-}
-
->>>>>>> testing

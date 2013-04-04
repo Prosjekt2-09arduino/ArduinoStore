@@ -169,20 +169,6 @@ public abstract class Protocol implements Runnable {
 			} catch (InterruptedException ex) {}				
 		}
 
-<<<<<<< HEAD
-		//Build a string from the byte array
-		String response = new String( currentCommand.getContent() );
-
-		//Finished processing this instruction
-		tempAckProcessor = null;
-		ackProcessingComplete();
-
-		//Build a MetaData package out from the raw String object using JSON parsing
-		try {
-			connectionMetadata = new ConnectionMetadata( new JSONObject(response) );
-		} catch (JSONException e) {
-			Log.d(TAG, "JSONException when constructing metadata: " + e);
-=======
 		if(currentCommand.getContent() != null){
 
 			//Build a string from the byte array
@@ -198,7 +184,10 @@ public abstract class Protocol implements Runnable {
 			} catch (JSONException e) {
 				Log.d(TAG, "JSONException when constructing metadata: " + e);
 			}
->>>>>>> master
+		}
+		else{
+			Log.d(TAG, "Got a nullpointer in protocol where it should not be null\n" +
+					"(no bytes received from arduino)");
 		}
 	}
 
