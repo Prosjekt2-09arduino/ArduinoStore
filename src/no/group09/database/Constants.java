@@ -160,6 +160,21 @@ public class Constants {
 			save.insertBinaryFile(new BinaryFile(1, Constants.getByteExample()));
 			save.insertBinaryFile(new BinaryFile(2, Constants.getByteExample()));
 			save.insertBinaryFile(new BinaryFile(3, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(4, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(5, Constants.getByteExample()));
+			
+			save.insertBinaryFile(new BinaryFile(6, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(7, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(8, Constants.getByteExample()));
+
+			save.insertBinaryFile(new BinaryFile(9, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(10, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(11, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(12, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(13, Constants.getByteExample()));
+			
+			save.insertBinaryFile(new BinaryFile(14, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(15, Constants.getByteExample()));
 	}
 	
 	/** returns a example binary file */
