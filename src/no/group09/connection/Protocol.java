@@ -169,6 +169,7 @@ public abstract class Protocol implements Runnable {
 			} catch (InterruptedException ex) {}				
 		}
 
+<<<<<<< HEAD
 		//Build a string from the byte array
 		String response = new String( currentCommand.getContent() );
 
@@ -181,6 +182,23 @@ public abstract class Protocol implements Runnable {
 			connectionMetadata = new ConnectionMetadata( new JSONObject(response) );
 		} catch (JSONException e) {
 			Log.d(TAG, "JSONException when constructing metadata: " + e);
+=======
+		if(currentCommand.getContent() != null){
+
+			//Build a string from the byte array
+			String response = new String( currentCommand.getContent() );
+
+			//Finished processing this instruction
+			tempAckProcessor = null;
+			ackProcessingComplete();
+
+			//Build a MetaData package out from the raw String object using JSON parsing
+			try {
+				connectionMetadata = new ConnectionMetadata( new JSONObject(response) );
+			} catch (JSONException e) {
+				Log.d(TAG, "JSONException when constructing metadata: " + e);
+			}
+>>>>>>> master
 		}
 	}
 

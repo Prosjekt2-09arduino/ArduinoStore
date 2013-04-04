@@ -45,7 +45,7 @@ public class BluetoothConnection extends Protocol {
 	/** Unique requestResult ID when using startActivityForResult in the parentActivity to enable the Bluetooth Adapter*/
 	public static int REQUEST_ENABLE_BT = 374370074;
 	
-	 private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+//	 private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	
 	private static final String TAG = "BT_CONNECTION";
 

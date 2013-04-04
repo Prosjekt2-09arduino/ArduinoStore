@@ -108,7 +108,7 @@ class ConnectionThread extends Thread {
 		Thread socketThread = new Thread(){
 			@Override
 			public void run() {
-				for(int i = 0; i<2; i++){
+//				for(int i = 0; i<2; i++){
 					try {
 						connection.socket.connect();
 						connectionSuccessful = true;
@@ -116,7 +116,7 @@ class ConnectionThread extends Thread {
 						Log.d(TAG, "Unable to open socket: " + ex);
 						connection.disconnect();
 					}
-				}
+//				}
 			}
 		};
 

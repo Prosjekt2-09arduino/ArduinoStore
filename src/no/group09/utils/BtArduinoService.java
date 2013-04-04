@@ -26,7 +26,7 @@ public class BtArduinoService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		sendData();
+//		sendData();
 	}
 
 	public void sendData(){
@@ -91,7 +91,6 @@ public class BtArduinoService extends Service {
 
 			if(connection.getConnectionState() != ConnectionState.STATE_DISCONNECTED){
 				Log.d(TAG, "State was not disconnected (onStartCommand())\nSetting state to Disconnected.");
-				connection.disconnect();
 			}
 
 			Log.d(TAG, "Connection state: " + connection.getConnectionState());

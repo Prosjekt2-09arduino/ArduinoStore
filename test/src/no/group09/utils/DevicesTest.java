@@ -27,6 +27,7 @@ public class DevicesTest extends ActivityInstrumentationTestCase2<Devices>{
 	public void testDeviceList() throws Exception {
 		boolean finish = false;
 		
+<<<<<<< HEAD
 		//Check if refresh button is invisible (gone)
 		assertEquals(8, solo.getView(R.id.refresh).getVisibility());
 		
@@ -41,5 +42,7 @@ public class DevicesTest extends ActivityInstrumentationTestCase2<Devices>{
 				finish = true;
 			}
 		}
+=======
+>>>>>>> master
 	}
 }
