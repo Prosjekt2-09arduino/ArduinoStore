@@ -25,10 +25,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 import no.group09.connection.BluetoothConnection;
+import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -86,9 +89,6 @@ public class Devices extends Activity  {
 	private View linearLayout;
 	private TextView workingText;
 	static Context context;
-
-	private BtArduinoService bluetoothService;
-	private BluetoothConnection connection;
 
 	private boolean secondClick = false;
 
@@ -174,31 +174,47 @@ public class Devices extends Activity  {
 				btAdapter.cancelDiscovery();
 
 				String macAddress = listAdapter.getMacAddress(position);
-				
+
 				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
 				serviceIntent.putExtra(MAC_ADDRESS, macAddress);
 
 				//FIXME: If the service allready is running, it does not start over.
 				//This might be a problem if it needs to change the connected device.
-				
+				if(isMyServiceRunning()){
+					BtArduinoService.getBtService().getBluetoothConnection().setConnectionState(ConnectionState.STATE_DISCONNECTED);
+					BtArduinoService.getBtService().getBluetoothConnection().disconnect();
+					stopService(serviceIntent);
+				}
 				startService(serviceIntent);
 
 				ProgressDialogTask task = new ProgressDialogTask();
 				task.execute();
 				savedPosition = position;
+
 			}
 		});	
 
 		deviceList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
-				
+
 				//This gives a popup box with functionality to the arduino
 				dialogBoxForTestingPurposes();
 
 				return false;
 			}
 		});
+	}
+
+	/** Checks wether a service is running or not */
+	private boolean isMyServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (BtArduinoService.class.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -272,7 +288,7 @@ public class Devices extends Activity  {
 	private void registerBroadcastReceiver() {
 		//Register the BroadcastReceiver
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//		filter.addAction(BluetoothDevice.ACTION_UUID);
+		//		filter.addAction(BluetoothDevice.ACTION_UUID);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);		//connected devices
@@ -531,17 +547,14 @@ public class Devices extends Activity  {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			while(true) {
-				if (bluetoothService == null) {
-					bluetoothService = BtArduinoService.getBtService();
-				}
-				if (bluetoothService != null) {
-					connection = bluetoothService.getBluetoothConnection();
-				}
-				if (connection != null) {
-					if (connection.isConnected()) {
-						return true;
+				if(BtArduinoService.getBtService() != null){
+					if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+						if(BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
+							return true;
+						}
 					}
 				}
+				
 				if (System.currentTimeMillis() > timeout) {
 					return false;
 				}
