@@ -174,12 +174,13 @@ public class Devices extends Activity  {
 				btAdapter.cancelDiscovery();
 
 				String macAddress = listAdapter.getMacAddress(position);
-
+				
 				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
 				serviceIntent.putExtra(MAC_ADDRESS, macAddress);
 
 				//FIXME: If the service allready is running, it does not start over.
 				//This might be a problem if it needs to change the connected device.
+				
 				startService(serviceIntent);
 
 				ProgressDialogTask task = new ProgressDialogTask();
@@ -191,7 +192,8 @@ public class Devices extends Activity  {
 		deviceList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
-
+				
+				//This gives a popup box with functionality to the arduino
 				dialogBoxForTestingPurposes();
 
 				return false;
