@@ -1,15 +1,22 @@
 package no.group09.utils;
+import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.ucsoftwarestore.R;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /*
  * Licensed to UbiCollab.org under one or more contributor
@@ -41,6 +48,7 @@ public class AddDeviceScreen extends Activity {
 	String serial = null;
 	private final static String TAG = "AddDeviceScreen"; 
 	private String serialString = null;
+	private static final int CUSTOM_REQUEST_QR_SCANNER = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +60,69 @@ public class AddDeviceScreen extends Activity {
 
 
 		//Add functionality to the QR button
-		
-		
+
+
 
 		//Add functionality to the input serial button
 		inputSerialButton = (Button) findViewById(R.id.input_serial_button);
-		inputSerialButton.setOnClickListener(new View.OnClickListener() {
+		inputSerialButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				onCreateDialog();
 			}
 		});
+
+		qrButton = (Button) findViewById(R.id.qr_button);
+		qrButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+				intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+
+				String title = (String) getResources().getText(R.string.chooser_title);
+
+				Intent chooser = Intent.createChooser(intent, title);
+
+				startActivityForResult(chooser, CUSTOM_REQUEST_QR_SCANNER);
+			}
+		});
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (requestCode == CUSTOM_REQUEST_QR_SCANNER) {
+
+			//Successful scan
+			if (resultCode == RESULT_OK) {
+				String macAddress = intent.getStringExtra("SCAN_RESULT");
+
+				Toast.makeText(getBaseContext(), macAddress, Toast.LENGTH_LONG).show();
+				
+				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
+				serviceIntent.putExtra(Devices.MAC_ADDRESS, macAddress);
+
+				if(isMyServiceRunning()){
+					BtArduinoService.getBtService().getBluetoothConnection().setConnectionState(ConnectionState.STATE_DISCONNECTED);
+					BtArduinoService.getBtService().getBluetoothConnection().disconnect();
+					stopService(serviceIntent);
+				}
+				startService(serviceIntent);
+			}
+		}
+	}
+	
+	/** Checks wether a service is running or not */
+	private boolean isMyServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (BtArduinoService.class.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -77,10 +136,10 @@ public class AddDeviceScreen extends Activity {
 	 */
 	public Dialog onCreateDialog() {
 		AlertDialog.Builder inputSerialDialog = new AlertDialog.Builder(this);
-		
+
 		final EditText input = new EditText(this);
 		inputSerialDialog.setView(input);
-		
+
 		inputSerialDialog.setMessage("Please type the serial key of your bluetooth device")
 		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 

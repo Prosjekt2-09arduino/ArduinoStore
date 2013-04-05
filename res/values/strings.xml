@@ -87,5 +87,6 @@
     
     <string name="hide_incompitable_checkbox">Hide/show incompitable</string>
     
+    <string name="chooser_title">Chose QR reader</string>
     
 </resources>
