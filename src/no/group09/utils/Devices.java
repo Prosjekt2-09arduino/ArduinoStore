@@ -35,6 +35,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -241,10 +242,21 @@ public class Devices extends Activity  {
 						if(!BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
 							setTitle("Devices");
 						}
+						else{
+							HashMap<String, String> map = new HashMap<String, String>();
+							map.put("name", sharedPref.getString("connected_device_name", "null"));
+							map.put("mac", sharedPref.getString("connected_device_mac", "null"));
+							map.put("pager", "708");
+							if(!device_list.contains(map)){
+								device_list.add(map);
+								deviceList.setItemChecked(0, true);
+							}
+						}
 					}
 				}
 
 				//Scan for new BT devices
+				
 				checkBTState();
 			}
 		});
@@ -288,7 +300,6 @@ public class Devices extends Activity  {
 	private void registerBroadcastReceiver() {
 		//Register the BroadcastReceiver
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		//		filter.addAction(BluetoothDevice.ACTION_UUID);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);		//connected devices
@@ -344,6 +355,21 @@ public class Devices extends Activity  {
 		//Notify the adapter that the list is now empty
 		listAdapter.notifyDataSetChanged();
 
+		if(BtArduinoService.getBtService() != null){
+			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+				if(BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("name", sharedPref.getString("connected_device_name", "null"));
+					map.put("mac", sharedPref.getString("connected_device_mac", "null"));
+					map.put("pager", "708");
+					if(!device_list.contains(map)){
+						device_list.add(map);
+						deviceList.setItemChecked(0, true);
+					}
+				}
+			}
+		}
+		
 		setActivityTitle();
 	}
 
@@ -478,41 +504,19 @@ public class Devices extends Activity  {
 					listAdapter.notifyDataSetChanged();
 				}
 			}
-
-			//If the device is connected
-			if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)){
-
-				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				HashMap<String, String> map = new HashMap<String, String>();
-
-				//Check if it is in the list already
-				if(!btDeviceList.contains(device)){
-					map.put("name", device.getName());
-					map.put("mac", device.getAddress());
-					map.put("pager", device.getBluetoothClass().toString());
-
-					device_list.add(map);
-					btDeviceList.add(device);
-
-					//Notify the adapter about the changes
-					listAdapter.notifyDataSetChanged();
-				}
-			}
-
+			
 			//If discovery finished
 			if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
 
-				//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
-
+				//int SDK_INT = android.os.Build.VERSION.SDK_INT;
 
 				refresh.setVisibility(View.VISIBLE);
 				Log.d(TAG, "\nDiscovery Finished");
-
-				//				if(SDK_INT < 11)
-				//					showTextView(false);
+				//if(SDK_INT < 11)
+				//showTextView(false);
 			}
 		}
 	}
@@ -554,7 +558,7 @@ public class Devices extends Activity  {
 						}
 					}
 				}
-				
+
 				if (System.currentTimeMillis() > timeout) {
 					return false;
 				}
@@ -582,6 +586,7 @@ public class Devices extends Activity  {
 				Editor edit = sharedPref.edit();
 				edit.putString("connected_device_dialog", lastConnectedDevice);
 				edit.putString("connected_device_name", listAdapter.getName(savedPosition));
+				edit.putString("connected_device_mac", listAdapter.getMacAddress(savedPosition));
 				edit.commit();
 				Log.d(TAG, "The information about the last connected device was written to shared preferences");
 

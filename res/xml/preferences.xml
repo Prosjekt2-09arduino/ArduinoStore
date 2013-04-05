@@ -40,6 +40,7 @@
     -->
     <PreferenceCategory android:key="device_name_category">
         <Preference android:key="connected_device_name" />
+        <Preference android:key="connected_device_mac"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
