@@ -29,13 +29,14 @@ import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.connection.ConnectionMetadata;
 import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothA2dp;
+import android.app.SearchManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -50,14 +51,15 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
@@ -468,9 +470,9 @@ public class Devices extends Activity  {
 	//		}
 	//
 	//	}
+	
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
-	 * 
 	 */
 	private class MyBroadcastReceiver extends BroadcastReceiver {
 
@@ -707,6 +709,49 @@ public class Devices extends Activity  {
 			}
 
 			dialog.show();
+		}
+	}
+	
+	/**
+	 * Creates options menus
+	 */
+	@Override
+	@SuppressLint("NewApi")
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.device_menu, menu);
+
+		//Search bar for versions over API level 11
+		int SDK_INT = android.os.Build.VERSION.SDK_INT;
+		
+		if(SDK_INT >= 11){ 
+			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+			SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+			searchView.setSubmitButtonEnabled(true);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns true as long as item corresponds with a proper options action.
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case R.id.menu_search:
+            onSearchRequested();
+            return true;
+
+		//Start the preferences class
+		case R.id.settings:
+			//Create an intent to start the preferences activity
+			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
+			this.startActivity(myIntent);
+			return true;
+
+		default : return false;
 		}
 	}
 }

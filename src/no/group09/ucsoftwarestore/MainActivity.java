@@ -25,7 +25,6 @@ import no.group09.fragments.Page;
 import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
-import no.group09.utils.SearchResults;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
@@ -39,14 +38,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.SearchView;
-import android.widget.Toast;
+
 /**
- * 
  * The main store activity for the app.
- *
  */
 public class MainActivity extends FragmentActivity {
 
@@ -63,10 +58,10 @@ public class MainActivity extends FragmentActivity {
 	private SharedPreferences sharedPref = null;
 
 	
-	@Override
 	/**
 	 * Takes state and creates the app
 	 */
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -88,34 +83,26 @@ public class MainActivity extends FragmentActivity {
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-
 		//This clears the database
-		//		getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
+		//getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
 
-		/** Create the database if it does not excist, or copy it into the application */
-
-		//This populates the database: false because we dont want to use content provider
-		// save.populateDatabase();
-
-		//		sets up search with search dialog. For older versions!
-		
-
-
+		//This populates the database
+		//save.populateDatabase();
 	}
 
-	@Override
 	/**
 	 * pauses current activity
 	 */
+	@Override
 	public void onPause(){
 		super.onPause();
 	}
 
-	@SuppressLint("NewApi")
-	@Override
 	/**
 	 * Creates options menus
 	 */
+	@SuppressLint("NewApi")
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 
@@ -127,30 +114,29 @@ public class MainActivity extends FragmentActivity {
 			menu.getItem(1).setTitle("Hide incompatible");
 		}
 
-		//		Search bar for versions over API level 11
-		int SDK_INT = android.os.Build.VERSION.SDK_INT; //gets the version of the device
+		//Search bar for versions over API level 11
+		int SDK_INT = android.os.Build.VERSION.SDK_INT;
+		
 		if(SDK_INT >= 11){ 
 			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 			SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+			
 			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 			searchView.setSubmitButtonEnabled(true);
-
-
 		}
 
 		return true;
 	}
 	
 
-	@Override
 	/**
 	 * Returns true as long as item corresponds with a proper options action.
 	 * 
 	 */
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
-//		Makes sure search works for older versions
 		case R.id.menu_search:
             onSearchRequested();
             return true;
@@ -207,19 +193,6 @@ public class MainActivity extends FragmentActivity {
 			startActivity(intent);
 			return true;
 
-			//		case R.id.add_device:
-			//			startActivity(new Intent(this, AddDeviceScreen.class));
-			//			return true;
-
-			//This is just for testing purposes. Remove when done.
-			//TODO: Remove when done testing the application view.
-			//		case R.id.application_view:
-			//			startActivity(new Intent(this, AppView.class));
-			//			return true;
-			//		}
-			//
-			//		//The item was none of the following
-
 		case R.id.populateDatabase:
 			Save save = new Save(getBaseContext());
 			save.populateDatabase();
@@ -255,10 +228,10 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	@Override
 	/**
 	 * Resumes previous activity
 	 */
+	@Override
 	public void onResume() {
 		super.onResume();
 		setActivityTitle();

@@ -40,12 +40,11 @@ public class ListAdapter extends BaseAdapter {
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater=null;
     
-	protected static final String KEY_ID = "id";
-	protected static final String APP_NAME = "title";
-	protected static final String DISTRIBUTOR = "distributor";
-	protected static final String RATING = "rating";
-	protected static final String IMAGE = "image";
-	
+	public static final String KEY_ID = "id";
+	public static final String APP_NAME = "title";
+	public static final String DISTRIBUTOR = "distributor";
+	public static final String RATING = "rating";
+	public static final String IMAGE = "image";
     
     public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
         context = a;
@@ -76,7 +75,6 @@ public class ListAdapter extends BaseAdapter {
 
         TextView appName = (TextView)vi.findViewById(R.id.app_name);
         TextView distributor = (TextView)vi.findViewById(R.id.distributor);
-//        TextView rating = (TextView)vi.findViewById(R.id.rating);
         RatingBar getRatingBar = (RatingBar) vi.findViewById(R.id.ratingBarIndicator);;
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image);
         
@@ -86,8 +84,7 @@ public class ListAdapter extends BaseAdapter {
         // Setting all values in listview
         appName.setText(listItem.get(APP_NAME));
         distributor.setText(listItem.get(DISTRIBUTOR));
-//        rating.setText(listItem.get(RATING));
-//        thumb_image.setImageBitmap(Save.converteStringToBitmap(listItem.get(IMAGE)));
+
         getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
         
         return vi;

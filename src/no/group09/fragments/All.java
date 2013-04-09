@@ -50,12 +50,6 @@ public class All extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		/** Getting the arguments to the Bundle object */
-		//		Bundle data = getArguments();
-
-		/** Getting integer data of the key current_page from the bundle */
-		//		mCurrentPage = data.getInt("current_page", 2);
 	}
 
 	@Override
@@ -67,6 +61,7 @@ public class All extends Fragment {
 
 		return view;
 	}
+	
 	/**
 	 * Update view with currently selected category of apps
 	 */
