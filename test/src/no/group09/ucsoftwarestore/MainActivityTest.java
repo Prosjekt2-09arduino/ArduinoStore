@@ -97,50 +97,50 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 		assertNotNull("AllTools is emtpy!",allTools.get(0));
 		assertNotNull("AllMedia is emtpy!",allMedia.get(0));
 
+		
+
+		
 		solo.clickOnText("Games");
 		for (App app : allGames) {
 			assertTrue(solo.searchText(app.getName()));
 		}
-		//
-		// solo.scrollToSide(Solo.LEFT);
-		// solo.clickOnText("Medical");
-		// for (App app : allMedical) {
-		// assertTrue(solo.searchText(app.getName()));
-		// }
-		//
-		// solo.scrollToSide(Solo.LEFT);
-		// solo.clickOnText("Tools");
-		// for (App app : allTools) {
-		// assertTrue(solo.searchText(app.getName()));
-		// }
-		//
-		// solo.scrollToSide(Solo.LEFT);
-		// solo.clickOnText("Media");
-		// for (App app : allMedia) {
-		// assertTrue(solo.searchText(app.getName()));
-		// }
-		//
-		// solo.scrollToSide(Solo.LEFT);
-		// solo.clickOnText("All");
-		// for (App app : allApps) {
-		// assertTrue(solo.searchText(app.getName()));
-		// }
-		//
+
+		solo.scrollToSide(Solo.LEFT);
+		solo.clickOnText("Medical");
+		for (App app : allMedical) {
+			assertTrue(solo.searchText(app.getName()));
+		}
+
+		solo.scrollToSide(Solo.LEFT);
+		solo.clickOnText("Tools");
+		for (App app : allTools) {
+			assertTrue(solo.searchText(app.getName()));
+		}
+		
+		solo.scrollToSide(Solo.LEFT);
+		solo.clickOnText("All");
+		for (App app : allApps) {
+			assertTrue(solo.searchText(app.getName()));
+		}
+
+		solo.scrollToSide(Solo.LEFT);
+		solo.clickOnText("Media");
+		for (App app : allMedia) {
+			assertTrue(solo.searchText(app.getName()));
+		}
+
+
+
 		// fills not compatible with not compatible apps
 		for (App app : allApps) {
 			if(!allCompatible.contains(app))
 				notCompatible.add(app);
 		}
 		assertNotNull(notCompatible.get(0));
-		//// checks if not compatible are shown
-		// for (App app : notCompatible) {
-		// assertTrue(solo.searchText(app.getName()));
-		// }
 
 
 		solo.clickOnActionBarItem(R.id.settings);
 		solo.clickOnText("Hide incompatible");
-
 
 		solo.goBack();
 		solo.scrollToSide(Solo.LEFT);
