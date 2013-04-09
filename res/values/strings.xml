@@ -89,4 +89,6 @@
     
     <string name="chooser_title">Chose QR reader</string>
     
+    <string name="disconnect">Disconnect</string>
+    
 </resources>

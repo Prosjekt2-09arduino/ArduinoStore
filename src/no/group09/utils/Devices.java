@@ -202,7 +202,9 @@ public class Devices extends Activity  {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 
 				//This gives a popup box with functionality to the arduino
-				dialogBoxForTestingPurposes();
+//				dialogBoxForTestingPurposes();
+				
+				disconnectButton();
 
 				return false;
 			}
@@ -258,7 +260,7 @@ public class Devices extends Activity  {
 				}
 
 				//Scan for new BT devices
-				
+
 				checkBTState();
 			}
 		});
@@ -371,7 +373,7 @@ public class Devices extends Activity  {
 				}
 			}
 		}
-		
+
 		setActivityTitle();
 	}
 
@@ -470,7 +472,7 @@ public class Devices extends Activity  {
 	//		}
 	//
 	//	}
-	
+
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
 	 */
@@ -506,7 +508,7 @@ public class Devices extends Activity  {
 					listAdapter.notifyDataSetChanged();
 				}
 			}
-			
+
 			//If discovery finished
 			if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 
@@ -711,33 +713,66 @@ public class Devices extends Activity  {
 			dialog.show();
 		}
 	}
-	
-	/**
-	 * Creates options menus
-	 */
-	@Override
-	@SuppressLint("NewApi")
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.device_menu, menu);
 
-		return true;
-	}
+	public void disconnectButton(){
 
-	/**
-	 * Returns true as long as item corresponds with a proper options action.
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+		final BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
 
-		//Start the preferences class
-		case R.id.settings:
-			//Create an intent to start the preferences activity
-			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
-			this.startActivity(myIntent);
-			return true;
+		if(connection.isConnected()){
 
-		default : return false;
+			// custom dialog
+			final Dialog dialog = new Dialog(Devices.this);
+			dialog.setContentView(R.layout.dialog_box_for_disconnect);
+			
+			Button disconnect = (Button) dialog.findViewById(R.id.disconnect);
+			disconnect.setOnClickListener(new OnClickListener() {
+				
+				
+				//FIXME: this isnt working properly
+				@Override
+				public void onClick(View v) {
+					connection.disconnect();
+					connection.setConnectionState(ConnectionState.STATE_DISCONNECTED);
+					BtArduinoService.getBtService().stopSelf();
+					BtArduinoService.getBtService().onDestroy();
+					Editor edit = sharedPref.edit();
+					edit.clear();
+					edit.commit();
+					setActivityTitle();
+					dialog.cancel();
+				}
+			});
+
+			dialog.show();
 		}
 	}
-}
+
+		/**
+		 * Creates options menus
+		 */
+		@Override
+		@SuppressLint("NewApi")
+		public boolean onCreateOptionsMenu(Menu menu) {
+			getMenuInflater().inflate(R.menu.device_menu, menu);
+
+			return true;
+		}
+
+		/**
+		 * Returns true as long as item corresponds with a proper options action.
+		 */
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+
+			//Start the preferences class
+			case R.id.settings:
+				//Create an intent to start the preferences activity
+				Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
+				this.startActivity(myIntent);
+				return true;
+
+			default : return false;
+			}
+		}
+	}
