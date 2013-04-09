@@ -52,16 +52,10 @@ public class AddDeviceScreen extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 
 		//Set the xml layout
 		setContentView(R.layout.add_device_screen);
-
-
-		//Add functionality to the QR button
-
-
 
 		//Add functionality to the input serial button
 		inputSerialButton = (Button) findViewById(R.id.input_serial_button);
@@ -73,6 +67,7 @@ public class AddDeviceScreen extends Activity {
 			}
 		});
 
+		//Add functionality to the QR button
 		qrButton = (Button) findViewById(R.id.qr_button);
 		qrButton.setOnClickListener(new OnClickListener() {
 
