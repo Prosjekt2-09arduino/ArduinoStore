@@ -720,16 +720,6 @@ public class Devices extends Activity  {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.device_menu, menu);
 
-		//Search bar for versions over API level 11
-		int SDK_INT = android.os.Build.VERSION.SDK_INT;
-		
-		if(SDK_INT >= 11){ 
-			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-			SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-			searchView.setSubmitButtonEnabled(true);
-		}
-
 		return true;
 	}
 
@@ -739,10 +729,6 @@ public class Devices extends Activity  {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-
-		case R.id.menu_search:
-            onSearchRequested();
-            return true;
 
 		//Start the preferences class
 		case R.id.settings:
