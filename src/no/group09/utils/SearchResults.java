@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 import no.group09.database.Save;
 import no.group09.database.entity.App;
 import no.group09.fragments.ListAdapter;
@@ -118,5 +119,11 @@ public class SearchResults extends Activity{
 				startActivity(intent);
 			}
 		});	
+		if(application_list.isEmpty()){
+			Toast.makeText(getBaseContext(), "No results available for " + query, Toast.LENGTH_LONG).show();
+			finish();
+			
+			
+		}
 	}
 }
