@@ -60,6 +60,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
@@ -204,7 +205,7 @@ public class Devices extends Activity  {
 				//This gives a popup box with functionality to the arduino
 				//				dialogBoxForTestingPurposes();
 
-				disconnectButton();
+				disconnectButton(position);
 
 				return false;
 			}
@@ -577,10 +578,11 @@ public class Devices extends Activity  {
 			BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
 			progressDialog.dismiss();
 			String message, title;
-			String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
 
 			if (success && connection.isConnected()) {
 				message = "The connection was successful.";
+
+				String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
 				title = "Devices - " + appName;
 
 				String lastConnectedDevice = "Device name: " + listAdapter.getName(savedPosition)
@@ -715,7 +717,7 @@ public class Devices extends Activity  {
 	}
 
 	/** Button for disconnecting from a connected BT device */
-	public void disconnectButton(){
+	public void disconnectButton(final int position){
 
 		//Check if the selected element is a connected device
 		if(BtArduinoService.getBtService() != null){
@@ -753,8 +755,13 @@ public class Devices extends Activity  {
 							
 							//Update the Activity's title
 							setActivityTitle();
+
+							//Unselect the view in the list
+							deviceList.setItemChecked(position, false);
 							
-							deviceList.setSelected(false);
+							//Notify the adapter about the changes
+							listAdapter.notifyDataSetInvalidated();
+							
 							
 							//Close the dialog box
 							dialog.cancel();
