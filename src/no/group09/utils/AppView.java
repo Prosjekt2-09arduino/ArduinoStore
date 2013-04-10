@@ -1,4 +1,5 @@
 package no.group09.utils;
+import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 
 import no.group09.database.Save;
@@ -10,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 
 /**
  * The informational view of an app in the shop.
@@ -32,7 +35,6 @@ public class AppView extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 
 		//Set the xml layout
@@ -40,31 +42,31 @@ public class AppView extends Activity {
 
 		//Fetch the application ID from the intent
 		int appID = getIntent().getExtras().getInt("app");
-		
+
 		//Get the database
 		save = new Save(getBaseContext());
-		
+
 		//Fetch the application from the database
 		App app = save.getAppByID(appID);
 		Developer developer = save.getDeveloperByID(app.getDeveloperID());
 		BinaryFile binaryfile = save.getBinaryFileByAppID(appID);
 		final String blob = binaryfile.getBinaryFileAsString();
+		
 		//Get the objects from xml
 		TextView appName = (TextView) findViewById(R.id.app_view_app_name);
 		TextView appDeveloper = (TextView) findViewById(R.id.app_view_developer);
 		RatingBar rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
 		TextView appDescription = (TextView) findViewById(R.id.app_view_description);
-		
+
 		//Set the information on the UI that we fetched from the database-objects
 		appName.setText(app.getName());
-		appDeveloper.setText(developer.getName());	//TODO: Get the developer from the database on this ID
+		appDeveloper.setText(developer.getName());
 		rating.setRating(app.getRating());
 		appDescription.setText(app.getDescription());
-		
-		
+
 		Button reviewButton = (Button) findViewById(R.id.reviewButton);
 		reviewButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getBaseContext(), blob, Toast.LENGTH_LONG).show();
@@ -75,37 +77,43 @@ public class AppView extends Activity {
 	/**	method for handling the click of the install button */
 	public void installClicked(View view){
 
-		//		creates an alertdialog builder
+		//Creates an alertdialog builder
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		//	if no device connected, create popup with that message
-		//		if(!getDeviceName().equals(null)
-		builder.setMessage("Cannot install app, no device connected").setPositiveButton("Ok",new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		}).setNegativeButton("Install anyway",new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-				//				just to test if installingDialog works and if it responds well
-				installingDialog();
-			}
-		});
+		if(Devices.isConnected()){
+			//If no device connected, create popup with that message
+			builder.setMessage("Cannot install app, no device connected").setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+				
+			}).setNegativeButton("Install anyway",new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					installingDialog();
+				}
+			});
+		}
+		else{
+			builder.setMessage("Press install to install this app to " + getDeviceName())
+			.setPositiveButton("Install", new DialogInterface.OnClickListener(){
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					installingDialog();
+				}
+				
+			}).setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					
+				}
+			});
+		}
+
 		builder.create();
-		//		else
-		//		builder.setMessage("Press install to install this app to " + getDeviceName().setPositiveButton("Install", new DialogInterface.OnClickListener(){
-		//			@Override
-		//			public void onClick(DialogInterface dialog, int which){
-		//
-		//			}
-		//		}).setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-		//			@Override
-		//			public void onClick(DialogInterface dialog, int which){
-		//
-		//			}
-		//		});
-		//		builder.create();
-
 		builder.show();
 
 	}
@@ -124,8 +132,7 @@ public class AppView extends Activity {
 		progressBar.setMax(100);
 		progressBar.show();
 
-
-		//			reset progress bar status, just in case...
+		//Reset progress bar status, just in case...
 		progressStatus = 0;
 
 		new Thread(new Runnable() {
@@ -133,51 +140,38 @@ public class AppView extends Activity {
 			@Override
 			public void run() {
 				while(progressStatus < 100){
-					//					TODO: call method to update progressStatus
-
 					progressStatus += 10;
-					//				to make sure thread doesnt use up too much resources
-					try {
-						Thread.sleep(10);
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
+					
+					//To make sure thread doesnt use up too much resources
+					try { Thread.sleep(10);
+					} catch (Exception e) {}
 
-					//					update the progress bar itself
+					//Update the progress bar itself
 					progressHandler.post(new Runnable() {
 
 						@Override
 						public void run() {
 							progressBar.setProgress(progressStatus);						
 						}
-
 					});
 				}
-				//				the progress is done
+				
+				//The progress is done
 				if(progressStatus >= 100){
-
-					//					sleep so the user can see the 100% mark
-					try {
-						Thread.sleep(1500);
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
+					//Sleep so the user can see the 100% mark
+					try { Thread.sleep(1500);
+					} catch (Exception e) {}
 					progressBar.dismiss();
 				}
 			}
-
 		}).start();
-
-		//			TODO: create progressbar, or cancel after feedback from device
 	}
-	/**
-	 * Get the name for the connected device
-	 * @return String with name of the connected device
-	 */
-	private String getDeviceName(){
-		//			TODO: implement this method of getting the connected device name
 
-		return null;
+	private String getDeviceName() {
+		if(Devices.isConnected()){
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			return pref.getString("connected_device_name", "null");
+		}
+		return "no device";
 	}
 }
-

@@ -57,6 +57,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -218,6 +219,15 @@ public class Devices extends Activity  {
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 			if (BtArduinoService.class.getName().equals(service.service.getClassName())) {
 				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isConnected(){
+		if(BtArduinoService.getBtService() != null){
+			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+				return BtArduinoService.getBtService().getBluetoothConnection().isConnected();
 			}
 		}
 		return false;
@@ -580,7 +590,7 @@ public class Devices extends Activity  {
 			String message, title;
 
 			if (success && connection.isConnected()) {
-				message = "The connection was successful.";
+				message = "The connection was successful.\n Long press to disconnect";
 
 				String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
 				title = "Devices - " + appName;
@@ -729,15 +739,17 @@ public class Devices extends Activity  {
 				if(connection.isConnected()){
 
 					//Custom dialog
-					final Dialog dialog = new Dialog(Devices.this);
-					dialog.setContentView(R.layout.dialog_box_for_disconnect);
+//					final AlertDialog dialog = new AlertDialog();
+//					dialog.setContentView(R.layout.dialog_box_for_disconnect);
+					
+					
+					AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
 
-					Button disconnect = (Button) dialog.findViewById(R.id.disconnect);
-					disconnect.setOnClickListener(new OnClickListener() {
+					responseDialog.setMessage("Click disconnect to disconnect from the device")
+					.setPositiveButton("Disconnect", new DialogInterface.OnClickListener() {
 
 						@Override
-						public void onClick(View v) {
-							
+						public void onClick(DialogInterface dialog, int which) {
 							//Disconnect the connection
 							connection.disconnect();
 							connection.setConnectionState(ConnectionState.STATE_DISCONNECTED);
@@ -766,9 +778,14 @@ public class Devices extends Activity  {
 							//Close the dialog box
 							dialog.cancel();
 						}
-					});
+					}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-					dialog.show();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
+					responseDialog.show();
 				}
 			}
 		}
