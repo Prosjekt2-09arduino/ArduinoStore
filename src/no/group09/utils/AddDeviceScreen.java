@@ -1,4 +1,7 @@
 package no.group09.utils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.ucsoftwarestore.R;
 
@@ -10,7 +13,10 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -105,6 +111,14 @@ public class AddDeviceScreen extends Activity {
 					stopService(serviceIntent);
 				}
 				startService(serviceIntent);
+				
+				SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				Editor edit = sharedPref.edit();
+				edit.putString("connected_device_mac", serialString);
+				edit.putString("connected_device_name", serialString);
+				edit.commit();
+				
+				finish();
 			}
 		}
 	}
@@ -141,11 +155,41 @@ public class AddDeviceScreen extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				serialString = input.getText().toString();
-				//TODO: Decide what to do with this string
-				Log.d(TAG, "The input: " + serialString + " was stored in a String");
+				
+				if(isValidMacAddress(serialString)){
+					
+				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
+				serviceIntent.putExtra(Devices.MAC_ADDRESS, serialString);
+
+				if(isMyServiceRunning()){
+					BtArduinoService.getBtService().getBluetoothConnection().setConnectionState(ConnectionState.STATE_DISCONNECTED);
+					BtArduinoService.getBtService().getBluetoothConnection().disconnect();
+					stopService(serviceIntent);
+				}
+				startService(serviceIntent);
+				Toast.makeText(getBaseContext(), "Connected!", Toast.LENGTH_SHORT).show();
+				
+				SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				Editor edit = sharedPref.edit();
+				edit.putString("connected_device_mac", serialString);
+				edit.putString("connected_device_name", serialString);
+				edit.commit();
+				
+				finish();
+				}
+				else{
+					Toast.makeText(getBaseContext(), "Not a valid mac address", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
 		return inputSerialDialog.show();
+	}
+	
+	public boolean isValidMacAddress(String mac) {
+	    Pattern isValid = Pattern.compile("([0-9A-F]{2}[:-]){5}([0-9A-F]{2})");
+	    Matcher m = isValid.matcher(mac);
+	    
+	    return m.matches();
 	}
 }

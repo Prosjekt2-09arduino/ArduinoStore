@@ -215,7 +215,7 @@ public class MainActivity extends FragmentActivity {
 		//Get the name of the selected category
 		String category = Page.getCategoryFromType(pageAdapter.page1);
 
-		if(BtArduinoService.getBtService() != null){
+		if(BtArduinoService.getBtService() != null && !appName.equals("null")){
 			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
 				setTitle(category + " - " + appName);
 			}

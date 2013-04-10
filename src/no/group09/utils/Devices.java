@@ -202,8 +202,8 @@ public class Devices extends Activity  {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 
 				//This gives a popup box with functionality to the arduino
-//				dialogBoxForTestingPurposes();
-				
+				//				dialogBoxForTestingPurposes();
+
 				disconnectButton();
 
 				return false;
@@ -381,7 +381,7 @@ public class Devices extends Activity  {
 	private void setActivityTitle(){
 		String appName = sharedPref.getString("connected_device_name", "null");
 
-		if(BtArduinoService.getBtService() != null){
+		if(BtArduinoService.getBtService() != null && !appName.equals("null")){
 			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
 				setTitle("Devices - " + appName);
 			}
@@ -714,65 +714,84 @@ public class Devices extends Activity  {
 		}
 	}
 
+	/** Button for disconnecting from a connected BT device */
 	public void disconnectButton(){
 
-		final BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
+		//Check if the selected element is a connected device
+		if(BtArduinoService.getBtService() != null){
+			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
 
-		if(connection.isConnected()){
+				//Get the BT connection
+				final BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
 
-			// custom dialog
-			final Dialog dialog = new Dialog(Devices.this);
-			dialog.setContentView(R.layout.dialog_box_for_disconnect);
-			
-			Button disconnect = (Button) dialog.findViewById(R.id.disconnect);
-			disconnect.setOnClickListener(new OnClickListener() {
-				
-				
-				//FIXME: this isnt working properly
-				@Override
-				public void onClick(View v) {
-					connection.disconnect();
-					connection.setConnectionState(ConnectionState.STATE_DISCONNECTED);
-					BtArduinoService.getBtService().stopSelf();
-					BtArduinoService.getBtService().onDestroy();
-					Editor edit = sharedPref.edit();
-					edit.clear();
-					edit.commit();
-					setActivityTitle();
-					dialog.cancel();
+				if(connection.isConnected()){
+
+					//Custom dialog
+					final Dialog dialog = new Dialog(Devices.this);
+					dialog.setContentView(R.layout.dialog_box_for_disconnect);
+
+					Button disconnect = (Button) dialog.findViewById(R.id.disconnect);
+					disconnect.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							
+							//Disconnect the connection
+							connection.disconnect();
+							connection.setConnectionState(ConnectionState.STATE_DISCONNECTED);
+							
+							//Stop the service
+							BtArduinoService.getBtService().stopSelf();
+							BtArduinoService.getBtService().onDestroy();
+							
+							//Clear the preferences
+							Editor edit = sharedPref.edit();
+							edit.remove("connected_device_name");
+							edit.remove("connected_device_mac");
+							edit.remove("connected_device_dialog");
+							edit.commit();
+							
+							//Update the Activity's title
+							setActivityTitle();
+							
+							deviceList.setSelected(false);
+							
+							//Close the dialog box
+							dialog.cancel();
+						}
+					});
+
+					dialog.show();
 				}
-			});
-
-			dialog.show();
-		}
-	}
-
-		/**
-		 * Creates options menus
-		 */
-		@Override
-		@SuppressLint("NewApi")
-		public boolean onCreateOptionsMenu(Menu menu) {
-			getMenuInflater().inflate(R.menu.device_menu, menu);
-
-			return true;
-		}
-
-		/**
-		 * Returns true as long as item corresponds with a proper options action.
-		 */
-		@Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-
-			//Start the preferences class
-			case R.id.settings:
-				//Create an intent to start the preferences activity
-				Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
-				this.startActivity(myIntent);
-				return true;
-
-			default : return false;
 			}
 		}
 	}
+
+	/**
+	 * Creates options menus
+	 */
+	@Override
+	@SuppressLint("NewApi")
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.device_menu, menu);
+		return true;
+	}
+
+	/**
+	 * Returns true as long as item corresponds with a proper options action.
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		//Start the preferences class
+		case R.id.settings:
+			//Create an intent to start the preferences activity
+			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
+			this.startActivity(myIntent);
+			return true;
+
+		default : return false;
+		}
+	}
+}
