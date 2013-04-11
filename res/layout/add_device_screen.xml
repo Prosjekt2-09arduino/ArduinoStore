@@ -49,7 +49,7 @@
         <Button
             android:id="@+id/qr_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:text="@string/connect_with_qr_button_text"
             android:background="@drawable/refresh_button_layout"  />
 
@@ -79,7 +79,7 @@
         <Button
             android:id="@+id/input_serial_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:text="@string/input_serial_button" 
             android:background="@drawable/refresh_button_layout" />
 
