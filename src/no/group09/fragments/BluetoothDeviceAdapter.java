@@ -25,6 +25,8 @@ import java.util.HashMap;
 import no.group09.ucsoftwarestore.R;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,9 +86,19 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 		deviceName.setText(listItem.get("name"));
 		deviceMac.setText(listItem.get("mac"));
 		
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		String savedDeviceName = sharedPrefs.getString("connected_device_name", "null");
+		String savedDeviceMac = sharedPrefs.getString("connected_device_mac", "null");
+
 		if(!listItem.get("pager").equals("708")){
 			ImageView image = (ImageView)vi.findViewById(R.id.list_image);
 			image.setImageResource(R.drawable.bluetooth);
+		}
+		
+		if(listItem.get("name").equals(savedDeviceName)
+				&& listItem.get("mac").equals(savedDeviceMac)){
+			ImageView image = (ImageView) vi.findViewById(R.id.list_image);
+			image.setImageResource(R.drawable.save);
 		}
 
 		return vi;

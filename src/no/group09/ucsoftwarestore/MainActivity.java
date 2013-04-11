@@ -123,7 +123,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected void onPreExecute() {
 			timeout = System.currentTimeMillis() + 8000;
-			Toast.makeText(getBaseContext(), "Connecting,  please wait...", Toast.LENGTH_LONG).show();
+			Toast.makeText(getBaseContext(), "Connecting,  please wait...", Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
