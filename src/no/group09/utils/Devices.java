@@ -563,6 +563,12 @@ public class Devices extends Activity  {
 			else {
 				message = "The connection was not successfull." + "\nPlease try again.";
 				title = "Devices";
+				
+				//Unselect the view in the list
+				deviceList.setItemChecked(savedPosition, false);
+
+				//Notify the adapter about the changes
+				listAdapter.notifyDataSetInvalidated();
 			}
 
 			createDialog(message);
