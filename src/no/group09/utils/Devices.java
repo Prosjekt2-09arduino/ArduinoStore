@@ -543,10 +543,7 @@ public class Devices extends Activity  {
 
 			if (success && connection.isConnected()) {
 				message = "The connection was successful.\n Long press to disconnect";
-
-				String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
-				title = "Devices - " + appName;
-
+				
 				String lastConnectedDevice = "Device name: " + listAdapter.getName(savedPosition)
 						+ "\nMAC Address: " + listAdapter.getMacAddress(savedPosition);
 
@@ -557,8 +554,10 @@ public class Devices extends Activity  {
 				edit.putString("connected_device_mac", listAdapter.getMacAddress(savedPosition));
 				edit.commit();
 
-				Log.d(TAG, "The information about the last connected device was written to shared preferences");
+				String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
+				title = "Devices - " + appName;
 
+				Log.d(TAG, "The information about the last connected device was written to shared preferences");
 			}
 			else {
 				message = "The connection was not successfull." + "\nPlease try again.";
