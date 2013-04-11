@@ -36,7 +36,6 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -55,15 +54,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 /**
@@ -91,8 +86,6 @@ public class Devices extends Activity  {
 	private ArrayList<BluetoothDevice> btDeviceList = new ArrayList<BluetoothDevice>();
 	private MyBroadcastReceiver actionFoundReceiver;
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
-	private View linearLayout;
-	private TextView workingText;
 	static Context context;
 
 	private boolean secondClick = false;
@@ -144,14 +137,11 @@ public class Devices extends Activity  {
 
 		refresh.setVisibility(View.GONE);
 
-		//Layout on top, used by textView
-		//		linearLayout =  findViewById(R.id.device_top_horizontal_linearlayout);
-		//		workingText = new TextView(this);
-		//		workingText.setText("Working...");
-		//		workingText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-		//		workingText.setTextColor(getResources().getColor(R.color.white));
-
-
+		//If we are connected to a device that is not in the list
+		if(isConnected()){
+			addToDeviceListAndSelectIt();
+		}
+		
 		//Check the BT state
 		checkBTState();
 
@@ -183,8 +173,6 @@ public class Devices extends Activity  {
 				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
 				serviceIntent.putExtra(MAC_ADDRESS, macAddress);
 
-				//FIXME: If the service allready is running, it does not start over.
-				//This might be a problem if it needs to change the connected device.
 				if(isMyServiceRunning()){
 					BtArduinoService.getBtService().getBluetoothConnection().setConnectionState(ConnectionState.STATE_DISCONNECTED);
 					BtArduinoService.getBtService().getBluetoothConnection().disconnect();
@@ -203,9 +191,6 @@ public class Devices extends Activity  {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 
-				//This gives a popup box with functionality to the arduino
-				//				dialogBoxForTestingPurposes();
-
 				disconnectButton(position);
 
 				return false;
@@ -214,7 +199,7 @@ public class Devices extends Activity  {
 	}
 
 	/** Checks wether a service is running or not */
-	private boolean isMyServiceRunning() {
+	public boolean isMyServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 			if (BtArduinoService.class.getName().equals(service.service.getClassName())) {
@@ -223,7 +208,8 @@ public class Devices extends Activity  {
 		}
 		return false;
 	}
-	
+
+	/** Check if there is a connection, return false if something is null or disconnected */
 	public static boolean isConnected(){
 		if(BtArduinoService.getBtService() != null){
 			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
@@ -271,7 +257,6 @@ public class Devices extends Activity  {
 				}
 
 				//Scan for new BT devices
-
 				checkBTState();
 			}
 		});
@@ -286,14 +271,7 @@ public class Devices extends Activity  {
 		browseShowButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				//Finishes this activity and goes back to the parent
-				finish();
-
-				//TODO: use finish() and delete this call when you want to browse shop instead for debug
-				//				dialogBoxForTestingPurposes();
-
-
+				finish();	//finishes the activity
 			}
 		});
 	}
@@ -367,38 +345,40 @@ public class Devices extends Activity  {
 		//Clear the list of BT device objects
 		btDeviceList.clear();
 
+		if(isConnected()){
+			addToDeviceListAndSelectIt();
+		}
+		
 		//Notify the adapter that the list is now empty
 		listAdapter.notifyDataSetChanged();
 
-		if(BtArduinoService.getBtService() != null){
-			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
-				if(BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
-					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("name", sharedPref.getString("connected_device_name", "null"));
-					map.put("mac", sharedPref.getString("connected_device_mac", "null"));
-					map.put("pager", "708");
-					if(!device_list.contains(map)){
-						device_list.add(map);
-						deviceList.setItemChecked(0, true);
-					}
-				}
+		setActivityTitle();
+	}
+	
+	private void addToDeviceListAndSelectIt(){
+		if(isConnected()){
+			HashMap<String, String> map = new HashMap<String, String>();
+			String deviceName = sharedPref.getString("connected_device_name", "null");
+			String deviceMac = sharedPref.getString("connected_device_mac", "null");
+			
+			map.put("name", deviceName);
+			map.put("mac", deviceMac);
+			map.put("pager", "708");
+
+			//If we are connected but it doesnt appear to be in the device list: add it
+			if(!device_list.contains(map) && !deviceName.equals("null") && !deviceMac.equals("null")){
+				device_list.add(map);
+				deviceList.setItemChecked(0, true);
 			}
 		}
-
-		setActivityTitle();
 	}
 
 	/** Add the connected device name to the title if connected */
 	private void setActivityTitle(){
 		String appName = sharedPref.getString("connected_device_name", "null");
 
-		if(BtArduinoService.getBtService() != null && !appName.equals("null")){
-			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
-				setTitle("Devices - " + appName);
-			}
-			else{
-				setTitle("Devices");
-			}
+		if(isConnected() && !appName.equals("null")){
+			setTitle("Devices - " + appName);
 		}
 		else{
 			setTitle("Devices");
@@ -412,7 +392,6 @@ public class Devices extends Activity  {
 	 * Android device. If bluetooth is disabled, it asks the user if he wants to 
 	 * enable it.
 	 */
-	@SuppressWarnings("deprecation")
 	private void checkBTState() {
 
 		//Check if the Android support bluetooth
@@ -425,10 +404,6 @@ public class Devices extends Activity  {
 				//Show the progress bar
 				progressBar.setVisibility(View.VISIBLE);
 				refresh.setVisibility(View.GONE);
-
-				//				int SDK_INT = android.os.Build.VERSION.SDK_INT;
-				//				if(SDK_INT < 11)
-				//					showTextView(true);
 
 				// Starting the device discovery
 				btAdapter.startDiscovery();
@@ -466,23 +441,6 @@ public class Devices extends Activity  {
 		}
 		return true;
 	}
-
-	/**
-	 * checks if it should show textview in place of progressbar
-	 * @param show
-	 */
-	//	private void showTextView(boolean show){
-	//
-	//
-	//
-	//		if(show){
-	//			((LinearLayout) linearLayout).addView(workingText);
-	//		}
-	//		else if(!show){
-	//			((LinearLayout) linearLayout).removeView(workingText);
-	//		}
-	//
-	//	}
 
 	/**
 	 * Broadcast receiver class. Used to receive Android Bluetooth API communication
@@ -525,13 +483,8 @@ public class Devices extends Activity  {
 
 				//Hide the progress bar
 				progressBar.setVisibility(View.GONE);
-
-				//int SDK_INT = android.os.Build.VERSION.SDK_INT;
-
 				refresh.setVisibility(View.VISIBLE);
 				Log.d(TAG, "\nDiscovery Finished");
-				//if(SDK_INT < 11)
-				//showTextView(false);
 			}
 		}
 	}
@@ -544,7 +497,7 @@ public class Devices extends Activity  {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
+				//Nothing needs to be done, this closes the box
 			}
 		});
 
@@ -553,7 +506,6 @@ public class Devices extends Activity  {
 	private class ProgressDialogTask extends AsyncTask<Void, Void, Boolean> {
 
 		private long timeout;
-
 
 		@Override
 		protected void onPreExecute() {
@@ -604,6 +556,7 @@ public class Devices extends Activity  {
 				edit.putString("connected_device_name", listAdapter.getName(savedPosition));
 				edit.putString("connected_device_mac", listAdapter.getMacAddress(savedPosition));
 				edit.commit();
+
 				Log.d(TAG, "The information about the last connected device was written to shared preferences");
 
 			}
@@ -709,7 +662,7 @@ public class Devices extends Activity  {
 						public void onClick(View v) {
 							try {
 								if(secondClick){
-									connection.print("hallo robin", false);
+									connection.print("hallo gruppe09", false);
 									secondClick = false;
 								}
 								else{
@@ -738,11 +691,6 @@ public class Devices extends Activity  {
 
 				if(connection.isConnected()){
 
-					//Custom dialog
-//					final AlertDialog dialog = new AlertDialog();
-//					dialog.setContentView(R.layout.dialog_box_for_disconnect);
-					
-					
 					AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
 
 					responseDialog.setMessage("Click disconnect to disconnect from the device")
@@ -753,28 +701,28 @@ public class Devices extends Activity  {
 							//Disconnect the connection
 							connection.disconnect();
 							connection.setConnectionState(ConnectionState.STATE_DISCONNECTED);
-							
+
 							//Stop the service
 							BtArduinoService.getBtService().stopSelf();
 							BtArduinoService.getBtService().onDestroy();
-							
+
 							//Clear the preferences
 							Editor edit = sharedPref.edit();
 							edit.remove("connected_device_name");
 							edit.remove("connected_device_mac");
 							edit.remove("connected_device_dialog");
 							edit.commit();
-							
+
 							//Update the Activity's title
 							setActivityTitle();
 
 							//Unselect the view in the list
 							deviceList.setItemChecked(position, false);
-							
+
 							//Notify the adapter about the changes
 							listAdapter.notifyDataSetInvalidated();
-							
-							
+
+
 							//Close the dialog box
 							dialog.cancel();
 						}

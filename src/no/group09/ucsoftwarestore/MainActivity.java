@@ -19,6 +19,9 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
+import java.util.HashMap;
+
+import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.database.Save;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.fragments.Page;
@@ -26,11 +29,16 @@ import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -39,6 +47,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 /**
  * The main store activity for the app.
@@ -57,7 +66,9 @@ public class MainActivity extends FragmentActivity {
 	/** The shared preference object */
 	private SharedPreferences sharedPref = null;
 
-	
+	private ProgressDialog progressDialog;
+
+
 	/**
 	 * Takes state and creates the app
 	 */
@@ -69,6 +80,14 @@ public class MainActivity extends FragmentActivity {
 		//Getting a reference to the ViewPager defined the layout file
 		pager = (ViewPager) findViewById(R.id.pager);
 
+		//Initializing the settings for the application
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		//Try to connect to last connected device
+		reconnect();
+
 		//Getting fragment manager
 		FragmentManager fm = getSupportFragmentManager();
 
@@ -77,17 +96,63 @@ public class MainActivity extends FragmentActivity {
 
 		//Setting the pagerAdapter to the pager object
 		pager.setAdapter(pagerAdapter);
+	}
 
-		//Initializing the settings for the application
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+	public void reconnect(){
+		if(!Devices.isConnected()){
+			String deviceName = sharedPref.getString("connected_device_name", "null");
+			String deviceMac = sharedPref.getString("connected_device_mac", "null");
 
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+			//If there is a last device in the preferences try to connect to it
+			if(!deviceName.equals("null") && !deviceMac.equals("null")){
 
-		//This clears the database
-		//getBaseContext().deleteDatabase(DatabaseHandler.DATABASE_NAME);
+				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
+				serviceIntent.putExtra(Devices.MAC_ADDRESS, deviceMac);
 
-		//This populates the database
-		//save.populateDatabase();
+				startService(serviceIntent);
+				new Reconnect().execute();
+			}
+		}
+	}
+
+
+	public class Reconnect extends AsyncTask<Void, Void, Boolean> {
+
+		private long timeout;
+
+		@Override
+		protected void onPreExecute() {
+			timeout = System.currentTimeMillis() + 8000;
+			Toast.makeText(getBaseContext(), "Connecting,  please wait...", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			while(true) {
+
+				if(Devices.isConnected()){
+					return true;
+				}
+
+				if (System.currentTimeMillis() > timeout) {
+					return false;
+				}
+
+				try { Thread.sleep(1);
+				} catch (InterruptedException e) {}
+			}
+		}      
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result && Devices.isConnected()) {
+				Toast.makeText(getBaseContext(), "Connected to " + sharedPref.getString("connected_device_name", "null"), Toast.LENGTH_LONG).show();
+			}
+			else{
+				Toast.makeText(getBaseContext(), "Not connected to any device", Toast.LENGTH_LONG).show();
+			}
+			setActivityTitle();
+		}
 	}
 
 	/**
@@ -116,18 +181,18 @@ public class MainActivity extends FragmentActivity {
 
 		//Search bar for versions over API level 11
 		int SDK_INT = android.os.Build.VERSION.SDK_INT;
-		
+
 		if(SDK_INT >= 11){ 
 			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 			SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-			
+
 			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 			searchView.setSubmitButtonEnabled(true);
 		}
 
 		return true;
 	}
-	
+
 
 	/**
 	 * Returns true as long as item corresponds with a proper options action.
@@ -138,9 +203,9 @@ public class MainActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 
 		case R.id.menu_search:
-            onSearchRequested();
-            return true;
-            
+			onSearchRequested();
+			return true;
+
 		case R.id.toggle_incompitable:
 
 			//Prepare to edit the setting
@@ -215,13 +280,8 @@ public class MainActivity extends FragmentActivity {
 		//Get the name of the selected category
 		String category = Page.getCategoryFromType(pageAdapter.page1);
 
-		if(BtArduinoService.getBtService() != null && !appName.equals("null")){
-			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
-				setTitle(category + " - " + appName);
-			}
-			else{
-				setTitle(category);
-			}
+		if(Devices.isConnected() && !appName.equals("null")){
+			setTitle(category + " - " + appName);
 		}
 		else{
 			setTitle(category);
