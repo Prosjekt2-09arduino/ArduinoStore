@@ -72,6 +72,8 @@ public abstract class Protocol implements Runnable {
 	 */
 	protected static final int TIMEOUT = 8000;
 
+	protected String URI = "";
+	
 	/**
 	 * Package private enumeration for all Commands supported by the Protocol standard
 	 *

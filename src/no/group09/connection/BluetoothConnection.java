@@ -64,6 +64,8 @@ public class BluetoothConnection extends Protocol {
 
 	private volatile ConnectionState connectionState;
 	private boolean connectionRequested = false;
+	
+	
 
 	/**
 	 * An enumeration describing the different connection states a BluetoothConnection can be
@@ -115,7 +117,7 @@ public class BluetoothConnection extends Protocol {
 			}
 		});
 	}
-
+	
 	/**
 	 * Ensures that we have a valid bluetooth socket
 	 */
@@ -229,6 +231,10 @@ public class BluetoothConnection extends Protocol {
 	@Override
 	public String toString() {
 		return device.getName();
+	}
+	
+	public String getURI(){
+		return this.URI;
 	}
 
 	/**

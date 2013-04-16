@@ -1,5 +1,8 @@
 package no.group09.database.entity;
 
+import no.group09.utils.BtArduinoService;
+import no.group09.utils.Devices;
+
 /**
  * Requirements for specific app
  */
@@ -8,6 +11,7 @@ public class Requirements {
 	private int id;
 	private String name, description;
 	private boolean compatible;
+	private String compatibleString;
 	
 	/** This is used when we create an object that has records from the local database */
 	public Requirements(int id, String name, String description, String compatible){
@@ -21,6 +25,20 @@ public class Requirements {
 		else if(compatible.equals("false")){
 			this.compatible = false;
 		}
+		
+		this.compatibleString = compatible;
+	}
+	
+	/**
+	 * 
+	 * @param uri - The uri on the connected device
+	 * @return - true if its compatible with the app
+	 */
+	public boolean isCompatible(String uri){
+		if(uri.equals(this.compatibleString))
+			return true;
+		
+		return false;
 	}
 	
 	/** This is used when we create the test-object to the local database */
@@ -36,7 +54,13 @@ public class Requirements {
 	}
 
 	public boolean isCompatible() {
-		return compatible;
+//		return compatible;
+		
+		if(Devices.isConnected()){
+			String URI = BtArduinoService.getBtService().getBluetoothConnection().getURI();
+			if(isCompatible(URI)) return true;
+		}
+		return false;
 	}
 
 	public void setCompatible(boolean compatible) {
