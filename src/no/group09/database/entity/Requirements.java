@@ -59,8 +59,9 @@ public class Requirements {
 		if(Devices.isConnected()){
 			String URI = BtArduinoService.getBtService().getBluetoothConnection().getURI();
 			if(isCompatible(URI)) return true;
+			else return false;
 		}
-		return false;
+		return compatible;	//Dont use URI but the hardcoded true/false from database
 	}
 
 	public void setCompatible(boolean compatible) {
