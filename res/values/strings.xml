@@ -80,7 +80,9 @@
     <string name="item_description">Description: This describes this amazing, life changing app.</string>
     <string name="images">Images:</string>
     <string name="required_hw">Required Hardware:</string>
-    <string name="required_hw_filler">Du trenger arduino</string>
+    
+    <string name="required_hw_filler">Du trenger: Arduino \nBluetooth \nScreen</string>
+    
     <string name="reviews_header">Reviews:</string>
     <string name="review_button">Add Review</string>
     <string name="item_profile_pic">Profile picture of item</string>
