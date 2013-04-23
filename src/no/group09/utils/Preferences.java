@@ -87,12 +87,12 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		String deviceName = sharedPref.getString("connected_device_name", "");
 		ps.findPreference("connected_device_dialog").setSummary("Last connected: " + deviceName);
 		
-		//Get the device name preference
-		Preference mCheckBoxPref = findPreference("connected_device_name");	
-		//get the preferencecategory to the device_name
-		PreferenceCategory mCategory = (PreferenceCategory) findPreference("device_name_category");	
-		//remove this category from the settings-view
-		mCategory.removePreference(mCheckBoxPref);	
+		
+		//Remove settings saved about the last connected devices from the settings screen
+		Preference connDeviceName = (Preference) findPreference("connected_device_name");
+		Preference connDeviceMac = (Preference) findPreference("connected_device_mac");
+		ps.removePreference(connDeviceName);
+		ps.removePreference(connDeviceMac);
 		
 	}
 	
