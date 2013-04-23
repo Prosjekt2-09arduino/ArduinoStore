@@ -41,7 +41,7 @@ public class WelcomeScreen extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_welcome_screen);	//change this to wilhelms xml
+		setContentView(R.layout.intro_screen);	//change this to wilhelms xml
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
 		//Progressdialog used to indicate that the program is connecting to a BT device

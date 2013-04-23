@@ -61,6 +61,13 @@
 
     <!-- Add device screen -->
     <string name="add_device_screen_title">Add device</string>
+    
+    <!-- Intro Screen -->
+    <string name="welcome">Welcome!</string>
+    <string name="intro_explanation">eorjgnoqern</string>
+    <string name="intro_device_list_button">Device List</string>
+    <string name="intro_shop_button">Browse Shop</string>
+    <string name="intro_checkbox">Do not show again</string>
 
     <!-- App view screen -->
     <string name="app_view_title">Application</string>
