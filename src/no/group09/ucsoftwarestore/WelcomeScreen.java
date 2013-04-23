@@ -49,7 +49,7 @@ public class WelcomeScreen extends Activity {
 		progressDialog.setCancelable(false);
 		
 		//Check preferences if we should reconnect to last connected device
-		if(sharedPref.getBoolean("", true)){
+		if(sharedPref.getBoolean("reconnect_check_box", true)){
 			//Try to reconnect
 			reconnect();
 		}

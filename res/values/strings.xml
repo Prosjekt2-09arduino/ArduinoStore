@@ -58,6 +58,9 @@
     <string name="conn_device_pref_group_title">Connections</string>
     <string name="connected_device">Connected device</string>
     <string name="conn_device_summary">Click to see the last connected device</string>
+    <string name="reconnect_check_box_title">Automatically reconnect</string>
+    <string name="reconnect_check_box_summary">Automatically try to reconnect to
+         last connected device when application is started</string>
 
     <!-- Add device screen -->
     <string name="add_device_screen_title">Add device</string>
