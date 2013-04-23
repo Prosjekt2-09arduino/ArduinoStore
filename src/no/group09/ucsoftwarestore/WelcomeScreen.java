@@ -19,6 +19,8 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
+import no.group09.fragments.MyFragmentPagerAdapter;
+import no.group09.fragments.Page;
 import no.group09.utils.Devices;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -99,6 +101,12 @@ public class WelcomeScreen extends Activity {
 			}
 		});
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		setActivityTitle();
+	}
 
 	/** Try to connect to the previous connected device if there was one */
 	public void reconnect(){
@@ -115,6 +123,18 @@ public class WelcomeScreen extends Activity {
 				startService(serviceIntent);
 				new Reconnect().execute();
 			}
+		}
+	}
+	
+	/** Add the connected device name to the title if connected */
+	public void setActivityTitle(){
+		String appName = sharedPref.getString("connected_device_name", "null");
+
+		if(Devices.isConnected() && !appName.equals("null")){
+			setTitle("µC Software Store" + " - " + appName);
+		}
+		else{
+			setTitle("µC Software Store" + " - No connected device");
 		}
 	}
 
@@ -177,7 +197,7 @@ public class WelcomeScreen extends Activity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
+				setActivityTitle();
 			}
 		}).setCancelable(false);
 
