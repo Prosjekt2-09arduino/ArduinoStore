@@ -28,6 +28,7 @@ import no.group09.fragments.Page;
 import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
+import no.group09.ucsoftwarestore.R;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -98,6 +99,7 @@ public class MainActivity extends FragmentActivity {
 		pager.setAdapter(pagerAdapter);
 	}
 
+	/** Try to connect to the previous connected device if there was one */
 	public void reconnect(){
 		if(!Devices.isConnected()){
 			String deviceName = sharedPref.getString("connected_device_name", "null");
@@ -115,7 +117,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-
+	/** Help class for connection to last device */
 	public class Reconnect extends AsyncTask<Void, Void, Boolean> {
 
 		private long timeout;
