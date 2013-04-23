@@ -80,7 +80,7 @@ public class AppView extends Activity {
 		//Creates an alertdialog builder
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		if(Devices.isConnected()){
+		if(!Devices.isConnected()){
 			//If no device connected, create popup with that message
 			builder.setMessage("Cannot install app, no device connected").setPositiveButton("Ok",new DialogInterface.OnClickListener() {
 
