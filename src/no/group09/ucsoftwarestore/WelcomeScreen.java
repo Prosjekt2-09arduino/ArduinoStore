@@ -31,57 +31,68 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class WelcomeScreen extends Activity {
 
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
-	
+
 	private Button device, browse;
 	private CheckBox reconnectCheckBox;
 	private Context ctxt;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.intro_screen);	//change this to wilhelms xml
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		ctxt = getBaseContext();
-		
+
 		//Progressdialog used to indicate that the program is connecting to a BT device
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setCancelable(false);
-		
+
 		//Check preferences if we should reconnect to last connected device
 		if(sharedPref.getBoolean("reconnect_check_box", true)){
 			//Try to reconnect
 			reconnect();
 		}
-		
+
 		device = (Button)findViewById(R.id.intro_device_list_button);
 		browse = (Button)findViewById(R.id.intro_browse_shop_button);
-		
 		addButtonFunctionality();
-		
+
 		reconnectCheckBox = (CheckBox) findViewById(R.id.reconnectbox);
 		reconnectCheckBox.setChecked(sharedPref.getBoolean("reconnect_check_box", true));
+		reconnectCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				Editor edit = sharedPref.edit();
+				edit.putBoolean("reconnect_check_box", isChecked);
+				edit.commit();
+			}
+		});
 	}
-	
+
 	private void addButtonFunctionality(){
 		device.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(ctxt, Devices.class));
 			}
 		});
-		
+
 		browse.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(ctxt, MainActivity.class));
@@ -146,17 +157,17 @@ public class WelcomeScreen extends Activity {
 			else{
 				message = "Not connected to any device";
 			}
-//			setActivityTitle();
-			
+			//			setActivityTitle();
+
 			//Close the "trying to connect" dialog
 			progressDialog.dismiss();
-			
+
 			//Open the connection status dialog
 			createDialog(message);
-			
+
 		}
 	}
-	
+
 	/** Dialog box that is used to show connection status after attempting to connect to a device */
 	public Dialog createDialog(String message) {
 		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
@@ -166,7 +177,7 @@ public class WelcomeScreen extends Activity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				
+
 			}
 		}).setCancelable(false);
 
