@@ -501,7 +501,7 @@ public class Devices extends Activity  {
 			public void onClick(DialogInterface dialog, int which) {
 				//Nothing needs to be done, this closes the box
 			}
-		});
+		}).setCancelable(false);
 
 		return responseDialog.show();
 	}

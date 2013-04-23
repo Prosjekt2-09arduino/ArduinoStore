@@ -76,7 +76,7 @@ public class ListAdapter extends BaseAdapter {
         TextView appName = (TextView)vi.findViewById(R.id.app_name);
         TextView distributor = (TextView)vi.findViewById(R.id.distributor);
         RatingBar getRatingBar = (RatingBar) vi.findViewById(R.id.ratingBarIndicator);;
-        ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image);
+        ImageView thumb_image = (ImageView)vi.findViewById(R.id.list_image);
         
         HashMap<String, String> listItem = new HashMap<String, String>();
         listItem = data.get(position);
@@ -84,7 +84,6 @@ public class ListAdapter extends BaseAdapter {
         // Setting all values in listview
         appName.setText(listItem.get(APP_NAME));
         distributor.setText(listItem.get(DISTRIBUTOR));
-
         getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
         
         return vi;

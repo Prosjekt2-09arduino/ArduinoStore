@@ -1,7 +1,6 @@
 package no.group09.utils;
-import no.group09.ucsoftwarestore.MainActivity;
-import no.group09.ucsoftwarestore.R;
 
+import no.group09.ucsoftwarestore.R;
 import no.group09.database.Save;
 import no.group09.database.entity.App;
 import no.group09.database.entity.BinaryFile;
@@ -13,18 +12,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 
 /**
  * The informational view of an app in the shop.
- * @author Wschive
- *
  */
 public class AppView extends Activity {
 
@@ -64,14 +58,14 @@ public class AppView extends Activity {
 		rating.setRating(app.getRating());
 		appDescription.setText(app.getDescription());
 
-		Button reviewButton = (Button) findViewById(R.id.reviewButton);
-		reviewButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getBaseContext(), blob, Toast.LENGTH_LONG).show();
-			}
-		});
+//		Button reviewButton = (Button) findViewById(R.id.reviewButton);
+//		reviewButton.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Toast.makeText(getBaseContext(), blob, Toast.LENGTH_LONG).show();
+//			}
+//		});
 	}
 
 	/**	method for handling the click of the install button */
