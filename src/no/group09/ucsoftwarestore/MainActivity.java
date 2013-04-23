@@ -87,7 +87,7 @@ public class MainActivity extends FragmentActivity {
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		//Try to connect to last connected device
-		reconnect();
+//		reconnect();
 
 		//Getting fragment manager
 		FragmentManager fm = getSupportFragmentManager();
@@ -99,63 +99,7 @@ public class MainActivity extends FragmentActivity {
 		pager.setAdapter(pagerAdapter);
 	}
 
-	/** Try to connect to the previous connected device if there was one */
-	public void reconnect(){
-		if(!Devices.isConnected()){
-			String deviceName = sharedPref.getString("connected_device_name", "null");
-			String deviceMac = sharedPref.getString("connected_device_mac", "null");
 
-			//If there is a last device in the preferences try to connect to it
-			if(!deviceName.equals("null") && !deviceMac.equals("null")){
-
-				Intent serviceIntent = new Intent(getApplicationContext(), no.group09.utils.BtArduinoService.class);
-				serviceIntent.putExtra(Devices.MAC_ADDRESS, deviceMac);
-
-				startService(serviceIntent);
-				new Reconnect().execute();
-			}
-		}
-	}
-
-	/** Help class for connection to last device */
-	public class Reconnect extends AsyncTask<Void, Void, Boolean> {
-
-		private long timeout;
-
-		@Override
-		protected void onPreExecute() {
-			timeout = System.currentTimeMillis() + 8000;
-			Toast.makeText(getBaseContext(), "Connecting,  please wait...", Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			while(true) {
-
-				if(Devices.isConnected()){
-					return true;
-				}
-
-				if (System.currentTimeMillis() > timeout) {
-					return false;
-				}
-
-				try { Thread.sleep(1);
-				} catch (InterruptedException e) {}
-			}
-		}      
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			if (result && Devices.isConnected()) {
-				Toast.makeText(getBaseContext(), "Connected to " + sharedPref.getString("connected_device_name", "null"), Toast.LENGTH_LONG).show();
-			}
-			else{
-				Toast.makeText(getBaseContext(), "Not connected to any device", Toast.LENGTH_LONG).show();
-			}
-			setActivityTitle();
-		}
-	}
 
 	/**
 	 * pauses current activity
