@@ -27,22 +27,30 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.view.Menu;
-import android.widget.Toast;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
 
 public class WelcomeScreen extends Activity {
 
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
 	
+	private Button device, browse;
+	private CheckBox reconnectCheckBox;
+	private Context ctxt;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.intro_screen);	//change this to wilhelms xml
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		ctxt = getBaseContext();
 		
 		//Progressdialog used to indicate that the program is connecting to a BT device
 		progressDialog = new ProgressDialog(this);
@@ -54,6 +62,31 @@ public class WelcomeScreen extends Activity {
 			reconnect();
 		}
 		
+		device = (Button)findViewById(R.id.intro_device_list_button);
+		browse = (Button)findViewById(R.id.intro_browse_shop_button);
+		
+		addButtonFunctionality();
+		
+		reconnectCheckBox = (CheckBox) findViewById(R.id.reconnectbox);
+		reconnectCheckBox.setChecked(sharedPref.getBoolean("reconnect_check_box", true));
+	}
+	
+	private void addButtonFunctionality(){
+		device.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(ctxt, Devices.class));
+			}
+		});
+		
+		browse.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(ctxt, MainActivity.class));
+			}
+		});
 	}
 
 	/** Try to connect to the previous connected device if there was one */
@@ -70,9 +103,6 @@ public class WelcomeScreen extends Activity {
 
 				startService(serviceIntent);
 				new Reconnect().execute();
-			}
-			else{
-				startActivity(new Intent(getBaseContext(), Devices.class));
 			}
 		}
 	}
@@ -136,7 +166,7 @@ public class WelcomeScreen extends Activity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				startActivity(new Intent(getBaseContext(), Devices.class));
+				
 			}
 		}).setCancelable(false);
 
