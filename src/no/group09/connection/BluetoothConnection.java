@@ -20,6 +20,8 @@ package no.group09.connection;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -114,6 +116,14 @@ public class BluetoothConnection extends Protocol {
 				disconnect();
 			}
 		});
+	}
+	
+	public InputStream getInputStream() {
+		return input;
+	}
+	
+	public OutputStream getOutputStream() {
+		return output;
 	}
 
 	/**
