@@ -200,7 +200,7 @@ public class MainActivity extends FragmentActivity {
 
 			//Show the device list
 		case R.id.device_list:
-			Intent intent = new Intent(this, Devices.class);	//FIXME: is 'this' an Activity?
+			Intent intent = new Intent(this, Devices.class);
 			startActivity(intent);
 			return true;
 
