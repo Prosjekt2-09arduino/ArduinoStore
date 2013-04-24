@@ -45,6 +45,7 @@ public class ListAdapter extends BaseAdapter {
 	public static final String DISTRIBUTOR = "distributor";
 	public static final String RATING = "rating";
 	public static final String IMAGE = "image";
+	public static final String CATEGORY = "category";
     
     public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
         context = a;
@@ -85,6 +86,22 @@ public class ListAdapter extends BaseAdapter {
         appName.setText(listItem.get(APP_NAME));
         distributor.setText(listItem.get(DISTRIBUTOR));
         getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
+        
+        if(listItem.get(CATEGORY).equals("Games")){
+        	thumb_image.setImageResource(R.drawable.games);
+        }
+        
+        else if(listItem.get(CATEGORY).equals("Medical")){
+        	thumb_image.setImageResource(R.drawable.medical);
+        }
+        
+        else if(listItem.get(CATEGORY).equals("Tools")){
+        	thumb_image.setImageResource(R.drawable.tools);
+        }
+        
+        else if(listItem.get(CATEGORY).equals("Media")){
+        	thumb_image.setImageResource(R.drawable.media);
+        }
         
         return vi;
     }

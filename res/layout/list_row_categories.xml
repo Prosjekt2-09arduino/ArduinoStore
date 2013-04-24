@@ -41,7 +41,7 @@
             android:id="@+id/list_image"
             android:layout_width="80dip"
             android:layout_height="80dip"
-            android:src="@drawable/rihanna" />
+            android:src="@drawable/save" />
     </LinearLayout>
 
     <!-- Category -->

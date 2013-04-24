@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.content.DialogInterface;
@@ -51,12 +52,28 @@ public class AppView extends Activity {
 		TextView appDeveloper = (TextView) findViewById(R.id.app_view_developer);
 		RatingBar rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
 		TextView appDescription = (TextView) findViewById(R.id.app_view_description);
+		ImageView thumb_image = (ImageView) findViewById(R.id.app_profile_pic);
 
 		//Set the information on the UI that we fetched from the database-objects
 		appName.setText(app.getName());
 		appDeveloper.setText(developer.getName());
 		rating.setRating(app.getRating());
 		appDescription.setText(app.getDescription());
+		
+		if(app.getCategory().equals("Games")){
+			thumb_image.setImageResource(R.drawable.games);
+		}
+		else if(app.getCategory().equals("Medical")){
+        	thumb_image.setImageResource(R.drawable.medical);
+        }
+        
+        else if(app.getCategory().equals("Tools")){
+        	thumb_image.setImageResource(R.drawable.tools);
+        }
+        
+        else if(app.getCategory().equals("Media")){
+        	thumb_image.setImageResource(R.drawable.media);
+        }
 
 //		Button reviewButton = (Button) findViewById(R.id.reviewButton);
 //		reviewButton.setOnClickListener(new OnClickListener() {

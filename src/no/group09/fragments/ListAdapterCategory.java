@@ -98,6 +98,9 @@ public class ListAdapterCategory extends BaseAdapter {
         else if(listItem.get(APP_NAME).equals("Media")){
         	thumb_image.setImageResource(R.drawable.media);
         }
+        else if(listItem.get(APP_NAME).equals("All")){
+        	thumb_image.setImageResource(R.drawable.ic_launcher);
+        }
         
         
         return vi;

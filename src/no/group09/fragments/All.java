@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -67,7 +68,7 @@ public class All extends Fragment {
 	 */
 	public void update(){
 		ArrayList<HashMap<String, String>> application_list = new ArrayList<HashMap<String, String>>();
-
+		
 		//This adds elements from the database to the listview
 		Save save = new Save(this.view.getContext());
 
@@ -92,6 +93,7 @@ public class All extends Fragment {
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
 					application_list.add(map);
 				}
 			}
@@ -110,6 +112,8 @@ public class All extends Fragment {
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
+
 					application_list.add(map);
 				}
 			}
@@ -128,6 +132,8 @@ public class All extends Fragment {
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
+
 					application_list.add(map);
 				}
 			}
@@ -146,6 +152,8 @@ public class All extends Fragment {
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
+
 					application_list.add(map);
 				}
 			}
