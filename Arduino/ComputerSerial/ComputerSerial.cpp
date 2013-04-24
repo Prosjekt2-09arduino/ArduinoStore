@@ -219,8 +219,11 @@ void ComputerSerial::pinWrite(uint8_t pin, uint8_t value) {
 	ack(OPCODE_PIN_W);
 }
 
+// Reset the arduino
 void ComputerSerial::reset() {
-	// Reset arduino
+	uint8_t resetByte = 0x14;
+	Serial.write(resetByte);
+	digitalWrite(4,LOW);
 }
 
 // Access prorgamming mode on BT
@@ -255,6 +258,8 @@ void ComputerSerial::serialEvent() {
 	static uint8_t flag = 0;
 	static uint8_t *content = NULL;
 	static uint8_t content_counter = 0;
+	
+	int tempRead = 0;
 
     //Check if there is a timeout
 	if (millis() > time && state != STATE_START) {
@@ -268,11 +273,18 @@ void ComputerSerial::serialEvent() {
 		switch (state)
 		{
 			case STATE_START:
-				if (Serial.read() == START_BYTE)
+				tempRead = Serial.read();
+				if (tempRead == OPCODE_RESET)
+				{
+					reset();
+				}
+				else if (tempRead == START_BYTE)
                 {
                     state = STATE_SIZE_HIGH;
                     if(content != NULL) free(content);
                 }
+				
+				tempRead = 0;
 				break;
 
 			case STATE_SIZE_HIGH:
