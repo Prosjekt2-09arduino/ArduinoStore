@@ -108,7 +108,7 @@ public class WelcomeScreen extends Activity {
 		setActivityTitle();
 	}
 
-	/** Try to connect to the previous connected device if there was one */
+	/** Try to connect to the previous connected device if there is one */
 	public void reconnect(){
 		if(!Devices.isConnected()){
 			String deviceName = sharedPref.getString("connected_device_name", "null");
@@ -134,7 +134,7 @@ public class WelcomeScreen extends Activity {
 			setTitle("µC Software Store" + " - " + appName);
 		}
 		else{
-			setTitle("µC Software Store" + " - No connected device");
+			setTitle("µC Software Store");
 		}
 	}
 
@@ -145,8 +145,9 @@ public class WelcomeScreen extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			timeout = System.currentTimeMillis() + 3000;
-			progressDialog.setMessage("Connecting, please wait...");
+			timeout = System.currentTimeMillis() + 30000;
+			progressDialog.setMessage("Connecting, please wait... This might take" +
+					"up to 30 seconds.");
 			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
@@ -154,7 +155,6 @@ public class WelcomeScreen extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			while(true) {
-
 				if(Devices.isConnected()){
 					return true;
 				}
@@ -172,12 +172,14 @@ public class WelcomeScreen extends Activity {
 		protected void onPostExecute(Boolean result) {
 			String message = "";
 			if (result && Devices.isConnected()) {
-				message = "Connected to " + sharedPref.getString("connected_device_name", "null");
+				String deviceName = sharedPref.getString("connected_device_name", "null");
+				
+				message = "Successfully connected to device: " + deviceName;
 			}
 			else{
-				message = "Not connected to any device";
+				message = "The connection was not successfull. Go to Device List to try again.";
 			}
-			//			setActivityTitle();
+			setActivityTitle();
 
 			//Close the "trying to connect" dialog
 			progressDialog.dismiss();
