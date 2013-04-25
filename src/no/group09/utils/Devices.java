@@ -89,6 +89,12 @@ public class Devices extends Activity  {
 	private MyBroadcastReceiver actionFoundReceiver;
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
 	static Context context;
+	
+	/** 
+	 * Message text that is to be printed to the user when the attempt to 
+	 * connect was unsuccessful.
+	 */
+	private final static String NEGATIVE_MESSAGE = "The connection was not successfull.\nPlease try again.";
 
 	private boolean secondClick = false;
 
@@ -280,6 +286,7 @@ public class Devices extends Activity  {
 
 	//Disse to er en del av en stygg hack, men det funker. Fix senere.
 	private void setContext(Context context) {
+		//TODO: remove.
 		Devices.context = context;
 	}
 
@@ -512,8 +519,9 @@ public class Devices extends Activity  {
 
 		@Override
 		protected void onPreExecute() {
-			timeout = System.currentTimeMillis() + 3000;
-			progressDialog.setMessage("Connecting, please wait...");
+			timeout = System.currentTimeMillis() + 30000;
+			progressDialog.setMessage("Connecting, please wait... This might take " +
+					"up to 30 seconds.");
 			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
@@ -521,13 +529,8 @@ public class Devices extends Activity  {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			while(true) {
-				if(BtArduinoService.getBtService() != null){
-					if(BtArduinoService.getBtService().getBluetoothConnection() != null){
-						if(BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
-							return true;
-						}
-					}
-				}
+				
+				if (Devices.isConnected()) return true;
 
 				if (System.currentTimeMillis() > timeout) {
 					return false;
@@ -545,7 +548,8 @@ public class Devices extends Activity  {
 			String message, title;
 
 			if (success && connection.isConnected()) {
-				message = "The connection was successful.\n Long press to disconnect";
+				
+				message = "Successfully connected to device: " + listAdapter.getName(savedPosition);
 				
 				String lastConnectedDevice = "Device name: " + listAdapter.getName(savedPosition)
 						+ "\nMAC Address: " + listAdapter.getMacAddress(savedPosition);
@@ -557,13 +561,11 @@ public class Devices extends Activity  {
 				edit.putString("connected_device_mac", listAdapter.getMacAddress(savedPosition));
 				edit.commit();
 
-				String appName = sharedPref.getString("connected_device_name", "could not find connected device name");
-				title = "Devices - " + appName;
-
-				Log.d(TAG, "The information about the last connected device was written to shared preferences");
+				//Set the name of connected device in title bar
+				title = "Devices - " + listAdapter.getName(savedPosition);
 			}
 			else {
-				message = "The connection was not successfull." + "\nPlease try again.";
+				message = NEGATIVE_MESSAGE;
 				title = "Devices";
 				
 				//Unselect the view in the list

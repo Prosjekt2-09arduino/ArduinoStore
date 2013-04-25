@@ -159,7 +159,9 @@ public class BtArduinoService extends Service {
 		}
 
 		setBtService(this);
-		connect();
+		boolean connection = connect();
+		
+		Log.d(TAG, "connect() returned: " + connection); 
 
 		//START_NOT_STICKY makes sure the service dies when the app is killed
 		return START_NOT_STICKY;

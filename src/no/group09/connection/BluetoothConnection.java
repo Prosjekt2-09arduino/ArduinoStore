@@ -138,7 +138,7 @@ public class BluetoothConnection extends Protocol {
 
 		//Create a socket through a hidden method (normal method does not work on all devices like Samsung Galaxy SII)
 		try {
-			Method m  = device.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
+			Method m  = device.getClass().getMethod("createInsecureRfcommSocket", new Class[] { int.class });
 			if(m == null) Log.d(TAG, "method is null!");
 			socket = (BluetoothSocket) m.invoke(device, Integer.valueOf(1));
 //			socket = (BluetoothSocket) m.invoke(device, MY_UUID);
