@@ -66,8 +66,10 @@ public class AddDeviceScreen extends Activity {
 	 * Message text that is to be printed to the user when the attempt to 
 	 * connect was unsuccessful.
 	 */
-	private final static String NEGATIVE_MESSAGE = "The connection was not successfull.\nPlease try again.";
-	protected static final String NOT_VALID_MAC = "The MAC address entered is not valid.\nPlease enter a valid MAC address.";
+	private final static String NEGATIVE_MESSAGE = "The connection was not " +
+			"successfull.\nPlease try again.";
+	protected static final String NOT_VALID_MAC = "The MAC address entered is not " +
+			"valid.\n\nPlease enter a valid MAC address.";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -117,33 +119,39 @@ public class AddDeviceScreen extends Activity {
 			//Successful scan
 			if (resultCode == RESULT_OK) {
 				String macAddress = intent.getStringExtra("SCAN_RESULT");
+				macAddress.toUpperCase();
+				if (isValidMacAddress(macAddress)){
 
-				Toast.makeText(getBaseContext(), "Trying to connect to: " + 
-						macAddress, Toast.LENGTH_LONG).show();
+					Toast.makeText(getBaseContext(), "Trying to connect to: " + 
+							macAddress, Toast.LENGTH_LONG).show();
 
-				Intent serviceIntent = new Intent(getApplicationContext(), 
-						no.group09.utils.BtArduinoService.class);
+					Intent serviceIntent = new Intent(getApplicationContext(), 
+							no.group09.utils.BtArduinoService.class);
 
-				serviceIntent.putExtra(Devices.MAC_ADDRESS, macAddress);
+					serviceIntent.putExtra(Devices.MAC_ADDRESS, macAddress);
 
-				/* 
-				 * Checks if there is another valid bluetooth connection running
-				 * If so, the previous connection is terminated and disconnected
-				 */
-				if(isMyServiceRunning()) {
-					BtArduinoService.getBtService().getBluetoothConnection()
-					.setConnectionState(ConnectionState.STATE_DISCONNECTED);
+					/* 
+					 * Checks if there is another valid bluetooth connection running
+					 * If so, the previous connection is terminated and disconnected
+					 */
+					if(isMyServiceRunning()) {
+						BtArduinoService.getBtService().getBluetoothConnection()
+						.setConnectionState(ConnectionState.STATE_DISCONNECTED);
 
-					BtArduinoService.getBtService().getBluetoothConnection().disconnect();
-					stopService(serviceIntent);
+						BtArduinoService.getBtService().getBluetoothConnection().disconnect();
+						stopService(serviceIntent);
+					}
+
+					Log.d(TAG, "Starting new service for connection with device");
+					startService(serviceIntent);
+					setMacAdress(macAddress);
+
+					ProgressDialogTask task = new ProgressDialogTask();
+					task.execute();
 				}
-
-				Log.d(TAG, "Starting new service for connection with device");
-				startService(serviceIntent);
-				setMacAdress(macAddress);
-
-				ProgressDialogTask task = new ProgressDialogTask();
-				task.execute();
+				else {
+					createDialog(NOT_VALID_MAC);
+				}
 			}
 		}
 	}
@@ -175,46 +183,66 @@ public class AddDeviceScreen extends Activity {
 		final EditText input = new EditText(this);
 		inputSerialDialog.setView(input);
 
-		inputSerialDialog.setMessage("Please type the MAC address of your bluetooth device")
-		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		inputSerialDialog.setMessage("Please type the complete MAC address of " +
+				"your bluetooth device.")
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				serialString = input.getText().toString();
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						serialString = input.getText().toString();
+						toUpperCase(serialString);
+						if(isValidMacAddress(serialString)){
 
-				if(isValidMacAddress(serialString)){
+							Intent serviceIntent = new Intent(getBaseContext(), 
+									no.group09.utils.BtArduinoService.class);
 
-					Intent serviceIntent = new Intent(getBaseContext(), 
-							no.group09.utils.BtArduinoService.class);
+							serviceIntent.putExtra(Devices.MAC_ADDRESS, serialString);
 
-					serviceIntent.putExtra(Devices.MAC_ADDRESS, serialString);
+							/* 
+							 * Checks if there is another valid bluetooth connection running
+							 * If so, the previous connection is terminated and disconnected
+							 */
+							if(isMyServiceRunning()){
+								BtArduinoService.getBtService().getBluetoothConnection()
+								.setConnectionState(ConnectionState.STATE_DISCONNECTED);
+								BtArduinoService.getBtService().getBluetoothConnection().disconnect();
+								stopService(serviceIntent);
+							}
 
-					/* 
-					 * Checks if there is another valid bluetooth connection running
-					 * If so, the previous connection is terminated and disconnected
-					 */
-					if(isMyServiceRunning()){
-						BtArduinoService.getBtService().getBluetoothConnection()
-							.setConnectionState(ConnectionState.STATE_DISCONNECTED);
-						BtArduinoService.getBtService().getBluetoothConnection().disconnect();
-						stopService(serviceIntent);
+							Log.d(TAG, "Starting new service for connection with device");
+							startService(serviceIntent);
+							setMacAdress(serialString);
+
+							ProgressDialogTask task = new ProgressDialogTask();
+							task.execute();
+						}
+
+						else{
+							createDialog(NOT_VALID_MAC);
+						}
 					}
-
-					Log.d(TAG, "Starting new service for connection with device");
-					startService(serviceIntent);
-					setMacAdress(serialString);
-
-					ProgressDialogTask task = new ProgressDialogTask();
-					task.execute();
-				}
-
-				else{
-					createDialog(NOT_VALID_MAC);
-				}
-			}
-		});
+				});
 
 		return inputSerialDialog.show();
+	}
+	
+	/**
+	 * Converts string to uppercase
+	 * 
+	 * @param address the string to be converted
+	 */
+	public void toUpperCase(String address) {
+		String uppercase = "";
+		for (int i = 0; i < address.length(); i++) {
+			int c = address.charAt(i);
+			
+			if (c >= 97 && c <= 122) {
+				c = c - 32;
+				uppercase += (char) c;
+			}
+			else uppercase += (char) c;
+		}
+		serialString = uppercase;
 	}
 
 	public String getMacAdress() {
@@ -269,7 +297,7 @@ public class AddDeviceScreen extends Activity {
 			});
 		}
 		//Check if the response from the connection attempt was negative
-		if (message.equals(NEGATIVE_MESSAGE)) {
+		else if (message.equals(NEGATIVE_MESSAGE)) {
 			responseDialog.setMessage(message)
 			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 				@Override
@@ -331,7 +359,7 @@ public class AddDeviceScreen extends Activity {
 
 			if (success && connection.isConnected()) {
 				String deviceName = connection.toString();
-				
+
 				//Check if the connected device has a name
 				if(deviceName != null) {
 					String lastConnectedDevice = "Device name: " + deviceName
