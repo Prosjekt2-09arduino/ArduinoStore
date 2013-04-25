@@ -67,6 +67,7 @@ public class AddDeviceScreen extends Activity {
 	 * connect was unsuccessful.
 	 */
 	private final static String NEGATIVE_MESSAGE = "The connection was not successfull.\nPlease try again.";
+	protected static final String NOT_VALID_MAC = "The MAC address entered is not valid.\nPlease enter a valid MAC address.";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,8 @@ public class AddDeviceScreen extends Activity {
 			if (resultCode == RESULT_OK) {
 				String macAddress = intent.getStringExtra("SCAN_RESULT");
 
-				Toast.makeText(getBaseContext(), macAddress, Toast.LENGTH_LONG).show();
+				Toast.makeText(getBaseContext(), "Trying to connect to: " + 
+						macAddress, Toast.LENGTH_LONG).show();
 
 				Intent serviceIntent = new Intent(getApplicationContext(), 
 						no.group09.utils.BtArduinoService.class);
@@ -136,17 +138,12 @@ public class AddDeviceScreen extends Activity {
 					stopService(serviceIntent);
 				}
 
-				//Start the new service 
+				Log.d(TAG, "Starting new service for connection with device");
 				startService(serviceIntent);
+				setMacAdress(macAddress);
 
-				//Store this connection in the preferences
-				SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-				Editor edit = sharedPref.edit();
-				edit.putString("connected_device_mac", serialString);
-				edit.putString("connected_device_name", serialString);
-				edit.commit();
-
-				finish();
+				ProgressDialogTask task = new ProgressDialogTask();
+				task.execute();
 			}
 		}
 	}
@@ -170,9 +167,6 @@ public class AddDeviceScreen extends Activity {
 	 * Creates a pop up box where the user can type in the serial of the
 	 * bluetooth device. 
 	 * 
-	 * The string the user types in is now stored as a simple string, but not in 
-	 * shared preferences. See the TODO in the method.
-	 * 
 	 * @return The created Dialog
 	 */
 	public Dialog onCreateDialog() {
@@ -195,33 +189,27 @@ public class AddDeviceScreen extends Activity {
 
 					serviceIntent.putExtra(Devices.MAC_ADDRESS, serialString);
 
-					Log.w(TAG, "isConnected: " + Devices.isConnected());
-
-					Log.w(TAG, "isMyServiceRunning: " + isMyServiceRunning());
-
 					/* 
 					 * Checks if there is another valid bluetooth connection running
 					 * If so, the previous connection is terminated and disconnected
 					 */
 					if(isMyServiceRunning()){
-						BtArduinoService.getBtService().getBluetoothConnection().setConnectionState(ConnectionState.STATE_DISCONNECTED);
+						BtArduinoService.getBtService().getBluetoothConnection()
+							.setConnectionState(ConnectionState.STATE_DISCONNECTED);
 						BtArduinoService.getBtService().getBluetoothConnection().disconnect();
 						stopService(serviceIntent);
 					}
 
-					Log.w(TAG, "isConnected: " + Devices.isConnected());
+					Log.d(TAG, "Starting new service for connection with device");
 					startService(serviceIntent);
 					setMacAdress(serialString);
-
-					Log.w(TAG, "isMyServiceRunning: " + isMyServiceRunning());
 
 					ProgressDialogTask task = new ProgressDialogTask();
 					task.execute();
 				}
 
-				//TODO: Fix better handling of this.
 				else{
-					Toast.makeText(getBaseContext(), "Not a valid MAC address", Toast.LENGTH_SHORT).show();
+					createDialog(NOT_VALID_MAC);
 				}
 			}
 		});
@@ -269,6 +257,17 @@ public class AddDeviceScreen extends Activity {
 	public Dialog createDialog(String message) {
 		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
 
+		//The MAC address entered by the user was not valid
+		if (message.equals(NOT_VALID_MAC)) {
+			responseDialog.setMessage(message)
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					//The connection was unsuccessful, and the user will need
+					//to try again - just dismiss the dialog box.
+				}
+			});
+		}
 		//Check if the response from the connection attempt was negative
 		if (message.equals(NEGATIVE_MESSAGE)) {
 			responseDialog.setMessage(message)
@@ -279,7 +278,6 @@ public class AddDeviceScreen extends Activity {
 					//to try again - just dismiss the dialog box.
 				}
 			});
-
 		}
 		//The response from connection attempt was positive
 		else {
@@ -303,7 +301,7 @@ public class AddDeviceScreen extends Activity {
 		protected void onPreExecute() {
 			//30 second timeout
 			timeout = System.currentTimeMillis() + 30000;
-			progressDialog.setMessage("Connecting, please wait... This might take" +
+			progressDialog.setMessage("Connecting, please wait... This might take " +
 					"up to 30 seconds.");
 			progressDialog.setCancelable(false);
 			progressDialog.show();

@@ -520,7 +520,7 @@ public class Devices extends Activity  {
 		@Override
 		protected void onPreExecute() {
 			timeout = System.currentTimeMillis() + 30000;
-			progressDialog.setMessage("Connecting, please wait... This might take" +
+			progressDialog.setMessage("Connecting, please wait... This might take " +
 					"up to 30 seconds.");
 			progressDialog.setCancelable(false);
 			progressDialog.show();
