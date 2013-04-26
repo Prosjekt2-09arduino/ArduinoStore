@@ -6,12 +6,12 @@ import java.io.OutputStream;
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.connection.ConnectionListener;
-import no.group09.stk500_v1.Logger;
-import no.group09.stk500_v1.STK500v1;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import no.group09.stk500_v1.Logger;
+import no.group09.stk500_v1.STK500v1;
 import no.group09.utils.LogForProtocol;
 
 /**
@@ -20,7 +20,7 @@ import no.group09.utils.LogForProtocol;
  * @author JeppeE
  *
  */
-public class BtArduinoService extends Service {
+public class BtArduinoService extends Service implements Runnable{
 
 	private String TAG = "BtArduinoService";
 	private BluetoothConnection connection = null;
@@ -30,10 +30,12 @@ public class BtArduinoService extends Service {
 	private STK500v1 programmer;
 	private byte[] hexFile;
 	private Logger logger = new LogForProtocol();
+	private Thread programmingThread;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		programmingThread = new Thread();
 //		sendData();
 	}
 	
@@ -58,9 +60,23 @@ public class BtArduinoService extends Service {
 				this.hexFile = hexFile;
 				//TODO: Run as new thread
 				programmer = new STK500v1(output, input, logger, hexFile);
+				//Starting thread
+				programmingThread.run();
 			}
 		} else {
 			//TODO: Reset programmer
+		}
+	}
+	
+	@Override
+	public void run() {
+		
+		boolean result = programmer.programUsingOptiboot(true, 128);
+		if (result) {
+			programmer.stopReadWrapper();
+		}
+		else {
+			//TODO: Handle the event of programming was unsuccesful.
 		}
 	}
 	
