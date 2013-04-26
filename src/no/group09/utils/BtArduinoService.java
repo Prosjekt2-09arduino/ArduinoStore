@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.util.Log;
 import no.group09.stk500_v1.Logger;
 import no.group09.stk500_v1.STK500v1;
+import no.group09.stk500_v1.STK500v1.ProtocolState;
 import no.group09.utils.LogForProtocol;
 
 /**
@@ -31,14 +32,22 @@ public class BtArduinoService extends Service implements Runnable{
 	private byte[] hexFile;
 	private Logger logger = new LogForProtocol();
 	private Thread programmingThread;
+	/** Used to check if the programmer is running */
+	private volatile boolean programmerRunning = false;
+	/** Variable used to check the progress of the programming */
+	private int progress = 0;
+	/** Field used to contain the state of the programmer */
+	private ProtocolState state;
+	/** String used to print the message displayed to the user */
+	private String stateMessage = "";
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		programmingThread = new Thread();
-//		sendData();
+		//		sendData();
 	}
-	
+
 	/**
 	 * Prepare the programmer with the provided file to program.
 	 * @param hexFile As a byte array in Intel hex format.
@@ -57,29 +66,147 @@ public class BtArduinoService extends Service implements Runnable{
 							"but no connection prepared", "w");
 					return;
 				}
+
 				this.hexFile = hexFile;
-				//TODO: Run as new thread
 				programmer = new STK500v1(output, input, logger, hexFile);
 				//Starting thread
 				programmingThread.run();
+				//The programmer is now running
+				programmerRunning = true;
+				//Start checking the state of the programmer
+				checkProtocolState();
 			}
 		} else {
 			//TODO: Reset programmer
 		}
 	}
-	
-	@Override
-	public void run() {
-		
-		boolean result = programmer.programUsingOptiboot(true, 128);
-		if (result) {
-			programmer.stopReadWrapper();
-		}
-		else {
-			//TODO: Handle the event of programming was unsuccesful.
+
+	private void checkProtocolState() {
+		while (programmerRunning) {
+			
+			setProtocolState(programmer.getProtocolState());
+			switch(getProtocolState()) {
+			case CONNECTING:
+				setStateMessage("Trying to connect...");
+				break;
+			case ERROR_CONNECT:
+				setStateMessage("An error was encountered while connecting");
+				programmerRunning = false;
+				break;
+			case ERROR_PARSE_HEX:
+				setStateMessage("Downloaded program was corrupted");
+				programmerRunning = false;
+				break;
+			case ERROR_READ:
+				setStateMessage("Error while verifying program");
+				programmerRunning = false;
+				break;
+			case ERROR_WRITE:
+				setStateMessage("Error while programming device");
+				programmerRunning = false;
+				break;
+			case FINISHED:
+				setStateMessage("Finished programming");
+				programmerRunning = false;
+				break;
+			case INITIALIZING:
+				setStateMessage("Initializing programmer");
+				break;
+			case READING:
+				setStateMessage("Verifying program...");
+				break;
+			case WRITING:
+				setStateMessage("Programming");
+				break;
+			case READY:
+				/*
+				 * Add functionality to check if the programmer is in this sate too
+				 * long. If this is the case something most likely is wrong.
+				 * Could be if it e.g. is in ready state after three checks.
+				 *
+				 */
+				setStateMessage("Programmer ready");
+				break;
+			default:
+				break;
+			}
+			
+			try {
+				this.wait(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
+	private void setStateMessage(String message) {
+		this.stateMessage = message;
+	}
+	
+	public String getStateMessage() {
+		return stateMessage;
+	}
+	
+	/**
+	 * Sets the current state of the programmer. Should be called every time the
+	 * state changes
+	 * 
+	 * @param state The new state of the programmer
+	 */
+	private void setProtocolState(ProtocolState state) {
+		this.state = state;
+	}
+	
+	/**
+	 * Returns the current state of the programmer.
+	 * 
+	 * @return The current state of the programmer.
+	 */
+	public ProtocolState getProtocolState() {
+		return this.state;
+	}
+	
+	/**
+	 * Checks if the programmer is running.
+	 * 
+	 * @return True if the programmer is running, false if not.
+	 */
+	public boolean isProgrammerRunning() {
+		return programmerRunning;
+	}
+	
+	/**
+	 * Sets the progress of the programming of the Arduino. Should be called
+	 * every time there is an update with the progress.
+	 * 
+	 * @param progress The new progress. Must be an integer between 0 and 100.
+	 */
+	private void setProgress(int progress) {
+		this.progress = progress;
+	}
+	
+	/**
+	 * Returns the progress of the programming of the Arduino
+	 * 
+	 * @return The total progress as an integer between 0 and 100
+	 */
+	public int getProgress() {
+		return this.progress;
+	}
+
+	@Override
+	public void run() {
+		//Start the programming. This does not return until the programmer is finished
+		boolean result = programmer.programUsingOptiboot(true, 128);
+		if (result) {
+			programmer.stopReadWrapper();
+			programmerRunning = false;
+		}
+		else {
+			//TODO: Handle the event of programming was unsuccessful.
+		}
+	}
+
 	/**
 	 * Check if the programmer is ready to be programmed.
 	 * @return true if ready
@@ -176,7 +303,7 @@ public class BtArduinoService extends Service implements Runnable{
 
 		setBtService(this);
 		boolean connection = connect();
-		
+
 		Log.d(TAG, "connect() returned: " + connection); 
 
 		//START_NOT_STICKY makes sure the service dies when the app is killed
