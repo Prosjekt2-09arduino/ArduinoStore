@@ -21,7 +21,7 @@ import no.group09.utils.LogForProtocol;
  * @author JeppeE
  *
  */
-public class BtArduinoService extends Service implements Runnable{
+public class BtArduinoService extends Service {
 
 	private String TAG = "BtArduinoService";
 	private BluetoothConnection connection = null;
@@ -31,20 +31,20 @@ public class BtArduinoService extends Service implements Runnable{
 	private STK500v1 programmer;
 	private byte[] hexFile;
 	private Logger logger = new LogForProtocol();
-	private Thread programmingThread;
+	private Thread programmerHandlerThread;
 	/** Used to check if the programmer is running */
-	private volatile boolean programmerRunning = false;
+	private volatile boolean checkState = false;
 	/** Variable used to check the progress of the programming */
 	private int progress = 0;
 	/** Field used to contain the state of the programmer */
 	private ProtocolState state;
 	/** String used to print the message displayed to the user */
 	private String stateMessage = "";
-
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		programmingThread = new Thread();
+		
 		//		sendData();
 	}
 
@@ -69,58 +69,62 @@ public class BtArduinoService extends Service implements Runnable{
 
 				this.hexFile = hexFile;
 				programmer = new STK500v1(output, input, logger, hexFile);
-				//Starting thread
-				programmingThread.run();
+				
 				//The programmer is now running
-				programmerRunning = true;
-				//Start checking the state of the programmer
-				checkProtocolState();
+				checkState = true;
+				
 			}
 		} else {
 			//TODO: Reset programmer
 		}
 	}
 
-	private void checkProtocolState() {
-		while (programmerRunning) {
+	private synchronized void checkProtocolState() {
+		while (checkState) {
 			
 			setProtocolState(programmer.getProtocolState());
-			switch(getProtocolState()) {
+			ProtocolState state = getProtocolState();
+			Log.d("AppView", "State fetched: " + state);
+			
+			switch(state) {
 			case CONNECTING:
 				setStateMessage("Trying to connect...");
 				break;
 			case ERROR_CONNECT:
 				setStateMessage("An error was encountered while connecting");
-				programmerRunning = false;
+				programmer.stopReadWrapper();
+				checkState = false;
 				break;
 			case ERROR_PARSE_HEX:
 				setStateMessage("Downloaded program was corrupted");
-				programmerRunning = false;
+				checkState = false;
 				break;
 			case ERROR_READ:
 				setStateMessage("Error while verifying program");
-				programmerRunning = false;
+				checkState = false;
 				break;
 			case ERROR_WRITE:
 				setStateMessage("Error while programming device");
-				programmerRunning = false;
+				checkState = false;
 				break;
 			case FINISHED:
 				setStateMessage("Finished programming");
-				programmerRunning = false;
+				checkState = false;
 				break;
 			case INITIALIZING:
 				setStateMessage("Initializing programmer");
 				break;
 			case READING:
 				setStateMessage("Verifying program...");
+				setProgress(programmer.getProgress());
 				break;
 			case WRITING:
+				setProgress(programmer.getProgress());
 				setStateMessage("Programming");
 				break;
 			case READY:
 				/*
-				 * Add functionality to check if the programmer is in this sate too
+				 * Add functionality to check if the programmer is in this state too
 				 * long. If this is the case something most likely is wrong.
 				 * Could be if it e.g. is in ready state after three checks.
 				 *
@@ -128,6 +132,8 @@ public class BtArduinoService extends Service implements Runnable{
 				setStateMessage("Programmer ready");
 				break;
 			default:
+				Log.wtf("AppView", "Unknown state: " + state);
+				checkState = false;
 				break;
 			}
 			
@@ -143,7 +149,7 @@ public class BtArduinoService extends Service implements Runnable{
 		this.stateMessage = message;
 	}
 	
-	public String getStateMessage() {
+	public synchronized String getStateMessage() {
 		return stateMessage;
 	}
 	
@@ -162,7 +168,7 @@ public class BtArduinoService extends Service implements Runnable{
 	 * 
 	 * @return The current state of the programmer.
 	 */
-	public ProtocolState getProtocolState() {
+	public synchronized ProtocolState getProtocolState() {
 		return this.state;
 	}
 	
@@ -171,8 +177,8 @@ public class BtArduinoService extends Service implements Runnable{
 	 * 
 	 * @return True if the programmer is running, false if not.
 	 */
-	public boolean isProgrammerRunning() {
-		return programmerRunning;
+	public synchronized boolean isProgrammerRunning() {
+		return checkState;
 	}
 	
 	/**
@@ -194,18 +200,7 @@ public class BtArduinoService extends Service implements Runnable{
 		return this.progress;
 	}
 
-	@Override
-	public void run() {
-		//Start the programming. This does not return until the programmer is finished
-		boolean result = programmer.programUsingOptiboot(true, 128);
-		if (result) {
-			programmer.stopReadWrapper();
-			programmerRunning = false;
-		}
-		else {
-			//TODO: Handle the event of programming was unsuccessful.
-		}
-	}
+
 
 	/**
 	 * Check if the programmer is ready to be programmed.
@@ -225,13 +220,48 @@ public class BtArduinoService extends Service implements Runnable{
 	 */
 	public void sendData(byte[] hexFile){
 		if (!isProgrammerReady()) {
-			prepareProgrammer(hexFile);
+			programmerHandlerThread = new Thread(new ProgrammerHandler(hexFile));
+			//Starting thread
+			programmerHandlerThread.start();
+			
 		} else if (hexFile == this.hexFile) {
 			//TODO: Ask programmer to program now
 		} else {
 			//programmer ready but a different file was prepared with it
 			logger.logcat("BtService.sendData: Programmer was prepared with another" +
 					" hex file. Sending aborted.", "i");
+		}
+	}
+	
+	class ProgrammerTask implements Runnable {
+
+		@Override
+		public void run() {
+			//Start the programming. This does not return until the programmer is finished
+			boolean result = programmer.programUsingOptiboot(true, 128);
+			if (result) {
+				Log.d(TAG, "programUsinOptiboot returned true");
+			}
+			else {
+				//TODO: Handle the event of programming was unsuccessful.
+				Log.d(TAG, "programUsinOptiboot returned false");
+			}
+		}
+		
+	}
+	
+	class ProgrammerHandler implements Runnable {
+		byte[] hexFile;
+		public ProgrammerHandler(byte[] hexFile) {
+			this.hexFile = hexFile;
+		}
+		@Override
+		public void run() {
+			prepareProgrammer(hexFile);
+			//Start blocking programming operation in another thread
+			new Thread(new ProgrammerTask()).start();
+			//Start checking the state of the programmer
+			checkProtocolState();
 		}
 	}
 

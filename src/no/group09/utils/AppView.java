@@ -10,6 +10,7 @@ import no.group09.database.entity.Developer;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.os.Bundle;
@@ -30,22 +31,25 @@ import android.content.SharedPreferences;
 /**
  * The informational view of an app in the shop.
  */
-public class AppView extends Activity implements Runnable {
+public class AppView extends Activity {
 
 	ProgressDialog progressBar;
 	private int progressNumber = 0;
-	private Handler progressHandler = new Handler();
+	private Handler progressHandler;
 	private Save save;
 	private Context ctxt;
 	private Thread progressbarThread;
 	private ProtocolState state;
 	private static final String TAG = "AppView";
 	private BtArduinoService service;
+	private String message = "";
+	private AlertDialog installDialog, resultDialog;
+	private byte[] byteArray;
+	private AlertDialog.Builder responseDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		//Set the xml layout
 		setContentView(R.layout.app_view);	
 
@@ -57,8 +61,12 @@ public class AppView extends Activity implements Runnable {
 		//Get the database
 		save = new Save(getBaseContext());
 
-		//Initialize the thread that should contain the progressbar
-		progressbarThread = new Thread();
+		progressBar = new ProgressDialog(this);
+		
+		responseDialog = new AlertDialog.Builder(this);
+
+		byteArray = testProgrammer();
+
 
 		//Fetch the application from the database
 		App app = save.getAppByID(appID);
@@ -103,7 +111,7 @@ public class AppView extends Activity implements Runnable {
 			}
 		});
 	}
-	
+
 	public byte[] testProgrammer() {
 		String hexData =
 				//	"3A	10	0000	00	0C9465000C948D000C948D000C948D0064" +
@@ -712,7 +720,7 @@ public class AppView extends Activity implements Runnable {
 				"3A10259A0040001400540000000000050DAA0D9B0C19" +
 				"3A0625AA00CC0CAC0CF50C9A" +
 				"3A00000001FF";
-		
+
 		//Convert string to byte array
 		byte[] binaryFile = new byte[hexData.length() / 2];
 		for(int i=0; i < hexData.length(); i+=2)
@@ -751,17 +759,38 @@ public class AppView extends Activity implements Runnable {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which){
-							byte[] byteArray = testProgrammer();
-							
-							service = (BtArduinoService) getSystemService(Context.ACTIVITY_SERVICE);
-							Log.d(TAG, "Fetched service! Progress: " + service.getProgress());
-							
-							service.sendData(byteArray);
-							
-							//TODO: add call to the service for it to start the 
-							//programmer here.
 
-							installingDialog();
+							service = BtArduinoService.getBtService();
+
+							if (service != null) {
+								Log.d(TAG, "Fetched service! Progress: " + service.getProgress());
+
+								installDialog.dismiss();
+
+								progressHandler = new Handler();
+								progressbarThread = new Thread(new ProgressBarUpdate());
+								progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+								progressBar.setCancelable(false);
+								progressBar.setTitle("Installing app to " + getDeviceName());
+								progressBar.setMessage("First message.");
+								progressBar.setProgress(0);
+								progressBar.setMax(100);
+
+								setProgressBarVisibility(true);
+
+								progressBar.show();
+
+								Log.d(TAG, "Ready to start progressBar");
+								installingDialog();
+
+								//TODO: add call to the service for it to start the 
+								//programmer here.
+
+
+							}
+							else {
+								Log.d(TAG, "Service was null!");
+							}
 						}
 
 					}).setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
@@ -769,12 +798,12 @@ public class AppView extends Activity implements Runnable {
 						public void onClick(DialogInterface dialog, int which){
 
 						}
-					});
+					}).show();
 		}
-		builder.create();
-		builder.show();
+		installDialog = builder.create();
+		//		installDialog.show();
 	}
-	
+
 	/**
 	 * Method for showing the result of a programming attempt. Writes success
 	 * message if it was successful or error message if not.
@@ -782,184 +811,32 @@ public class AppView extends Activity implements Runnable {
 	 * @param error Boolean for indicating if an error message or success message
 	 * should be printed. True for error, false for success. 
 	 */
-	public void informationBox(boolean error) {
-		//Creates an alertdialog builder
-		AlertDialog.Builder b = new AlertDialog.Builder(this);
-		
-		if (error) {
-			//TODO: give better error message?
-			b.setMessage("An error was encountered while trying to program your " +
-					"device. Please try to install again.").setPositiveButton
-					("OK", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					
-					
-				}
-			});
-		}
-		else {
-			b.setMessage("You have successfully programmed your device!").setPositiveButton
-					("OK", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					
-					
-				}
-			});
-		}
-		b.create();
-		b.show();
-	}
+
 	/**
 	 * Dialog for displaying progressbar for installation purposes.
 	 */
 	public void installingDialog(){
 
-		progressBar = new ProgressDialog(this);
-		progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progressBar.setCancelable(false);
-		progressBar.setTitle("Installing app to " + getDeviceName());
-		progressBar.setProgress(0);
-		progressBar.setMax(100);
-		progressBar.show();
-
-		progressbarThread.run();
-
-		//preparing progress bar dialog
+		//		progressHandler = new Handler();
+		//		progressbarThread = new Thread(new ProgressBarUpdate());
 		//		progressBar = new ProgressDialog(this);
 		//		progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		//		progressBar.setCancelable(false);
 		//		progressBar.setTitle("Installing app to " + getDeviceName());
-		//		progressBar.setMessage("DO NOT DISCONNECT OR MOVE AWAY FROM THE DEVICE!");
+		//		progressBar.setMessage("First message.");
 		//		progressBar.setProgress(0);
 		//		progressBar.setMax(100);
+		//		
+		//		setProgressBarVisibility(true);
+		//		
 		//		progressBar.show();
-		//
-		//		//Reset progress bar status, just in case...
-		//		progressStatus = 0;
+		//		
+		//		Log.d(TAG, "Ready to start progressBar");
+		progressbarThread.start();
 
-		//		new Thread(new Runnable() {
-		//
-		//			@Override
-		//			public void run() {
-		//				while(progressStatus < 100){
-		//					progressStatus += 10;
-		//					
-		//					//To make sure thread doesnt use up too much resources
-		//					try { Thread.sleep(10);
-		//					} catch (Exception e) {}
-		//
-		//					//Update the progress bar itself
-		//					progressHandler.post(new Runnable() {
-		//
-		//						@Override
-		//						public void run() {
-		//							progressBar.setProgress(progressStatus);						
-		//						}
-		//					});
-		//				}
-		//				
-		//				//The progress is done
-		//				if(progressStatus >= 100){
-		//					//Sleep so the user can see the 100% mark
-		//					try { Thread.sleep(1500);
-		//					} catch (Exception e) {}
-		//					progressBar.dismiss();
-		//				}
-		//			}
-		//		}).start();
 	}
 
-	//	public BtArduinoService getService() {
-	//		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-	//		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-	//			if (BtArduinoService.class.getName().equals(service.service.getClassName())) {
-	//				return service;
-	//			}
-	//		}
-	//		return false;
-	//	}
 
-	@Override
-	public void run() {
-		//Fetch the BtArduinoService running the programmer thread
-		//TODO: check if this works.
-//		final BtArduinoService service = (BtArduinoService) getSystemService(Context.ACTIVITY_SERVICE);
-		
-		Log.d(TAG, "Progress has entered run()");
-
-		//This should run until the programmer has stopped
-		while (service.isProgrammerRunning()) {
-			//Fetch the current message from the service
-			String message = service.getStateMessage();
-			//Get the state of the programmer
-			state = service.getProtocolState();
-
-			//The actual progress should only be shown if the programmer is reading or writing
-			if (state == ProtocolState.READING || state == ProtocolState.WRITING) {
-
-				//Show the progress
-				progressNumber = service.getProgress();
-				progressHandler.post(new Runnable() {
-
-					@Override
-					public void run() {
-						while (progressNumber <= 100){
-							progressBar.setProgress(progressNumber);
-							progressNumber = service.getProgress();
-
-							if (progressNumber == 100) {
-								//Sleep so the user can see the 100% mark
-								try { Thread.sleep(1500);
-								} catch (Exception e) {}
-							}
-							//Get the current state to check if it has changed
-							state = service.getProtocolState();
-							/*
-							 * If the state is not reading or writing, the programmer
-							 * has either encountered an error or it is finished. 
-							 */
-							if (state != ProtocolState.READING && state != ProtocolState.WRITING) {
-								break;
-							}
-						}
-					}
-				});
-			}
-
-			//If an error was encountered
-			if (state == ProtocolState.ERROR_CONNECT || state == ProtocolState.ERROR_PARSE_HEX
-					|| state == ProtocolState.ERROR_READ || state == ProtocolState.ERROR_WRITE) {
-				
-				progressBar.setMessage(message);
-				//Make the thread sleep for a short interval to show the message
-				try { Thread.sleep(1500);
-				} catch (Exception e) {}
-				
-				progressBar.dismiss();
-				//Show the information box
-				informationBox(true);
-			}
-			
-			if (state == ProtocolState.FINISHED) {
-				progressBar.setMessage(message);
-				//Make the thread sleep for a short interval to show the message
-				try { Thread.sleep(1500);
-				} catch (Exception e) {}
-				
-				progressBar.dismiss();
-				informationBox(false);
-			}
-
-			else {
-				progressBar.setMessage(message);
-			}
-
-		}
-	}
 
 	private String getDeviceName() {
 		if(Devices.isConnected()){
@@ -967,5 +844,176 @@ public class AppView extends Activity implements Runnable {
 			return pref.getString("connected_device_name", "null");
 		}
 		return "no device";
+	}
+
+	class ShowInformationBox implements Runnable {
+
+		boolean error = false;
+
+		public ShowInformationBox (boolean error) {
+			this.error = error;
+		}
+
+		@Override
+		public void run() {
+			//Creates an alertdialog builder
+//			AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+
+			if (error) {
+				//TODO: give better error message?
+				responseDialog.setMessage("An error was encountered while trying to program your " +
+						"device. Please try to install again.").setPositiveButton
+						("OK", new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								//								resultDialog.dismiss();
+							}
+						});
+			}
+			else {
+				responseDialog.setMessage("You have successfully programmed your device!").setPositiveButton
+				("OK", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//						resultDialog.dismiss();
+					}
+				});
+			}
+			responseDialog.create();
+			responseDialog.show();
+		}
+
+	}
+	public Dialog createDialog(boolean error) {
+//		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
+
+		if (error) {
+		responseDialog.setMessage("Error encountered")
+		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//Nothing needs to be done, this closes the box
+			}
+		}).setCancelable(false);
+		}
+		
+		return responseDialog.show();
+	}
+
+	class ProgressBarUpdate implements Runnable {
+
+		@Override
+		public void run() {
+			Log.d(TAG, "Sending data to service");
+			service.sendData(byteArray);
+			Log.d(TAG, "Progress has entered run()");
+
+			while (!service.isProgrammerRunning()){
+				//				Log.d(TAG, "Programmer not running. Waiting");
+			}
+
+			//This should run until the programmer has stopped
+			while (true) {
+				//				Log.d(TAG, "Programmer is running");
+				//Fetch the current message from the service
+				message = service.getStateMessage();
+				//Get the state of the programmer
+				state = service.getProtocolState();
+
+				//The actual progress should only be shown if the programmer is reading or writing
+				if (state == ProtocolState.READING || state == ProtocolState.WRITING) {
+
+					//Show the progress
+					progressNumber = service.getProgress();
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							while (progressNumber <= 100){
+								progressNumber = service.getProgress();
+
+								//Get the current state to check if it has changed
+								progressHandler.post(new Runnable() {
+
+									@Override
+									public void run() {
+										progressBar.setProgress(progressNumber);
+										progressBar.setMessage(message);
+									}
+								});
+
+								state = service.getProtocolState();
+								/*
+								 * If the state is not reading or writing, the programmer
+								 * has either encountered an error or it is finished. 
+								 */
+								if (state != ProtocolState.READING && state != ProtocolState.WRITING) {
+									break;
+								}
+							}
+						}
+					}).start();
+				}
+
+				//If an error was encountered
+				else if (state == ProtocolState.ERROR_CONNECT || state == ProtocolState.ERROR_PARSE_HEX
+						|| state == ProtocolState.ERROR_READ || state == ProtocolState.ERROR_WRITE) {
+
+					Log.d(TAG, "Error received.");
+					progressHandler.post(new Runnable() {
+
+						@Override
+						public void run() {
+							progressBar.setMessage(message);
+						}
+					});
+
+					//Make the thread sleep for a short interval to show the message
+					try { Thread.sleep(1500);
+					} catch (Exception e) {}
+
+					progressBar.dismiss();
+					//Show the information box
+					runOnUiThread(new ShowInformationBox(true));
+//					createDialog(true);
+					break;
+				}
+
+				else if (state == ProtocolState.FINISHED) {
+
+					progressHandler.post(new Runnable() {
+
+						@Override
+						public void run() {
+							progressBar.setMessage(message);
+						}
+					});
+
+					progressBar.dismiss();
+					//Make the thread sleep for a short interval to show the message
+					//					try { Thread.sleep(1500);
+					//					} catch (Exception e) {}
+
+					//					informationBox(false);
+					break;
+				}
+
+				else {
+					//					Log.d(TAG, "State: " + state);
+					progressHandler.post(new Runnable() {
+						//TODO: Add check for failed to program
+
+						@Override
+						public void run() {
+							progressBar.setMessage(message);
+						}
+					});
+				}
+
+			}
+		}
+
 	}
 }
