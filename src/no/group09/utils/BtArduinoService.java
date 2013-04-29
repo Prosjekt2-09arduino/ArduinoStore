@@ -66,7 +66,9 @@ public class BtArduinoService extends Service {
 							"but no connection prepared", "w");
 					return;
 				}
-
+				
+				state = ProtocolState.INITIALIZING;
+				
 				this.hexFile = hexFile;
 				programmer = new STK500v1(output, input, logger, hexFile);
 				
@@ -208,8 +210,16 @@ public class BtArduinoService extends Service {
 	 */
 	private boolean isProgrammerReady() {
 		if (programmer != null) {
-			//TODO Add sensible checks
-			return true;
+			ProtocolState state = programmer.getProtocolState();
+			if (state == ProtocolState.READY) {
+				return true;
+			} else if (state == ProtocolState.ERROR_CONNECT || state == ProtocolState.ERROR_PARSE_HEX
+					|| state == ProtocolState.ERROR_READ || state == ProtocolState.ERROR_WRITE) {
+				programmer.stopReadWrapper();
+				//Delete the programmer
+				programmer = null;
+				return false;
+			}
 		}
 		return false;
 	}
