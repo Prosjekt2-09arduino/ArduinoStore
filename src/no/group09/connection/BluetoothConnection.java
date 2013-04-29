@@ -57,8 +57,8 @@ public class BluetoothConnection extends Protocol {
 	/** We notify this listener on any connection state changes */
 	private ConnectionListener connectionListener;
 
-	protected BufferedInputStream input;
-	protected BufferedOutputStream output;
+	protected InputStream input;
+	protected OutputStream output;
 
 	protected BluetoothDevice device;
 	protected BluetoothSocket socket;
@@ -154,8 +154,8 @@ public class BluetoothConnection extends Protocol {
 
 		//Get input and output streams
 		try {
-	    	output = new BufferedOutputStream(socket.getOutputStream());
-	    	input = new BufferedInputStream(socket.getInputStream());	
+	    	output = socket.getOutputStream();
+	    	input = socket.getInputStream();	
 		} catch (IOException ex) {
 			Log.d(TAG, getClass().getSimpleName() + " Unable to get input/output stream: " + ex.getMessage());
 			return false;
