@@ -65,7 +65,7 @@ void ComputerSerial::commandHandler(word size, uint8_t opcode, uint8_t flag, uin
             getDeviceInfo();
             break;
 		case OPCODE_RESET:
-			break;
+			reset();
 		default:
 			break;
 	}
@@ -219,8 +219,12 @@ void ComputerSerial::pinWrite(uint8_t pin, uint8_t value) {
 	ack(OPCODE_PIN_W);
 }
 
+// Reset the arduino by sending STK_OK and activate reset pin
 void ComputerSerial::reset() {
-	// Reset arduino
+	// uint8_t STK_OK = 0x10;
+	// Serial.write(STK_OK);
+		
+	digitalWrite(4,LOW);
 }
 
 // Access prorgamming mode on BT
@@ -255,6 +259,8 @@ void ComputerSerial::serialEvent() {
 	static uint8_t flag = 0;
 	static uint8_t *content = NULL;
 	static uint8_t content_counter = 0;
+	
+	int tempRead = 0;
 
     //Check if there is a timeout
 	if (millis() > time && state != STATE_START) {
@@ -267,12 +273,16 @@ void ComputerSerial::serialEvent() {
     {
 		switch (state)
 		{
+			// start	size high	size low	opcode	flag	content
+			// 0xFF		0x00		0x01		0xFF	0x00	0x00
 			case STATE_START:
 				if (Serial.read() == START_BYTE)
                 {
                     state = STATE_SIZE_HIGH;
                     if(content != NULL) free(content);
                 }
+				
+				tempRead = 0;
 				break;
 
 			case STATE_SIZE_HIGH:

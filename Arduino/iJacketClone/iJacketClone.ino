@@ -95,17 +95,9 @@ void setup()
 	//Initialize computer serial class
 	comp.begin(115200);
 	
-	// If programming mode is enabled, restart device
-	pinMode(4,OUTPUT);
-	if(EEPROM.read(0) == 255)
-	{
-		delay(400);
-		digitalWrite(4, LOW);
-	}
-	else
-	{
-		digitalWrite(4, HIGH);
-	}
+	// Initialize reset function
+	pinMode(RESET_PIN,OUTPUT);
+	digitalWrite(RESET_PIN,HIGH);
 	
 	comp.setDeviceName("uCSS");
 	comp.setDeviceVersion("v0.1a");

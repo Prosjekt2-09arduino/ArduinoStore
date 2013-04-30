@@ -46,9 +46,10 @@
     <string name="bluetooth_devices_tittle">Devices</string>
     <string name="connect_with_qr_button_text">Connect with QR code</string>
     <string name="input_serial_button">Input serial</string>
-    <string name="explanatory_qr_text">Requires INSERT NAME OF QR READER. Click to 
-        connect with your bluetooth device by scanning its QR code</string>
-    <string name="explanatory_input_serial">Click to input the serial key of your bluetooth device</string>
+    <string name="explanatory_qr_text">Click to connect with your bluetooth device
+        by scanning its QR code.</string>
+    <string name="explanatory_input_serial">Click to insert the MAC address of 
+        your bluetooth device.</string>
 
     <!-- Preferences screen -->
     <string name="preferences_title">Settings</string>

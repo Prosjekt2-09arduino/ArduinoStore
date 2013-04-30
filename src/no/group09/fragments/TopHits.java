@@ -94,6 +94,8 @@ public class TopHits extends Fragment{
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());	//Fetch the developer from the ID
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
+
 					application_list.add(map);
 				}
 			}
@@ -108,6 +110,8 @@ public class TopHits extends Fragment{
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
+
 					application_list.add(map);
 				}
 			}
@@ -122,6 +126,8 @@ public class TopHits extends Fragment{
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
+
 					application_list.add(map);
 				}
 			}
@@ -136,6 +142,8 @@ public class TopHits extends Fragment{
 					map.put(ListAdapter.APP_NAME, app.getName());
 					map.put(ListAdapter.DISTRIBUTOR, save.getDeveloperByID(app.getDeveloperID()).getName());
 					map.put(ListAdapter.RATING, String.valueOf(app.getRating()));
+					map.put(ListAdapter.CATEGORY, app.getCategory());
+
 					application_list.add(map);
 				}
 			}
