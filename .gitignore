@@ -19,3 +19,6 @@ local.properties
 
 # sym linked protocol package (remove after library conversion)
 src/no/group09/stk500_v1/*
+
+src/no/group09/stk500_v1
+
