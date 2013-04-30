@@ -46,6 +46,8 @@ public class AppView extends Activity {
 	private AlertDialog installDialog, resultDialog;
 	private byte[] byteArray;
 	private AlertDialog.Builder responseDialog;
+	private Activity activityRef;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class AppView extends Activity {
 		setContentView(R.layout.app_view);	
 
 		ctxt = getBaseContext();
+		activityRef = this;
 
 		//Fetch the application ID from the intent
 		int appID = getIntent().getExtras().getInt("app");
@@ -61,8 +64,8 @@ public class AppView extends Activity {
 		//Get the database
 		save = new Save(getBaseContext());
 
-		progressBar = new ProgressDialog(this);
-		
+//		progressBar = new ProgressDialog(this);
+
 		responseDialog = new AlertDialog.Builder(this);
 
 		byteArray = testProgrammer();
@@ -766,13 +769,13 @@ public class AppView extends Activity {
 								Log.d(TAG, "Fetched service! Progress: " + service.getProgress());
 
 								installDialog.dismiss();
-
+								progressBar = new ProgressDialog(activityRef);
 								progressHandler = new Handler();
 								progressbarThread = new Thread(new ProgressBarUpdate());
 								progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 								progressBar.setCancelable(false);
 								progressBar.setTitle("Installing app to " + getDeviceName());
-								progressBar.setMessage("First message.");
+								progressBar.setMessage("Working");
 								progressBar.setProgress(0);
 								progressBar.setMax(100);
 
@@ -857,7 +860,7 @@ public class AppView extends Activity {
 		@Override
 		public void run() {
 			//Creates an alertdialog builder
-//			AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+			//			AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
 
 			if (error) {
 				//TODO: give better error message?
@@ -887,19 +890,19 @@ public class AppView extends Activity {
 
 	}
 	public Dialog createDialog(boolean error) {
-//		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
+		//		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
 
 		if (error) {
-		responseDialog.setMessage("Error encountered")
-		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			responseDialog.setMessage("Error encountered")
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				//Nothing needs to be done, this closes the box
-			}
-		}).setCancelable(false);
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					//Nothing needs to be done, this closes the box
+				}
+			}).setCancelable(false);
 		}
-		
+
 		return responseDialog.show();
 	}
 
@@ -928,33 +931,29 @@ public class AppView extends Activity {
 
 					//Show the progress
 					progressNumber = service.getProgress();
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							while (progressNumber <= 100){
-								progressNumber = service.getProgress();
 
-								//Get the current state to check if it has changed
-								progressHandler.post(new Runnable() {
+					if (progressNumber <= 100){
+						progressNumber = service.getProgress();
 
-									@Override
-									public void run() {
-										progressBar.setProgress(progressNumber);
-										progressBar.setMessage(message);
-									}
-								});
+						//Get the current state to check if it has changed
+						progressHandler.post(new Runnable() {
 
-								state = service.getProtocolState();
-								/*
-								 * If the state is not reading or writing, the programmer
-								 * has either encountered an error or it is finished. 
-								 */
-								if (state != ProtocolState.READING && state != ProtocolState.WRITING) {
-									break;
-								}
+							@Override
+							public void run() {
+								progressBar.setProgress(progressNumber);
+								progressBar.setMessage(message);
 							}
+						});
+
+						state = service.getProtocolState();
+						/*
+						 * If the state is not reading or writing, the programmer
+						 * has either encountered an error or it is finished. 
+						 */
+						if (state != ProtocolState.READING && state != ProtocolState.WRITING) {
+							//									break;
 						}
-					}).start();
+					}
 				}
 
 				//If an error was encountered
@@ -977,7 +976,7 @@ public class AppView extends Activity {
 					progressBar.dismiss();
 					//Show the information box
 					runOnUiThread(new ShowInformationBox(true));
-//					createDialog(true);
+					//					createDialog(true);
 					break;
 				}
 
@@ -1001,10 +1000,8 @@ public class AppView extends Activity {
 				}
 
 				else {
-					//					Log.d(TAG, "State: " + state);
 					progressHandler.post(new Runnable() {
-						//TODO: Add check for failed to program
-
+						
 						@Override
 						public void run() {
 							progressBar.setMessage(message);

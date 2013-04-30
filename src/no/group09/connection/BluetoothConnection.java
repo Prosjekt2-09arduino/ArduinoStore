@@ -339,6 +339,10 @@ public class BluetoothConnection extends Protocol {
         
     };
     
+    public void enableReading(boolean read) {
+    	
+    }
+    
 //    public ConnectionState getConnectionState(){
 //    	return connectionState;
 //    }

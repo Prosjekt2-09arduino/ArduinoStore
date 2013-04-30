@@ -79,62 +79,65 @@ public class BtArduinoService extends Service {
 				}
 				
 				//HACK
-				try {
-					input.close();
-					output.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					synchronized(this) {
-						wait(1000);
-					}
-				} catch (InterruptedException e3) {
-					// TODO Auto-generated catch block
-					e3.printStackTrace();
-				}
+//				try {
+//					input.close();
+//					output.close();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				try {
+//					synchronized(this) {
+//						wait(1000);
+//					}
+//				} catch (InterruptedException e3) {
+//					// TODO Auto-generated catch block
+//					e3.printStackTrace();
+//				}
+//				
+//				String address = "00:13:02:20:93:35";
+//				
+//				BluetoothDevice device = btAdapter.getRemoteDevice(address);
+//
+//				try {
+//					btSocket = createBluetoothSocket(device);
+//				} catch (IOException e1) {
+//					logger.printToConsole("\n Failed to create BT socket");
+//				}
+//
+//				btAdapter.cancelDiscovery();
+//
+//				logger.printToConsole("\n...Connecting...");
+//				logger.logcat("initialiseConnectButton: Connecting...", "d");
+//
+//				try {
+//					btSocket.connect();
+//					logger.logcat("initialiseConnectButton: Connection OK...", "d");
+//				} catch (IOException e) {
+//					try {
+//						btSocket.close();
+//					} catch (IOException e2) {
+//						logger.printToConsole("\n Failed to close socket");
+//					}
+//				}
+//
+//				try {
+//					output = btSocket.getOutputStream();
+//				} catch (IOException e) {
+//					logger.printToConsole("\n...Output stream creating failed...");
+//				}
+//				try {
+//					input = btSocket.getInputStream();
+//				} catch (IOException e) {
+//					logger.printToConsole("\n...Input stream creation failed...");
+//				}
+//				logger.printToConsole("\n...Sockets created...");
+//				logger.logcat("initialiseConnectButton: Sockets created", "d");
 				
-				String address = "00:13:02:20:93:35";
-				
-				BluetoothDevice device = btAdapter.getRemoteDevice(address);
-
-				try {
-					btSocket = createBluetoothSocket(device);
-				} catch (IOException e1) {
-					logger.printToConsole("\n Failed to create BT socket");
-				}
-
-				btAdapter.cancelDiscovery();
-
-				logger.printToConsole("\n...Connecting...");
-				logger.logcat("initialiseConnectButton: Connecting...", "d");
-
-				try {
-					btSocket.connect();
-					logger.logcat("initialiseConnectButton: Connection OK...", "d");
-				} catch (IOException e) {
-					try {
-						btSocket.close();
-					} catch (IOException e2) {
-						logger.printToConsole("\n Failed to close socket");
-					}
-				}
-
-				try {
-					output = btSocket.getOutputStream();
-				} catch (IOException e) {
-					logger.printToConsole("\n...Output stream creating failed...");
-				}
-				try {
-					input = btSocket.getInputStream();
-				} catch (IOException e) {
-					logger.printToConsole("\n...Input stream creation failed...");
-				}
-				logger.printToConsole("\n...Sockets created...");
-				logger.logcat("initialiseConnectButton: Sockets created", "d");
-				
+				//ENDHACK
 				state = ProtocolState.INITIALIZING;
+				
+				progress = 0;
 				
 				this.hexFile = hexFile;
 				programmer = new STK500v1(output, input, logger, hexFile);
@@ -328,7 +331,7 @@ public class BtArduinoService extends Service {
 		@Override
 		public void run() {
 			//Start the programming. This does not return until the programmer is finished
-			boolean result = programmer.programUsingOptiboot(true, 16);
+			boolean result = programmer.programUsingOptiboot(false, 256);
 			if (result) {
 				Log.d(TAG, "programUsinOptiboot returned true");
 			}

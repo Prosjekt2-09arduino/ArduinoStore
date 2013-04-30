@@ -61,7 +61,7 @@ class ConnectionThread extends Thread {
 		public void run() {			
 
 			//Keep listening bytes from the stream
-			while( connection.getConnectionState() != ConnectionState.STATE_DISCONNECTED ){
+			while( connection.getConnectionState() == ConnectionState.STATE_CONNECTING ){
 				try {
 					int readByte = connection.input.read();
 					if( readByte != -1 ) {
