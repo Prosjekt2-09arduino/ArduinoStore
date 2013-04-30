@@ -65,7 +65,7 @@ void ComputerSerial::commandHandler(word size, uint8_t opcode, uint8_t flag, uin
             getDeviceInfo();
             break;
 		case OPCODE_RESET:
-			break;
+			reset();
 		default:
 			break;
 	}
@@ -219,10 +219,11 @@ void ComputerSerial::pinWrite(uint8_t pin, uint8_t value) {
 	ack(OPCODE_PIN_W);
 }
 
-// Reset the arduino
+// Reset the arduino by sending STK_OK and activate reset pin
 void ComputerSerial::reset() {
-	uint8_t resetByte = 0x14;
-	Serial.write(resetByte);
+	// uint8_t STK_OK = 0x10;
+	// Serial.write(STK_OK);
+		
 	digitalWrite(4,LOW);
 }
 
@@ -272,13 +273,10 @@ void ComputerSerial::serialEvent() {
     {
 		switch (state)
 		{
+			// start	size high	size low	opcode	flag	content
+			// 0xFF		0x00		0x01		0xFF	0x00	0x00
 			case STATE_START:
-				tempRead = Serial.read();
-				if (tempRead == OPCODE_RESET)
-				{
-					reset();
-				}
-				else if (tempRead == START_BYTE)
+				if (Serial.read() == START_BYTE)
                 {
                     state = STATE_SIZE_HIGH;
                     if(content != NULL) free(content);
