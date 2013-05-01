@@ -331,7 +331,7 @@ public class BtArduinoService extends Service {
 		@Override
 		public void run() {
 			//Start the programming. This does not return until the programmer is finished
-			boolean result = programmer.programUsingOptiboot(false, 256);
+			boolean result = programmer.programUsingOptiboot(false, 128);
 			if (result) {
 				Log.d(TAG, "programUsinOptiboot returned true");
 			}
