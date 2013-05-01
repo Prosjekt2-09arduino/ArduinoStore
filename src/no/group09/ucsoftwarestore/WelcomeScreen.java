@@ -162,6 +162,8 @@ public class WelcomeScreen extends Activity {
 				if (System.currentTimeMillis() > timeout) {
 					return false;
 				}
+				
+				else if (Devices.connectionHasFailed()) return false;
 
 				try { Thread.sleep(1);
 				} catch (InterruptedException e) {}
