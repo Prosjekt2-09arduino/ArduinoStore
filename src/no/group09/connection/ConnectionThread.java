@@ -108,15 +108,13 @@ class ConnectionThread extends Thread {
 		Thread socketThread = new Thread(){
 			@Override
 			public void run() {
-//				for(int i = 0; i<2; i++){
-					try {
-						connection.socket.connect();
-						connectionSuccessful = true;
-					} catch (IOException ex) {
-						Log.d(TAG, "Unable to open socket: " + ex);
-						connection.disconnect();
-					}
-//				}
+				try {
+					connection.socket.connect();
+					connectionSuccessful = true;
+				} catch (IOException ex) {
+					Log.d(TAG, "Unable to open socket: " + ex);
+					connection.disconnect();
+				}
 			}
 		};
 
@@ -133,7 +131,6 @@ class ConnectionThread extends Thread {
 				connection.disconnect();
 				return;
 			}			
-			//try {Thread.sleep(25); } catch (InterruptedException e) {}
 		}
 
 		//Start the super protocol thread loop

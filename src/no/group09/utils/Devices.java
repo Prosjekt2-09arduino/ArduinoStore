@@ -89,6 +89,7 @@ public class Devices extends Activity  {
 	private MyBroadcastReceiver actionFoundReceiver;
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
 	static Context context;
+	private static ConnectionState oldState;
 	
 	/** 
 	 * Message text that is to be printed to the user when the attempt to 
@@ -221,6 +222,32 @@ public class Devices extends Activity  {
 		if(BtArduinoService.getBtService() != null){
 			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
 				return BtArduinoService.getBtService().getBluetoothConnection().isConnected();
+			}
+		}
+		return false;
+	}
+	
+	public static boolean connectionHasFailed() {
+		
+		if(BtArduinoService.getBtService() != null){
+			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
+				BluetoothConnection connection = BtArduinoService.getBtService()
+						.getBluetoothConnection();
+				if (oldState == null) {
+					oldState = connection.getConnectionState();
+					Log.d(TAG, "State changed. New state: " + oldState);
+				}
+				else {
+					if (oldState == ConnectionState.STATE_CONNECTING && 
+							connection.getConnectionState() == ConnectionState.STATE_DISCONNECTED) {
+						Log.d(TAG, "Was connecting. Now disconnected");
+						return true;
+					}
+					else if (oldState != connection.getConnectionState()) {
+						oldState = connection.getConnectionState();
+						Log.d(TAG, "State changed. New state: " + oldState);
+					}
+				}
 			}
 		}
 		return false;
@@ -524,6 +551,7 @@ public class Devices extends Activity  {
 					"up to 30 seconds.");
 			progressDialog.setCancelable(false);
 			progressDialog.show();
+			oldState = null;
 		}
 
 		@Override
@@ -531,7 +559,9 @@ public class Devices extends Activity  {
 			while(true) {
 				
 				if (Devices.isConnected()) return true;
-
+				
+				else if (Devices.connectionHasFailed()) return false;
+				
 				if (System.currentTimeMillis() > timeout) {
 					return false;
 				}
