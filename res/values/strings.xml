@@ -68,10 +68,10 @@
     
     <!-- Intro Screen -->
     <string name="welcome">Welcome!</string>
-    <string name="intro_explanation">Explanation hehehe</string>
+    <string name="intro_explanation">This app store allows you to download apps to your Arduino device through Bluetooth. Press "Device List" to see nearby devices, or "Browse Shop" to enter the app store.</string>
     <string name="intro_device_list_button">Device List</string>
     <string name="intro_shop_button">Browse Shop</string>
-    <string name="intro_checkbox">Automatic try to reconnect to last connected device</string>
+    <string name="intro_checkbox">Automatically try to reconnect to last connected device</string>
 
     <!-- App view screen -->
     <string name="app_view_title">Application</string>
