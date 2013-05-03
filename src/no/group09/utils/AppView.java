@@ -442,7 +442,6 @@ public class AppView extends Activity {
 					progressBar.dismiss();
 					//Show the information box
 					runOnUiThread(new ShowInformationBox(true));
-					//					createDialog(true);
 					break;
 				}
 
@@ -458,10 +457,10 @@ public class AppView extends Activity {
 
 					progressBar.dismiss();
 					//Make the thread sleep for a short interval to show the message
-					//					try { Thread.sleep(1500);
-					//					} catch (Exception e) {}
+					try { Thread.sleep(1500);
+					} catch (Exception e) {}
 
-					//					informationBox(false);
+					runOnUiThread(new ShowInformationBox(false));
 					break;
 				}
 
