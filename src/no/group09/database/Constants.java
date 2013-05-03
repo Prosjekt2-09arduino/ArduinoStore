@@ -133,9 +133,9 @@ public class Constants {
 			save.insertApp(new App("FunTime", 4, 4, "Games", "This describes this amazing, life changing app. yey!", 3));			//4
 			save.insertApp(new App("PlayWithPlayers", 1, 2, "Games", "This describes this amazing, life changing app. yey!", 3));	//5
 			
-//			save.insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!", 2));	
-//			save.insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!", 3));	
-//			save.insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!", 1));	
+			save.insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!", 2));	
+			save.insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!", 3));	
+			save.insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!", 1));	
 			
 			save.insertApp(new App("Tool", 5, 5, "Tools", "This describes this amazing, life changing app. yey!", 2));				//6
 			save.insertApp(new App("ToolBox", 5, 3, "Tools", "This describes this amazing, life changing app. yey!", 3));			//7
@@ -149,8 +149,8 @@ public class Constants {
 			save.insertDeveloper(new Developer("Wilhelm", "www.lol.com"));	//developer 1
 			save.insertDeveloper(new Developer("Robin", "www.haha.com"));	//2
 			save.insertDeveloper(new Developer("Jeppe", "www.hehe.com"));	//3
-			save.insertDeveloper(new Developer("Bjørn", "www.hoho.com"));	//4
-			save.insertDeveloper(new Developer("Ståle", "www.rofl.com"));	//5
+			save.insertDeveloper(new Developer("Bjï¿½rn", "www.hoho.com"));	//4
+			save.insertDeveloper(new Developer("Stï¿½le", "www.rofl.com"));	//5
 			save.insertDeveloper(new Developer("Nina", "www.kake.com"));	//6
 			
 			save.insertRequirements(new Requirements("name", "description", true));	//compatible
@@ -158,8 +158,8 @@ public class Constants {
 			save.insertRequirements(new Requirements("name", "desc..", false));		//not compatible
 			
 			save.insertBinaryFile(new BinaryFile(1, Constants.getByteExample(1)));
-			save.insertBinaryFile(new BinaryFile(2, Constants.getByteExample(2)));
-			save.insertBinaryFile(new BinaryFile(3, Constants.getByteExample(3)));
+			save.insertBinaryFile(new BinaryFile(2, Constants.getByteExample(1)));
+			save.insertBinaryFile(new BinaryFile(3, Constants.getByteExample(1)));
 			save.insertBinaryFile(new BinaryFile(4, Constants.getByteExample(1)));
 			save.insertBinaryFile(new BinaryFile(5, Constants.getByteExample(1)));
 			
@@ -167,11 +167,11 @@ public class Constants {
 			save.insertBinaryFile(new BinaryFile(7, Constants.getByteExample(2)));
 			save.insertBinaryFile(new BinaryFile(8, Constants.getByteExample(2)));
 
-			save.insertBinaryFile(new BinaryFile(9, Constants.getByteExample(2)));
-			save.insertBinaryFile(new BinaryFile(10, Constants.getByteExample(2)));
-//			save.insertBinaryFile(new BinaryFile(11, Constants.getByteExample()));
-//			save.insertBinaryFile(new BinaryFile(12, Constants.getByteExample()));
-//			save.insertBinaryFile(new BinaryFile(13, Constants.getByteExample()));
+			save.insertBinaryFile(new BinaryFile(9, Constants.getByteExample(3)));
+			save.insertBinaryFile(new BinaryFile(10, Constants.getByteExample(3)));
+			save.insertBinaryFile(new BinaryFile(11, Constants.getByteExample(3)));
+			save.insertBinaryFile(new BinaryFile(12, Constants.getByteExample(3)));
+			save.insertBinaryFile(new BinaryFile(13, Constants.getByteExample(3)));
 //			
 //			save.insertBinaryFile(new BinaryFile(14, Constants.getByteExample()));
 //			save.insertBinaryFile(new BinaryFile(15, Constants.getByteExample()));
