@@ -35,78 +35,81 @@ import android.widget.TextView;
  * basic ListAdapter for apps
  */
 public class ListAdapter extends BaseAdapter {
-    
-    private Context context;
-    private ArrayList<HashMap<String, String>> data;
-    private static LayoutInflater inflater=null;
-    
+
+	private Context context;
+	private ArrayList<HashMap<String, String>> data;
+	private static LayoutInflater inflater=null;
+
 	public static final String KEY_ID = "id";
 	public static final String APP_NAME = "title";
 	public static final String DISTRIBUTOR = "distributor";
 	public static final String RATING = "rating";
 	public static final String IMAGE = "image";
 	public static final String CATEGORY = "category";
-    
-    public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
-        context = a;
-        data = d;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
 
-    @Override
+	public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
+		context = a;
+		data = d;
+		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
+	@Override
 	public int getCount() {
-        return data.size();
-    }
+		return data.size();
+	}
 
-    @Override
+	@Override
 	public Object getItem(int position) {
-        return position;
-    }
+		return position;
+	}
 
-    @Override
+	@Override
 	public long getItemId(int position) {
-        return position;
-    }
-    
-    @Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-        View vi=convertView;
-        if(convertView==null)
-            vi = inflater.inflate(R.layout.list_row, null);
+		return position;
+	}
 
-        TextView appName = (TextView)vi.findViewById(R.id.app_name);
-        TextView distributor = (TextView)vi.findViewById(R.id.distributor);
-        RatingBar getRatingBar = (RatingBar) vi.findViewById(R.id.ratingBarIndicator);;
-        ImageView thumb_image = (ImageView)vi.findViewById(R.id.list_image);
-        
-        HashMap<String, String> listItem = new HashMap<String, String>();
-        listItem = data.get(position);
-        
-        // Setting all values in listview
-        appName.setText(listItem.get(APP_NAME));
-        distributor.setText(listItem.get(DISTRIBUTOR));
-        getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
-        
-//        if(listItem.get(CATEGORY).equals("Games")){
-//        	thumb_image.setImageResource(R.drawable.games);
-//        }
-//        
-//        else if(listItem.get(CATEGORY).equals("Medical")){
-//        	thumb_image.setImageResource(R.drawable.medical);
-//        }
-//        
-//        else if(listItem.get(CATEGORY).equals("Tools")){
-//        	thumb_image.setImageResource(R.drawable.tools);
-//        }
-//        
-//        else if(listItem.get(CATEGORY).equals("Media")){
-//        	thumb_image.setImageResource(R.drawable.media);
-//        }
-        
-        return vi;
-    }
-    
-    public String getID(int position){
-    	return data.get(position).get(KEY_ID);
-    }
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View vi=convertView;
+		if(convertView==null)
+			vi = inflater.inflate(R.layout.list_row, null);
+
+		TextView appName = (TextView)vi.findViewById(R.id.app_name);
+		TextView distributor = (TextView)vi.findViewById(R.id.distributor);
+		RatingBar getRatingBar = (RatingBar) vi.findViewById(R.id.ratingBarIndicator);;
+		ImageView thumb_image = (ImageView)vi.findViewById(R.id.list_image);
+
+		HashMap<String, String> listItem = new HashMap<String, String>();
+		listItem = data.get(position);
+
+		// Setting all values in listview
+		appName.setText(listItem.get(APP_NAME));
+		distributor.setText(listItem.get(DISTRIBUTOR));
+		getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
+
+//		if(listItem.get(CATEGORY) != null){
+
+			if(listItem.get(CATEGORY).equals("Games")){
+				thumb_image.setImageResource(R.drawable.games);
+			}
+
+			else if(listItem.get(CATEGORY).equals("Medical")){
+				thumb_image.setImageResource(R.drawable.medical);
+			}
+
+			else if(listItem.get(CATEGORY).equals("Tools")){
+				thumb_image.setImageResource(R.drawable.tools);
+			}
+
+			else if(listItem.get(CATEGORY).equals("Media")){
+				thumb_image.setImageResource(R.drawable.media);
+			}
+//		}
+
+		return vi;
+	}
+
+	public String getID(int position){
+		return data.get(position).get(KEY_ID);
+	}
 }
