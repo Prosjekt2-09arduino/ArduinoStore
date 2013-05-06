@@ -389,6 +389,8 @@ public class Devices extends Activity  {
 		listAdapter.notifyDataSetChanged();
 
 		setActivityTitle();
+		
+		checkBTState();
 	}
 	
 	private void addToDeviceListAndSelectIt(){

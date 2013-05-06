@@ -7,6 +7,7 @@ import no.group09.database.Save;
 import no.group09.database.entity.App;
 import no.group09.database.entity.BinaryFile;
 import no.group09.database.entity.Developer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -17,6 +18,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.view.View.OnClickListener;
@@ -477,5 +480,33 @@ public class AppView extends Activity {
 			}
 		}
 
+	}
+	
+	/**
+	 * Creates options menus
+	 */
+	@Override
+	@SuppressLint("NewApi")
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.device_menu, menu);
+		return true;
+	}
+
+	/**
+	 * Returns true as long as item corresponds with a proper options action.
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		//Start the preferences class
+		case R.id.settings:
+			//Create an intent to start the preferences activity
+			Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
+			this.startActivity(myIntent);
+			return true;
+
+		default : return false;
+		}
 	}
 }
