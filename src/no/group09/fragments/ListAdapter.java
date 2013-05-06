@@ -87,21 +87,21 @@ public class ListAdapter extends BaseAdapter {
         distributor.setText(listItem.get(DISTRIBUTOR));
         getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
         
-        if(listItem.get(CATEGORY).equals("Games")){
-        	thumb_image.setImageResource(R.drawable.games);
-        }
-        
-        else if(listItem.get(CATEGORY).equals("Medical")){
-        	thumb_image.setImageResource(R.drawable.medical);
-        }
-        
-        else if(listItem.get(CATEGORY).equals("Tools")){
-        	thumb_image.setImageResource(R.drawable.tools);
-        }
-        
-        else if(listItem.get(CATEGORY).equals("Media")){
-        	thumb_image.setImageResource(R.drawable.media);
-        }
+//        if(listItem.get(CATEGORY).equals("Games")){
+//        	thumb_image.setImageResource(R.drawable.games);
+//        }
+//        
+//        else if(listItem.get(CATEGORY).equals("Medical")){
+//        	thumb_image.setImageResource(R.drawable.medical);
+//        }
+//        
+//        else if(listItem.get(CATEGORY).equals("Tools")){
+//        	thumb_image.setImageResource(R.drawable.tools);
+//        }
+//        
+//        else if(listItem.get(CATEGORY).equals("Media")){
+//        	thumb_image.setImageResource(R.drawable.media);
+//        }
         
         return vi;
     }
