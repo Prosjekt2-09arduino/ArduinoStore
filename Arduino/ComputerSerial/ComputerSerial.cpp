@@ -224,6 +224,7 @@ void ComputerSerial::reset() {
 	// uint8_t STK_OK = 0x10;
 	// Serial.write(STK_OK);
 		
+	pinMode(4,OUTPUT);
 	digitalWrite(4,LOW);
 }
 
