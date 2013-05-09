@@ -133,15 +133,15 @@ public class Constants {
 			save.insertApp(new App("FunTime", 4, 4, "Games", "This describes this amazing, life changing app. yey!", 3));			//4
 			save.insertApp(new App("PlayWithPlayers", 1, 2, "Games", "This describes this amazing, life changing app. yey!", 3));	//5
 			
-			save.insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!", 2));	
-			save.insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!", 3));	
-			save.insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!", 1));	
+			save.insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!", 2));			//6
+			save.insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!", 3));			//7
+			save.insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!", 1));			//8
 			
-			save.insertApp(new App("Tool", 5, 5, "Tools", "This describes this amazing, life changing app. yey!", 2));				//6
-			save.insertApp(new App("ToolBox", 5, 3, "Tools", "This describes this amazing, life changing app. yey!", 3));			//7
-			save.insertApp(new App("BoxTooler", 2, 1, "Tools", "This describes this amazing, life changing app. yey!", 3));			//8
-			save.insertApp(new App("ToolTooler", 3, 1, "Tools", "This describes this amazing, life changing app. yey!", 1));		//9
-			save.insertApp(new App("ScrewDriver", 4, 1, "Tools", "This describes this amazing, life changing app. yey!", 2));		//10
+			save.insertApp(new App("Tool", 5, 5, "Tools", "This describes this amazing, life changing app. yey!", 2));				//9
+			save.insertApp(new App("ToolBox", 5, 3, "Tools", "This describes this amazing, life changing app. yey!", 3));			//10
+			save.insertApp(new App("BoxTooler", 2, 1, "Tools", "This describes this amazing, life changing app. yey!", 3));			//11
+			save.insertApp(new App("ToolTooler", 3, 1, "Tools", "This describes this amazing, life changing app. yey!", 1));		//12
+			save.insertApp(new App("ScrewDriver", 4, 1, "Tools", "This describes this amazing, life changing app. yey!", 2));		//13
 			
 //			save.insertApp(new App("Player", 4, 5, "Media", "This describes this amazing, life changing app. yey!", 1));	
 //			save.insertApp(new App("MusicP", 2, 2, "Media", "This describes this amazing, life changing app. yey!", 3));
@@ -157,16 +157,19 @@ public class Constants {
 			save.insertRequirements(new Requirements("name", "desc..", true));		//compatible
 			save.insertRequirements(new Requirements("name", "desc..", false));		//not compatible
 			
+			//games: LED
 			save.insertBinaryFile(new BinaryFile(1, Constants.getByteExample(1)));
 			save.insertBinaryFile(new BinaryFile(2, Constants.getByteExample(1)));
 			save.insertBinaryFile(new BinaryFile(3, Constants.getByteExample(1)));
 			save.insertBinaryFile(new BinaryFile(4, Constants.getByteExample(1)));
 			save.insertBinaryFile(new BinaryFile(5, Constants.getByteExample(1)));
 			
+			//medical: mario
 			save.insertBinaryFile(new BinaryFile(6, Constants.getByteExample(2)));
 			save.insertBinaryFile(new BinaryFile(7, Constants.getByteExample(2)));
 			save.insertBinaryFile(new BinaryFile(8, Constants.getByteExample(2)));
 
+			//tool: alternative LED
 			save.insertBinaryFile(new BinaryFile(9, Constants.getByteExample(3)));
 			save.insertBinaryFile(new BinaryFile(10, Constants.getByteExample(3)));
 			save.insertBinaryFile(new BinaryFile(11, Constants.getByteExample(3)));
@@ -184,7 +187,7 @@ public class Constants {
 		//If it is a game
 		if(type == 1){
 			//LEDS
-			s = "3A100000000C9464000C948C000C948C000C948C0068" +
+			s = 	"3A100000000C9464000C948C000C948C000C948C0068" +
 					"3A100010000C948C000C948C000C948C000C948C0030" +
 					"3A100020000C948C000C948C000C948C000C948C0020" +
 					"3A100030000C948C000C948C000C948C000C948C0010" +
@@ -606,7 +609,7 @@ public class Constants {
 		//If it is a tool
 		else if (type == 2) {
 			//Mario
-			s = "3A100000000C94EF000C9417010C9417010C94170139" +
+			s = 	"3A100000000C94EF000C9417010C9417010C94170139" +
 					"3A100010000C9417010C9417010C9417010C94B8114F" +
 					"3A100020000C9417010C9417010C9417010C94611196" +
 					"3A100030000C9417010C9417010C940A110C941701DD" +
