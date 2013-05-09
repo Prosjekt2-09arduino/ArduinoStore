@@ -132,6 +132,16 @@ class ConnectionThread extends Thread {
 				return;
 			}			
 		}
+		
+		Log.d(TAG, "Bluetooth connection: wait for hardware reset processing before " +
+				"requesting handshake...");
+		//wait to allow hardware reset to take place before requesting handshake
+		long now = System.currentTimeMillis();
+		while (System.currentTimeMillis() - now <= 150) {
+			try {
+				Thread.sleep(25);
+			} catch (InterruptedException e) {}
+		}
 
 		//Start the super protocol thread loop
 		Log.d(TAG, "Basic connection established! Requesting Metadata to finish handshake procedure.");
