@@ -15,12 +15,15 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import no.group09.stk500_v1.Logger;
 import no.group09.stk500_v1.STK500v1;
 import no.group09.stk500_v1.STK500v1.ProtocolState;
 import no.group09.utils.LogForProtocol;
+import no.group09.utils.AppView.ProgressbarHandler;
 
 /**
  * Service used to hold the Bluetooth connection
@@ -42,12 +45,14 @@ public class BtArduinoService extends Service {
 	/** Used to check if the programmer is running */
 	private volatile boolean checkState = false;
 	/** Variable used to check the progress of the programming */
-	private int progress = 0;
+	private int newProgress = 0;
 	/** Field used to contain the state of the programmer */
 	private ProtocolState state;
 	/** String used to print the message displayed to the user */
 	private String stateMessage = "";
-	
+
+	private ProgressbarHandler handler;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -71,97 +76,149 @@ public class BtArduinoService extends Service {
 							"but no connection prepared", "w");
 					return;
 				}
-				
+
 				state = ProtocolState.INITIALIZING;
-				
-				progress = 0;
-				
+
+				newProgress = 0;
+
 				this.hexFile = hexFile;
 				programmer = new STK500v1(output, input, logger, hexFile);
-				
+
 				//The programmer is now running
 				checkState = true;
-				
+
 			}
 		} else {
-			//TODO: Reset programmer
+			//Reset the programmer
+			programmer = null;
+			prepareProgrammer(hexFile);
 		}
 	}
 
 	private synchronized void checkProtocolState() {
+
+		ProtocolState oldState = null;
+		boolean updateProgressBar = false;
+		int oldProgress = 0;
+
 		while (checkState) {
-			
+
 			setProtocolState(programmer.getProtocolState());
-			ProtocolState state = getProtocolState();
-			Log.d("AppView", "State fetched: " + state);
-			
-			switch(state) {
+			ProtocolState newState = getProtocolState();
+			newProgress = programmer.getProgress();
+			Log.d("AppView", "State fetched: " + newState);
+
+			if (oldState != newState || oldProgress != newProgress) updateProgressBar = true;
+
+			switch(newState) {
 			case CONNECTING:
-				setStateMessage("Trying to connect...");
+				if (updateProgressBar) {
+					stateUpdateProgressBar("Trying to connect...", false);
+					oldState = newState;
+				}
 				break;
 			case ERROR_CONNECT:
-				setStateMessage("An error was encountered while connecting");
-//				programmer.stopReadWrapper();
+				if (updateProgressBar) {
+					stateUpdateProgressBar("An error was encountered while connecting", true);
+					oldState = newState;
+				}
 				checkState = false;
 				break;
 			case ERROR_PARSE_HEX:
-				setStateMessage("Downloaded program was corrupted");
+				if (updateProgressBar) {
+					stateUpdateProgressBar("Downloaded program was corrupted", true);
+					oldState = newState;
+				}
 				checkState = false;
 				break;
 			case ERROR_READ:
-				setStateMessage("Error while verifying program");
+				if (updateProgressBar) {
+					stateUpdateProgressBar("Error while verifying program", true);
+					oldState = newState;
+				}
 				checkState = false;
 				break;
 			case ERROR_WRITE:
-				setStateMessage("Error while programming device");
+				if (updateProgressBar) {
+					stateUpdateProgressBar("Error while programming device", true);
+					oldState = newState;
+				}
 				checkState = false;
 				break;
 			case FINISHED:
-				setStateMessage("Finished programming");
+				if (updateProgressBar) {
+					stateUpdateProgressBar("Finished programming", true);
+					oldState = newState;
+				}
 				checkState = false;
 				break;
 			case INITIALIZING:
-				setStateMessage("Initializing programmer");
+				if (updateProgressBar) {
+					stateUpdateProgressBar("Initializing programmer", false);
+					oldState = newState;
+				}
 				break;
 			case READING:
-				setStateMessage("Verifying program...");
-				setProgress(programmer.getProgress());
+				if (updateProgressBar) {
+					stateUpdateProgressBarProgress("Verifying program...", newProgress);
+					oldState = newState;
+					oldProgress = newProgress;
+				}
 				break;
 			case WRITING:
-				setProgress(programmer.getProgress());
-				setStateMessage("Programming");
+				if (updateProgressBar) {
+					stateUpdateProgressBarProgress("Programming...", newProgress);
+					oldState = newState;
+					oldProgress = newProgress;
+				}
 				break;
 			case READY:
-				/*
-				 * Add functionality to check if the programmer is in this state too
-				 * long. If this is the case something most likely is wrong.
-				 * Could be if it e.g. is in ready state after three checks.
-				 *
-				 */
-				setStateMessage("Programmer ready");
+				if (updateProgressBar) {
+					stateUpdateProgressBar("Programmer ready", false);
+					oldState = newState;
+				}
 				break;
 			default:
-				Log.wtf("AppView", "Unknown state: " + state);
+				Log.wtf("AppView", "Unknown state: " + newState);
 				checkState = false;
 				break;
 			}
-			
+
 			try {
-				this.wait(500);
+				this.wait(30);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
+	private void stateUpdateProgressBarProgress(String message, int progress) {
+		Message msg = Message.obtain(handler, 0, 1, progress, message);
+		msg.sendToTarget();
+//		handler.sendMessage(msg);
+	}
+	private void stateUpdateProgressBar(String message, boolean hide) {
+		int arg1 = 0;
+		if (hide) arg1 = 0;
+		else arg1 = 1;
+		Message msg = Message.obtain(handler, 0, arg1, newProgress, message);
+		msg.sendToTarget();
+//		Message msg = new Message();
+//		Bundle data = new Bundle();
+//		data.putInt("integer", 0);
+//		data.putString("string", message);
+//		msg.setData(data);
+//		handler.sendMessage(msg);
+	}
+
 	private void setStateMessage(String message) {
 		this.stateMessage = message;
 	}
-	
+
 	public synchronized String getStateMessage() {
 		return stateMessage;
 	}
-	
+
 	/**
 	 * Sets the current state of the programmer. Should be called every time the
 	 * state changes
@@ -171,7 +228,7 @@ public class BtArduinoService extends Service {
 	private void setProtocolState(ProtocolState state) {
 		this.state = state;
 	}
-	
+
 	/**
 	 * Returns the current state of the programmer.
 	 * 
@@ -180,7 +237,7 @@ public class BtArduinoService extends Service {
 	public synchronized ProtocolState getProtocolState() {
 		return this.state;
 	}
-	
+
 	/**
 	 * Checks if the programmer is running.
 	 * 
@@ -189,7 +246,7 @@ public class BtArduinoService extends Service {
 	public synchronized boolean isProgrammerRunning() {
 		return checkState;
 	}
-	
+
 	/**
 	 * Sets the progress of the programming of the Arduino. Should be called
 	 * every time there is an update with the progress.
@@ -197,16 +254,16 @@ public class BtArduinoService extends Service {
 	 * @param progress The new progress. Must be an integer between 0 and 100.
 	 */
 	private void setProgress(int progress) {
-		this.progress = progress;
+		this.newProgress = progress;
 	}
-	
+
 	/**
 	 * Returns the progress of the programming of the Arduino
 	 * 
 	 * @return The total progress as an integer between 0 and 100
 	 */
 	public int getProgress() {
-		return this.progress;
+		return newProgress;
 	}
 
 	/**
@@ -220,7 +277,7 @@ public class BtArduinoService extends Service {
 				return true;
 			} else if (state == ProtocolState.ERROR_CONNECT || state == ProtocolState.ERROR_PARSE_HEX
 					|| state == ProtocolState.ERROR_READ || state == ProtocolState.ERROR_WRITE) {
-//				programmer.stopReadWrapper();
+				//				programmer.stopReadWrapper();
 				//Delete the programmer
 				programmer = null;
 				return false;
@@ -233,21 +290,19 @@ public class BtArduinoService extends Service {
 	 * Program using the supplied hex file. Prepares the programmer if required.
 	 * @param hexFile as byte array in Intel hex format.
 	 */
-	public void sendData(byte[] hexFile){
+	public void sendData(byte[] hexFile, ProgressbarHandler handler){
 		if (!isProgrammerReady()) {
+			this.handler = handler;
 			programmerHandlerThread = new Thread(new ProgrammerHandler(hexFile));
 			//Starting thread
 			programmerHandlerThread.start();
-			
-		} else if (hexFile == this.hexFile) {
-			//TODO: Ask programmer to program now
 		} else {
 			//programmer ready but a different file was prepared with it
 			logger.logcat("BtService.sendData: Programmer was prepared with another" +
 					" hex file. Sending aborted.", "i");
 		}
 	}
-	
+
 	class ProgrammerTask implements Runnable {
 
 		@Override
@@ -262,9 +317,9 @@ public class BtArduinoService extends Service {
 				Log.d(TAG, "programUsinOptiboot returned false");
 			}
 		}
-		
+
 	}
-	
+
 	class ProgrammerHandler implements Runnable {
 		byte[] hexFile;
 		public ProgrammerHandler(byte[] hexFile) {
