@@ -90,7 +90,7 @@ public class Devices extends Activity  {
 	public static final String MAC_ADDRESS = "MAC_ADDRESS";
 	static Context context;
 	private static ConnectionState oldState;
-	
+
 	/** 
 	 * Message text that is to be printed to the user when the attempt to 
 	 * connect was unsuccessful.
@@ -150,7 +150,7 @@ public class Devices extends Activity  {
 		if(isConnected()){
 			addToDeviceListAndSelectIt();
 		}
-		
+
 		checkBTState();
 
 		//Add the button that opens the 'Add device' screen
@@ -161,7 +161,7 @@ public class Devices extends Activity  {
 
 		addButtonFunctionality();
 	}
-	
+
 	/**
 	 * Method that initializes the device list and creates a service if an
 	 * item is clicked.
@@ -226,9 +226,9 @@ public class Devices extends Activity  {
 		}
 		return false;
 	}
-	
+
 	public static boolean connectionHasFailed() {
-		
+
 		if(BtArduinoService.getBtService() != null){
 			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
 				BluetoothConnection connection = BtArduinoService.getBtService()
@@ -305,7 +305,7 @@ public class Devices extends Activity  {
 		browseShowButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				finish();	//finishes the activity
+				//				finish();	//finishes the activity
 				startActivity(new Intent(getBaseContext(), MainActivity.class));
 			}
 		});
@@ -384,21 +384,21 @@ public class Devices extends Activity  {
 		if(isConnected()){
 			addToDeviceListAndSelectIt();
 		}
-		
+
 		//Notify the adapter that the list is now empty
 		listAdapter.notifyDataSetChanged();
 
 		setActivityTitle();
-		
+
 		checkBTState();
 	}
-	
+
 	private void addToDeviceListAndSelectIt(){
 		if(isConnected()){
 			HashMap<String, String> map = new HashMap<String, String>();
 			String deviceName = sharedPref.getString("connected_device_name", "null");
 			String deviceMac = sharedPref.getString("connected_device_mac", "null");
-			
+
 			map.put("name", deviceName);
 			map.put("mac", deviceMac);
 			map.put("pager", "708");
@@ -524,6 +524,21 @@ public class Devices extends Activity  {
 				refresh.setVisibility(View.VISIBLE);
 				Log.d(TAG, "\nDiscovery Finished");
 			}
+
+			if(BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)){
+				Toast.makeText(getBaseContext(), "State_Disconnected", Toast.LENGTH_SHORT).show();
+				Log.d(TAG, "ACTION_ACL_DISCONNECTED");
+			}
+
+			if(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)){
+				Toast.makeText(getBaseContext(), "STATE_DISCONNECT_REQUEST", Toast.LENGTH_SHORT).show();
+				Log.d(TAG, "ACTION_ACL_DISCONNECTED");
+			}
+
+			if(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED.equals(action)){
+				Toast.makeText(getBaseContext(), "State_changed", Toast.LENGTH_SHORT).show();
+				Log.d(TAG, "ACTION_CONNECTION_STATE_CHANGED");
+			}
 		}
 	}
 
@@ -541,7 +556,7 @@ public class Devices extends Activity  {
 
 		return responseDialog.show();
 	}
-	
+
 	private class ProgressDialogTask extends AsyncTask<Void, Void, Boolean> {
 
 		private long timeout;
@@ -559,11 +574,11 @@ public class Devices extends Activity  {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			while(true) {
-				
+
 				if (Devices.isConnected()) return true;
-				
+
 				else if (Devices.connectionHasFailed()) return false;
-				
+
 				if (System.currentTimeMillis() > timeout) {
 					return false;
 				}
@@ -580,9 +595,9 @@ public class Devices extends Activity  {
 			String message, title;
 
 			if (success && connection.isConnected()) {
-				
+
 				message = "Successfully connected to device: " + listAdapter.getName(savedPosition);
-				
+
 				String lastConnectedDevice = "Device name: " + listAdapter.getName(savedPosition)
 						+ "\nMAC Address: " + listAdapter.getMacAddress(savedPosition);
 
@@ -599,7 +614,7 @@ public class Devices extends Activity  {
 			else {
 				message = NEGATIVE_MESSAGE;
 				title = "Devices";
-				
+
 				//Unselect the view in the list
 				deviceList.setItemChecked(savedPosition, false);
 
