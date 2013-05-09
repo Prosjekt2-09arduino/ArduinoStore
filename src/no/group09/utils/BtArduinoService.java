@@ -48,15 +48,9 @@ public class BtArduinoService extends Service {
 	/** String used to print the message displayed to the user */
 	private String stateMessage = "";
 	
-	BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-	private BluetoothSocket btSocket = null;
-	private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-	
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
-		//		sendData();
 	}
 
 	/**
@@ -78,63 +72,6 @@ public class BtArduinoService extends Service {
 					return;
 				}
 				
-				//HACK
-//				try {
-//					input.close();
-//					output.close();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				try {
-//					synchronized(this) {
-//						wait(1000);
-//					}
-//				} catch (InterruptedException e3) {
-//					// TODO Auto-generated catch block
-//					e3.printStackTrace();
-//				}
-//				
-//				String address = "00:13:02:20:93:35";
-//				
-//				BluetoothDevice device = btAdapter.getRemoteDevice(address);
-//
-//				try {
-//					btSocket = createBluetoothSocket(device);
-//				} catch (IOException e1) {
-//					logger.printToConsole("\n Failed to create BT socket");
-//				}
-//
-//				btAdapter.cancelDiscovery();
-//
-//				logger.printToConsole("\n...Connecting...");
-//				logger.logcat("initialiseConnectButton: Connecting...", "d");
-//
-//				try {
-//					btSocket.connect();
-//					logger.logcat("initialiseConnectButton: Connection OK...", "d");
-//				} catch (IOException e) {
-//					try {
-//						btSocket.close();
-//					} catch (IOException e2) {
-//						logger.printToConsole("\n Failed to close socket");
-//					}
-//				}
-//
-//				try {
-//					output = btSocket.getOutputStream();
-//				} catch (IOException e) {
-//					logger.printToConsole("\n...Output stream creating failed...");
-//				}
-//				try {
-//					input = btSocket.getInputStream();
-//				} catch (IOException e) {
-//					logger.printToConsole("\n...Input stream creation failed...");
-//				}
-//				logger.printToConsole("\n...Sockets created...");
-//				logger.logcat("initialiseConnectButton: Sockets created", "d");
-				
-				//ENDHACK
 				state = ProtocolState.INITIALIZING;
 				
 				progress = 0;
@@ -150,19 +87,6 @@ public class BtArduinoService extends Service {
 			//TODO: Reset programmer
 		}
 	}
-	private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-		if(Build.VERSION.SDK_INT >= 10){
-			try {
-				final Method  m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[] { UUID.class });
-				return (BluetoothSocket) m.invoke(device, MY_UUID);
-			} catch (Exception e) {
-
-				logger.printToConsole("\n Couldnt create insecure RFComm connection");
-			}
-		}
-		return  device.createRfcommSocketToServiceRecord(MY_UUID);
-	}
-
 
 	private synchronized void checkProtocolState() {
 		while (checkState) {
@@ -177,7 +101,7 @@ public class BtArduinoService extends Service {
 				break;
 			case ERROR_CONNECT:
 				setStateMessage("An error was encountered while connecting");
-				programmer.stopReadWrapper();
+//				programmer.stopReadWrapper();
 				checkState = false;
 				break;
 			case ERROR_PARSE_HEX:
@@ -285,8 +209,6 @@ public class BtArduinoService extends Service {
 		return this.progress;
 	}
 
-
-
 	/**
 	 * Check if the programmer is ready to be programmed.
 	 * @return true if ready
@@ -298,7 +220,7 @@ public class BtArduinoService extends Service {
 				return true;
 			} else if (state == ProtocolState.ERROR_CONNECT || state == ProtocolState.ERROR_PARSE_HEX
 					|| state == ProtocolState.ERROR_READ || state == ProtocolState.ERROR_WRITE) {
-				programmer.stopReadWrapper();
+//				programmer.stopReadWrapper();
 				//Delete the programmer
 				programmer = null;
 				return false;
@@ -361,6 +283,7 @@ public class BtArduinoService extends Service {
 	/**
 	 * Get a connection with the Arduino. This is a Bluetooth connection with an added
 	 * handshake communicating with the Arduino library.
+	 * 
 	 * @return true if successful
 	 */
 	private boolean connect() {
@@ -418,7 +341,7 @@ public class BtArduinoService extends Service {
 			}
 
 			if(connection.getConnectionState() != ConnectionState.STATE_DISCONNECTED){
-				Log.d(TAG, "State was not disconnected (onStartCommand())\nSetting state to Disconnected.");
+				Log.d(TAG, "State was not disconnected (onStartCommand())");
 			}
 
 			Log.d(TAG, "Connection state: " + connection.getConnectionState());
