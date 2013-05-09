@@ -95,10 +95,6 @@ void setup()
 	//Initialize computer serial class
 	comp.begin(115200);
 	
-	// Initialize reset function
-	pinMode(RESET_PIN,OUTPUT);
-	digitalWrite(RESET_PIN,HIGH);
-	
 	comp.setDeviceName("uCSS");
 	comp.setDeviceVersion("v0.1a");
 
