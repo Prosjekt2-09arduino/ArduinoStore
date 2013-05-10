@@ -37,9 +37,9 @@ void setup()
 	comp.addDeviceDownloadLink("http://folk.ntnu.no/svarvaa/utils/pro2www/#appId1", "OSNAP Jacket");
 	
 	
-	pinMode(10, OUTPUT);
-	pinMode(11, OUTPUT);
-	pinMode(12, OUTPUT);
+	pinMode(5, OUTPUT);
+	pinMode(6, OUTPUT);
+	pinMode(13, OUTPUT);
 	
 	time = millis();
 }
@@ -48,28 +48,28 @@ void loop()
 {
 	if(h) {
 		if(millis() >= time+3000) {
-			digitalWrite(10, HIGH);
+			digitalWrite(5, HIGH);
 			time = millis();
 			h=false;
 		}
 		else if(millis() >= time+2000) {
-			digitalWrite(11, HIGH);
+			digitalWrite(6, HIGH);
 		}
 		else if(millis() >= time+1000) {
-			digitalWrite(12, HIGH);
+			digitalWrite(13, HIGH);
 		}
 	}
 	else {
 		if(millis() >= time+3000) {
-			digitalWrite(10, LOW);
+			digitalWrite(5, LOW);
 			time = millis();
 			h=true;
 		}
 		else if(millis() >= time+2000) {
-			digitalWrite(11, LOW);
+			digitalWrite(6, LOW);
 		}
 		else if(millis() >= time+1000) {
-			digitalWrite(12, LOW);
+			digitalWrite(13, LOW);
 		}
 	}
 }

@@ -24,6 +24,71 @@ static const int LIGHT_SENSOR = 6;
 static ComputerSerial comp;
 static LiquidCrystal lcd(PIN_SCREEN_A, PIN_SCREEN_B, PIN_SCREEN_1, PIN_SCREEN_2, PIN_SCREEN_3, PIN_SCREEN_4);
 
+// Send text to LCD
+void* text(byte flag, byte content[], word contentSize)
+{
+	boolean wrap = false;
+
+	lcd.clear();
+	lcd.home();
+	for(int i = 0; i < contentSize; i++) 
+	{
+		char letter = (char) content[i];
+
+		//newline?
+		if(letter == '\n')
+		{
+			wrap = true;
+			lcd.setCursor(0, 1);
+			continue;
+		}
+
+		//Print character
+		lcd.print(letter);
+
+		//Wrap to next line if needed
+		if(!wrap && i >= 15)
+		{
+			wrap = true;
+			lcd.setCursor(0, 1);
+		}
+
+		//Max 30 letters on the display
+		if(i > 30) break;
+	}
+
+}
+
+// Parse the data
+void* data(byte flag, byte data[], word dataSize)
+{
+	// TODO: Parser
+	
+	// Debug
+	for(int i=0; i<flag; i++) {
+		digitalWrite(13,HIGH);
+		delay(100);
+		digitalWrite(13,LOW);
+		delay(100);
+	}
+}
+
+// Speaker plays notification sound in 500 ms
+// TODO: use flag from commandHandler
+void* speaker(byte flag, byte data[], word dataSize)
+{
+	tone (PIN_SOUND, 200);
+	delay (100);
+	tone (PIN_SOUND, 600);
+	delay (100);
+	tone (PIN_SOUND, 1350);
+	delay (200);
+	tone (PIN_SOUND, 200);
+	delay (100);
+
+	noTone(PIN_SOUND);
+}
+
 // Reset
 void* reset(byte flag, byte data[], word dataSize)
 {
@@ -33,6 +98,10 @@ void setup()
 {
 	//Initialize computer serial class
 	comp.begin(115200);
+	
+	// Initialize reset function
+	pinMode(RESET_PIN,OUTPUT);
+	digitalWrite(RESET_PIN,HIGH);
 	
 	comp.setDeviceName("uCSS");
 	comp.setDeviceVersion("v0.1a");
@@ -61,10 +130,14 @@ void loop()
 		
 		// Calculate and print temperature
 		float temperature = (((analogRead(TEMPERATURE_SENSOR) * 5.0) / 1024) - 0.5) * 100;
+		
+		// Fahrenheit
+		temperature = (temperature * 9.0 / 5.0) + 32.0;
+		
 		lcd.setCursor(0, 0);
 		lcd.print("Temp: ");
 		lcd.print(temperature);
-		lcd.print(" C");
+		lcd.print(" F");
 
 		// // Print light sensor
 		// lcd.setCursor(0,1);

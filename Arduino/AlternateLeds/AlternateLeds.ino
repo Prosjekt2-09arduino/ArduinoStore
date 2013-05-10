@@ -48,18 +48,18 @@ void loop()
 {
 	if(h) {
 		if(millis() >= time+700) {
-			digitalWrite(10, HIGH);
-			digitalWrite(11, LOW);
-			digitalWrite(12, HIGH);
+			digitalWrite(5, HIGH);
+			digitalWrite(6, LOW);
+			digitalWrite(13, HIGH);
 			time = millis();
 			h=false;
 		}
 	}
 	else {
 		if(millis() >= time+700) {
-			digitalWrite(10, LOW);
-			digitalWrite(11, HIGH);
-			digitalWrite(12, LOW);
+			digitalWrite(5, LOW);
+			digitalWrite(6, HIGH);
+			digitalWrite(13, LOW);
 			time = millis();
 			h=true;
 		}
