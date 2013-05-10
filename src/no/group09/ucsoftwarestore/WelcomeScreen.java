@@ -19,8 +19,6 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
-import no.group09.fragments.MyFragmentPagerAdapter;
-import no.group09.fragments.Page;
 import no.group09.utils.Devices;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,7 +51,7 @@ public class WelcomeScreen extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.intro_screen);	//change this to wilhelms xml
+		setContentView(R.layout.intro_screen);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		ctxt = getBaseContext();
 
@@ -84,6 +82,9 @@ public class WelcomeScreen extends Activity {
 		});
 	}
 
+	/**
+	 * Adds functionality to the buttons on the screen
+	 */
 	private void addButtonFunctionality(){
 		device.setOnClickListener(new OnClickListener() {
 

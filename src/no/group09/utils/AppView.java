@@ -158,7 +158,7 @@ public class AppView extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		//Get the current service
 		service = BtArduinoService.getBtService();
-
+		
 		if(!Devices.isConnected()){
 			//If no device connected, create popup with that message
 			builder.setMessage("Cannot install app, no device connected")
@@ -174,7 +174,7 @@ public class AppView extends Activity {
 				public void onClick(DialogInterface dialog, int which){
 					startActivity(new Intent(ctxt, Devices.class));
 				}
-			});
+			}).show();
 		}
 		else{
 			builder.setMessage("Press install to install this app to " + 
