@@ -67,7 +67,10 @@ public class AppView extends Activity {
 	private byte[] byteArray;
 	private AlertDialog.Builder responseDialog;
 	private Activity activityRef;
-
+	private TextView appName, appDeveloper, appDescription;
+	private RatingBar rating;
+	private ImageView thumb_image;
+	private App app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,18 +90,18 @@ public class AppView extends Activity {
 		responseDialog = new AlertDialog.Builder(this);
 
 		//Fetch the application from the database
-		App app = save.getAppByID(appID);
+		app = save.getAppByID(appID);
 		Developer developer = save.getDeveloperByID(app.getDeveloperID());
 		BinaryFile binaryfile = save.getBinaryFileByAppID(appID);
 
 		byteArray = prepareHexfile(binaryfile.getBinaryFileAsString());
 
 		//Get the objects from xml
-		TextView appName = (TextView) findViewById(R.id.app_view_app_name);
-		TextView appDeveloper = (TextView) findViewById(R.id.app_view_developer);
-		RatingBar rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
-		TextView appDescription = (TextView) findViewById(R.id.app_view_description);
-		ImageView thumb_image = (ImageView) findViewById(R.id.app_profile_pic);
+		appName = (TextView) findViewById(R.id.app_view_app_name);
+		appDeveloper = (TextView) findViewById(R.id.app_view_developer);
+		rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
+		appDescription = (TextView) findViewById(R.id.app_view_description);
+		thumb_image = (ImageView) findViewById(R.id.app_profile_pic);
 
 		//Set the information on the UI that we fetched from the database-objects
 		appName.setText(app.getName());
@@ -106,20 +109,7 @@ public class AppView extends Activity {
 		rating.setRating(app.getRating());
 		appDescription.setText(app.getDescription());
 
-		if(app.getCategory().equals("Games")){
-			thumb_image.setImageResource(R.drawable.games);
-		}
-		else if(app.getCategory().equals("Medical")){
-			thumb_image.setImageResource(R.drawable.medical);
-		}
-
-		else if(app.getCategory().equals("Tools")){
-			thumb_image.setImageResource(R.drawable.tools);
-		}
-
-		else if(app.getCategory().equals("Media")){
-			thumb_image.setImageResource(R.drawable.media);
-		}
+		initializeElements();
 
 		Button installButton = (Button) findViewById(R.id.button1);
 		installButton.setOnClickListener(new OnClickListener() {
@@ -129,6 +119,41 @@ public class AppView extends Activity {
 				installClicked(v);
 			}
 		});
+	}
+	
+	/**
+	 * Method for illustration purposes. This method initializes each element
+	 * with an image when the app view of the selected app is entered. 
+	 */
+	public void initializeElements() {
+		if(app.getCategory().equals("Games")){
+			if (appName.getText().equals("Super Mario Tune")) {
+				thumb_image.setImageResource(R.drawable.supermario);
+				return;
+			}
+			thumb_image.setImageResource(R.drawable.games);
+		}
+		else if(app.getCategory().equals("Medical")){
+			thumb_image.setImageResource(R.drawable.medical);
+		}
+
+		else if(app.getCategory().equals("Tools")){
+			if (appName.getText().equals("Thermometer Celsius") || 
+					appName.getText().equals("Thermometer Fahrenheit")) {
+				thumb_image.setImageResource(R.drawable.thermometer);
+				return;
+			}
+			thumb_image.setImageResource(R.drawable.tools);
+		}
+
+		else if(app.getCategory().equals("Media")){
+			if (appName.getText().equals("Flashing LEDs sequential") || 
+					appName.getText().equals("Flashing LEDs alternative")) {
+				thumb_image.setImageResource(R.drawable.led);
+				return;
+			}
+			thumb_image.setImageResource(R.drawable.media);
+		} 
 	}
 
 	/**

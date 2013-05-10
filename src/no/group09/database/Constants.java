@@ -183,10 +183,10 @@ public class Constants {
 		save.insertBinaryFile(new BinaryFile(8, Constants.getByteExample(10)));
 
 		//TOOLS
-		save.insertApp(new App("Thermometer Celsius", 5, 1, "Tools", "This app mesures the temperature and shows" +
-				" it on the attached screen on your Arduino. The temperature is mesured in Celcius.", 1));				//9
-		save.insertApp(new App("Thermometer Fahrenheit", 5, 1, "Tools", "This app mesures the temperature and shows" +
-				" it on the attached screen on your Arduino. The temperature is mesured in Fahrenheit.", 1));			//10
+		save.insertApp(new App("Thermometer Celsius", 5, 1, "Tools", "This app measures the temperature and shows" +
+				" it on the attached screen on your Arduino. The temperature is measured in Celcius.", 1));				//9
+		save.insertApp(new App("Thermometer Fahrenheit", 5, 1, "Tools", "This app measures the temperature and shows" +
+				" it on the attached screen on your Arduino. The temperature is measured in Fahrenheit.", 1));			//10
 		save.insertApp(new App("Illustration app", 4, 1, "Tools", "This app is just for illustration purposes. It will" +
 				" not do anything if installed on an Arduino. It will also be hidden if you choose 'Hide incompatible'" +
 				" in the preferences.", 2));														//11
