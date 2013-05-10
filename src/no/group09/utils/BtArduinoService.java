@@ -1,21 +1,12 @@
 package no.group09.utils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.util.UUID;
-
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.connection.ConnectionListener;
 import android.app.Service;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
@@ -26,32 +17,31 @@ import no.group09.utils.LogForProtocol;
 import no.group09.utils.AppView.ProgressbarHandler;
 
 /**
- * Service used to hold the Bluetooth connection
- * 
- * @author JeppeE
- *
+ * Service used to hold the Bluetooth connection and handle the programming of
+ * a device. Used to continuously check the state of the programmer.
  */
 public class BtArduinoService extends Service {
 
 	private String TAG = "BtArduinoService";
+	private Logger logger = new LogForProtocol();
 	private BluetoothConnection connection = null;
 	private ConnectionListener connectionListener;
 	private String macAddress;
 	private static BtArduinoService btService;
 	private STK500v1 programmer;
 	private byte[] hexFile;
-	private Logger logger = new LogForProtocol();
 	private Thread programmerHandlerThread;
 	/** Used to check if the programmer is running */
 	private volatile boolean checkState = false;
 	/** Variable used to check the progress of the programming */
 	private int newProgress = 0;
-	/** Field used to contain the state of the programmer */
-	private ProtocolState state;
-	/** String used to print the message displayed to the user */
-	private String stateMessage = "";
-
+	/** Instance of the handler that handles the progress bar while programming */
 	private ProgressbarHandler handler;
+	/**
+	 * Number of bytes that is to be programmed each round of the programming.
+	 * Recommended is 128, but can also be set to any even number below 257.
+	 */
+	private static final int BYTES_PROGRAMMED_EACH_ROUND = 128;
 
 	@Override
 	public void onCreate() {
@@ -77,16 +67,13 @@ public class BtArduinoService extends Service {
 					return;
 				}
 
-				state = ProtocolState.INITIALIZING;
-
 				newProgress = 0;
 
 				this.hexFile = hexFile;
 				programmer = new STK500v1(output, input, logger, hexFile);
 
-				//The programmer is now running
+				//The programmer is now running. Start checking its state
 				checkState = true;
-
 			}
 		} else {
 			//Reset the programmer
@@ -95,19 +82,26 @@ public class BtArduinoService extends Service {
 		}
 	}
 
+	/**
+	 * Method continuously checking the state of the programmer and updating
+	 * the message that is to be displayed in the progress bar. 
+	 */
 	private synchronized void checkProtocolState() {
 
 		ProtocolState oldState = null;
 		boolean updateProgressBar = false;
 		int oldProgress = 0;
 
+		//While the programmer is running
 		while (checkState) {
 
-			setProtocolState(programmer.getProtocolState());
-			ProtocolState newState = getProtocolState();
+			//Get the updated state
+			ProtocolState newState = programmer.getProtocolState();
+			//Get the updated progress
 			newProgress = programmer.getProgress();
-			Log.d("AppView", "State fetched: " + newState);
 
+			//If the state or progress has changed since last iteration the 
+			//progress bar needs to be updated.
 			if (oldState != newState || oldProgress != newProgress) updateProgressBar = true;
 
 			switch(newState) {
@@ -183,7 +177,6 @@ public class BtArduinoService extends Service {
 				checkState = false;
 				break;
 			}
-
 			try {
 				this.wait(30);
 			} catch (InterruptedException e) {
@@ -192,83 +185,41 @@ public class BtArduinoService extends Service {
 		}
 	}
 	
+	/**
+	 * Method called when the progress bar of the installation needs to be 
+	 * updated with new a progress number.
+	 * 
+	 * @param message The message to be displayed in the installation progress window
+	 * @param progress The new progress number
+	 */
 	private void stateUpdateProgressBarProgress(String message, int progress) {
 		Message msg = Message.obtain(handler, 0, 1, progress, message);
 		msg.sendToTarget();
-//		handler.sendMessage(msg);
 	}
+	
+	/**
+	 * Method called when the message in the installation progress window needs
+	 * to be updated.
+	 * 
+	 * @param message - The new message to be displayed in the installation 
+	 * progress window.
+	 * @param hide boolean indicating if the installation progress window should
+	 * be hidden after this message is set or not. True if the window should
+	 * be dismissed, false if only the message should be updated and the windwow
+	 * should persist.
+	 */
 	private void stateUpdateProgressBar(String message, boolean hide) {
-		int arg1 = 0;
-		if (hide) arg1 = 0;
-		else arg1 = 1;
-		Message msg = Message.obtain(handler, 0, arg1, newProgress, message);
+		int hideWindow;
+		if (hide) hideWindow = 0;
+		else hideWindow = 1;
+		Message msg = Message.obtain(handler, 0, hideWindow, newProgress, message);
 		msg.sendToTarget();
-//		Message msg = new Message();
-//		Bundle data = new Bundle();
-//		data.putInt("integer", 0);
-//		data.putString("string", message);
-//		msg.setData(data);
-//		handler.sendMessage(msg);
-	}
-
-	private void setStateMessage(String message) {
-		this.stateMessage = message;
-	}
-
-	public synchronized String getStateMessage() {
-		return stateMessage;
-	}
-
-	/**
-	 * Sets the current state of the programmer. Should be called every time the
-	 * state changes
-	 * 
-	 * @param state The new state of the programmer
-	 */
-	private void setProtocolState(ProtocolState state) {
-		this.state = state;
-	}
-
-	/**
-	 * Returns the current state of the programmer.
-	 * 
-	 * @return The current state of the programmer.
-	 */
-	public synchronized ProtocolState getProtocolState() {
-		return this.state;
-	}
-
-	/**
-	 * Checks if the programmer is running.
-	 * 
-	 * @return True if the programmer is running, false if not.
-	 */
-	public synchronized boolean isProgrammerRunning() {
-		return checkState;
-	}
-
-	/**
-	 * Sets the progress of the programming of the Arduino. Should be called
-	 * every time there is an update with the progress.
-	 * 
-	 * @param progress The new progress. Must be an integer between 0 and 100.
-	 */
-	private void setProgress(int progress) {
-		this.newProgress = progress;
-	}
-
-	/**
-	 * Returns the progress of the programming of the Arduino
-	 * 
-	 * @return The total progress as an integer between 0 and 100
-	 */
-	public int getProgress() {
-		return newProgress;
 	}
 
 	/**
 	 * Check if the programmer is ready to be programmed.
-	 * @return true if ready
+	 * 
+	 * @return true if ready, false if not.
 	 */
 	private boolean isProgrammerReady() {
 		if (programmer != null) {
@@ -277,8 +228,7 @@ public class BtArduinoService extends Service {
 				return true;
 			} else if (state == ProtocolState.ERROR_CONNECT || state == ProtocolState.ERROR_PARSE_HEX
 					|| state == ProtocolState.ERROR_READ || state == ProtocolState.ERROR_WRITE) {
-				//				programmer.stopReadWrapper();
-				//Delete the programmer
+				//Delete the programmer 
 				programmer = null;
 				return false;
 			}
@@ -287,8 +237,11 @@ public class BtArduinoService extends Service {
 	}
 
 	/**
-	 * Program using the supplied hex file. Prepares the programmer if required.
-	 * @param hexFile as byte array in Intel hex format.
+	 * Program the connected device using the supplied hex file. Prepares the
+	 * programmer for programming if required.
+	 * 
+	 * @param hexFile the file that is to be programmed. Must be a byte array
+	 * in Intel hex format.
 	 */
 	public void sendData(byte[] hexFile, ProgressbarHandler handler){
 		if (!isProgrammerReady()) {
@@ -303,23 +256,29 @@ public class BtArduinoService extends Service {
 		}
 	}
 
+	/**
+	 * Runnable for doing the actual programming in a separate thread.
+	 */
 	class ProgrammerTask implements Runnable {
 
 		@Override
 		public void run() {
 			//Start the programming. This does not return until the programmer is finished
-			boolean result = programmer.programUsingOptiboot(false, 128);
+			boolean result = programmer.programUsingOptiboot(false, BYTES_PROGRAMMED_EACH_ROUND);
 			if (result) {
 				Log.d(TAG, "programUsinOptiboot returned true");
 			}
 			else {
-				//TODO: Handle the event of programming was unsuccessful.
+				//Programming was unsuccessful. Error message will be displayed to the user
 				Log.d(TAG, "programUsinOptiboot returned false");
 			}
 		}
-
 	}
 
+	/**
+	 * Separate thread for initiating and polling of status updates from the 
+	 * programming
+	 */
 	class ProgrammerHandler implements Runnable {
 		byte[] hexFile;
 		public ProgrammerHandler(byte[] hexFile) {
@@ -339,7 +298,7 @@ public class BtArduinoService extends Service {
 	 * Get a connection with the Arduino. This is a Bluetooth connection with an added
 	 * handshake communicating with the Arduino library.
 	 * 
-	 * @return true if successful
+	 * @return true if successfully connected
 	 */
 	private boolean connect() {
 
@@ -361,6 +320,7 @@ public class BtArduinoService extends Service {
 
 	/**
 	 * Gets the active connection
+	 * 
 	 * @return The active BluetoothConnection. Null if there is no active connection
 	 */
 	public BluetoothConnection getBluetoothConnection() {
@@ -369,20 +329,25 @@ public class BtArduinoService extends Service {
 
 	/**
 	 * Gets this service
-	 * @return The active service
+	 * 
+	 * @return The active service. Null if no service is active.
 	 */
 	public static BtArduinoService getBtService() {
 		return btService;
 	}
 
+	/**
+	 * Sets this service to the active service.
+	 * @param btService the active serivce.
+	 */
 	private static void setBtService(BtArduinoService btService) {
 		BtArduinoService.btService = btService;
 	}
 
-	@Override
 	/**
 	 * Method automatically called by the system when a service is started.
 	 */
+	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		Log.d(TAG, "onStartCommand called");
@@ -414,6 +379,7 @@ public class BtArduinoService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		//Disconnect from the connected device when the service is killed.
 		connection.disconnect();
 	}
 
@@ -424,6 +390,7 @@ public class BtArduinoService extends Service {
 
 	/**
 	 * Returns the current connection listener.
+	 * 
 	 * @return The current connection listener. Creates a new one if it is null
 	 */
 	private ConnectionListener getConnectionListener() {
