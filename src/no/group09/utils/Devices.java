@@ -282,7 +282,9 @@ public class Devices extends Activity  {
 							map.put("name", sharedPref.getString("connected_device_name", "null"));
 							map.put("mac", sharedPref.getString("connected_device_mac", "null"));
 							map.put("pager", "708");
-							if(!device_list.contains(map)){
+
+							//Check if there is a device in the list with the same mac address
+							if(!isDeviceWithMacInList(device_list, sharedPref.getString("connected_device_mac", "null"))){
 								device_list.add(map);
 								deviceList.setItemChecked(0, true);
 							}
@@ -313,7 +315,7 @@ public class Devices extends Activity  {
 
 	//Disse to er en del av en stygg hack, men det funker. Fix senere.
 	private void setContext(Context context) {
-		//TODO: remove.
+		//TODO: remove if fixed
 		Devices.context = context;
 	}
 
@@ -404,11 +406,22 @@ public class Devices extends Activity  {
 			map.put("pager", "708");
 
 			//If we are connected but it doesnt appear to be in the device list: add it
-			if(!device_list.contains(map) && !deviceName.equals("null") && !deviceMac.equals("null")){
+			if(isDeviceWithMacInList(device_list, deviceMac) && !deviceName.equals("null") && !deviceMac.equals("null")){
 				device_list.add(map);
 				deviceList.setItemChecked(0, true);
 			}
 		}
+	}
+
+	private boolean isDeviceWithMacInList(ArrayList<HashMap<String, String>> list, String deviceMac){
+
+		for(HashMap<String, String> map : list){
+			if(map.get("mac").equals(deviceMac)){
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/** Add the connected device name to the title if connected */
@@ -502,15 +515,21 @@ public class Devices extends Activity  {
 				//If the bluetooth class is named 708 that we made as a 'standard' for recognizing arduinos
 				if(onlyShowArduinos(device) || !btDeviceList.contains(device)){
 
+					//If there is a device in the list with the same mac address
+
 					//Adding found device
 					HashMap<String, String> map = new HashMap<String, String>();
 					map.put("name", device.getName());
 					map.put("mac", device.getAddress());
 					map.put("pager", device.getBluetoothClass().toString());
-					device_list.add(map);
 
-					//List of device objects
-					btDeviceList.add(device);
+					if(isDeviceWithMacInList(device_list, device.getAddress())){
+						device_list.add(map);
+
+						//List of device objects
+						btDeviceList.add(device);
+					}
+
 
 					listAdapter.notifyDataSetChanged();
 				}
