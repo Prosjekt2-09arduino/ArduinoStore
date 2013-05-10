@@ -19,27 +19,18 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
-import java.util.HashMap;
-
-import no.group09.connection.BluetoothConnection.ConnectionState;
 import no.group09.database.Save;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.fragments.Page;
-import no.group09.utils.BtArduinoService;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import no.group09.ucsoftwarestore.R;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -48,7 +39,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 /**
  * The main store activity for the app.
@@ -67,11 +57,8 @@ public class MainActivity extends FragmentActivity {
 	/** The shared preference object */
 	private SharedPreferences sharedPref = null;
 
-	private ProgressDialog progressDialog;
-
-
 	/**
-	 * Takes state and creates the app
+	 * Takes state and creates the application view
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,10 +71,8 @@ public class MainActivity extends FragmentActivity {
 		//Initializing the settings for the application
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
+		//Initializing the shared preferences
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		//Try to connect to last connected device
-//		reconnect();
 
 		//Getting fragment manager
 		FragmentManager fm = getSupportFragmentManager();
@@ -99,10 +84,8 @@ public class MainActivity extends FragmentActivity {
 		pager.setAdapter(pagerAdapter);
 	}
 
-
-
 	/**
-	 * pauses current activity
+	 * Pauses current activity
 	 */
 	@Override
 	public void onPause(){
@@ -110,7 +93,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Creates options menus
+	 * Creates options menu
 	 */
 	@SuppressLint("NewApi")
 	@Override
@@ -135,15 +118,9 @@ public class MainActivity extends FragmentActivity {
 			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 			searchView.setSubmitButtonEnabled(true);
 		}
-
 		return true;
 	}
 
-
-	/**
-	 * Returns true as long as item corresponds with a proper options action.
-	 * 
-	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -173,7 +150,6 @@ public class MainActivity extends FragmentActivity {
 			}
 
 			else{
-
 				//Changes the value and commits the changes
 				edit.putBoolean("hide_incompatible", true);
 				edit.commit();
@@ -197,7 +173,6 @@ public class MainActivity extends FragmentActivity {
 			this.startActivity(myIntent);
 			return true;
 
-
 			//Show the device list
 		case R.id.device_list:
 			Intent intent = new Intent(this, Devices.class);
@@ -215,10 +190,13 @@ public class MainActivity extends FragmentActivity {
 		default : return false;
 		}
 	}
-
-	/** Add the connected device name to the title if connected */
+	
+	/**
+	 * Add the connected device name to the title. If no device is stored in the
+	 * preferences no only the category name will be shown.
+	 */
 	public void setActivityTitle(){
-		String appName = sharedPref.getString("connected_device_name", "null");
+		String deviceName = sharedPref.getString("connected_device_name", "null");
 
 		//Get the enum type for what type (category) is selected
 		MyFragmentPagerAdapter pageAdapter = MainActivity.pagerAdapter;
@@ -226,8 +204,8 @@ public class MainActivity extends FragmentActivity {
 		//Get the name of the selected category
 		String category = Page.getCategoryFromType(pageAdapter.page1);
 
-		if(Devices.isConnected() && !appName.equals("null")){
-			setTitle(category + " - " + appName);
+		if(Devices.isConnected() && !deviceName.equals("null")){
+			setTitle(category + " - " + deviceName);
 		}
 		else{
 			setTitle(category);

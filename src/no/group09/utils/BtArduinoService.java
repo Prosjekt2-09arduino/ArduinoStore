@@ -1,5 +1,24 @@
 package no.group09.utils;
 
+/*
+ * Licensed to UbiCollab.org under one or more contributor
+ * license agreements.  See the NOTICE file distributed 
+ * with this work for additional information regarding
+ * copyright ownership. UbiCollab.org licenses this file
+ * to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import no.group09.connection.BluetoothConnection;
@@ -29,7 +48,6 @@ public class BtArduinoService extends Service {
 	private String macAddress;
 	private static BtArduinoService btService;
 	private STK500v1 programmer;
-	private byte[] hexFile;
 	private Thread programmerHandlerThread;
 	/** Used to check if the programmer is running */
 	private volatile boolean checkState = false;
@@ -68,8 +86,6 @@ public class BtArduinoService extends Service {
 				}
 
 				newProgress = 0;
-
-				this.hexFile = hexFile;
 				programmer = new STK500v1(output, input, logger, hexFile);
 
 				//The programmer is now running. Start checking its state
