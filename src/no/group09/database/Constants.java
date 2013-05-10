@@ -132,7 +132,6 @@ public class Constants {
 			save.insertApp(new App("PlayTime", 2, 5, "Games", "This describes this amazing, life changing app. yey!", 2));			//3
 			save.insertApp(new App("FunTime", 4, 4, "Games", "This describes this amazing, life changing app. yey!", 3));			//4
 			save.insertApp(new App("PlayWithPlayers", 1, 2, "Games", "This describes this amazing, life changing app. yey!", 3));	//5
-			
 			save.insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!", 2));	
 			save.insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!", 3));	
 			save.insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!", 1));	
