@@ -406,7 +406,7 @@ public class Devices extends Activity  {
 			map.put("pager", "708");
 
 			//If we are connected but it doesnt appear to be in the device list: add it
-			if(isDeviceWithMacInList(device_list, deviceMac) && !deviceName.equals("null") && !deviceMac.equals("null")){
+			if(!isDeviceWithMacInList(device_list, deviceMac) && !deviceName.equals("null") && !deviceMac.equals("null")){
 				device_list.add(map);
 				deviceList.setItemChecked(0, true);
 			}
@@ -523,7 +523,7 @@ public class Devices extends Activity  {
 					map.put("mac", device.getAddress());
 					map.put("pager", device.getBluetoothClass().toString());
 
-					if(isDeviceWithMacInList(device_list, device.getAddress())){
+					if(!isDeviceWithMacInList(device_list, device.getAddress())){
 						device_list.add(map);
 
 						//List of device objects
