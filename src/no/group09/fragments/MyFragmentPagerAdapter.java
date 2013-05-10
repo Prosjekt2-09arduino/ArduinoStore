@@ -45,6 +45,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 	/** The third tab. This is needed for editing the content on selected category */
 	public TopHits topHits;
 	
+	/** Category fragment */
 	public Categories categories;
 	
 	MainActivity main;
@@ -62,6 +63,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 		//Temporary
 		Fragment fragment = null;
 
+		//For each page, create a fragment
 		switch(page){
 		case 0: fragment = new Categories(); 
 				categories = (Categories) fragment;
@@ -76,6 +78,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 				break;
 		}
 		
+		//Give the fragment an information about which pagenumber it is
 		Bundle data = new Bundle();
 		data.putInt("current_page", page + 1);
 		fragment.setArguments(data);
@@ -94,6 +97,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
 		CharSequence tab = "";
 
+		//Set the title on the fragment by which potition it is at
 		switch(position){
 		case 0: tab = "CATEGORIES"; break;
 		case 1: tab = getTitleForPage1(); break;
@@ -101,7 +105,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 		default: tab = "";
 		}
 		
-		main.setActivityTitle();	//FIXME: remove this if it doesnt set the title in mainActivity when connected to a device
+		//Set the title on main activity
+		main.setActivityTitle();
 		
 		return tab;
 	}

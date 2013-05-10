@@ -12,26 +12,26 @@ import no.group09.database.entity.Requirements;
 public class Constants {
 
 	/** Select an app from the database */
-    protected final static String SELECT_APP = "select * from app where appid=?";
-    protected final static String SELECT_DEVELOPER = "select * from developer where developerid=?";
-    protected final static String SELECT_REQUIREMENTS = "select * from requirements where requirementid=?";
-    protected final static String SELECT_PICTURES = "select * from pictures where pictureid=?";
-    protected final static String SELECT_BINARYFILES = "select * from binaryfiles where appid=?"; //FIXME:working?
-    
-    /** Insert an app to the database */
-    protected final static String INSERT_APP = "insert or replace into app (name, rating, developerid, category, description, requirementid) values (?, ?, ?, ?, ?, ?)";
-    protected final static String INSERT_DEVELOPER = "insert or replace into developer (name, website) values (?, ?)";
-    protected final static String INSERT_REQUIREMENTS = "insert or replace into requirements (name, description, compatible) values (?, ?, ?)";
-    protected final static String INSERT_PICTURES = "insert or replace into pictures (appid, fileURL) values (?, ?)";
-    protected final static String INSERT_BINARYFILES = "insert or replace into binaryfiles (appid, file) values (?, ?)"; //FIXME:working?
+	protected final static String SELECT_APP = "select * from app where appid=?";
+	protected final static String SELECT_DEVELOPER = "select * from developer where developerid=?";
+	protected final static String SELECT_REQUIREMENTS = "select * from requirements where requirementid=?";
+	protected final static String SELECT_PICTURES = "select * from pictures where pictureid=?";
+	protected final static String SELECT_BINARYFILES = "select * from binaryfiles where appid=?";
 
-    /** Delete an app from the database */
-    protected final static String DELETE_APP = "delete from app where appid=?";
-    protected final static String DELETE_DEVELOPER = "delete from developer where developerid=?";
-    protected final static String DELETE_REQUIREMENTS = "delete from requirements where requirementid=?";
-    protected final static String DELETE_PICTURES = "delete from pictures where pictureid=?";
-    protected final static String DELETE_BINARYFILES = "delete from binaryfiles where appid=?"; //FIXME:working?
-	
+	/** Insert an app to the database */
+	protected final static String INSERT_APP = "insert or replace into app (name, rating, developerid, category, description, requirementid) values (?, ?, ?, ?, ?, ?)";
+	protected final static String INSERT_DEVELOPER = "insert or replace into developer (name, website) values (?, ?)";
+	protected final static String INSERT_REQUIREMENTS = "insert or replace into requirements (name, description, compatible) values (?, ?, ?)";
+	protected final static String INSERT_PICTURES = "insert or replace into pictures (appid, fileURL) values (?, ?)";
+	protected final static String INSERT_BINARYFILES = "insert or replace into binaryfiles (appid, file) values (?, ?)";
+
+	/** Delete an app from the database */
+	protected final static String DELETE_APP = "delete from app where appid=?";
+	protected final static String DELETE_DEVELOPER = "delete from developer where developerid=?";
+	protected final static String DELETE_REQUIREMENTS = "delete from requirements where requirementid=?";
+	protected final static String DELETE_PICTURES = "delete from pictures where pictureid=?";
+	protected final static String DELETE_BINARYFILES = "delete from binaryfiles where appid=?";
+
 	/** app(appid, name, description, developerid, icon) */
 	protected final static String APP_TABLE="app";
 	protected final static String APP_ID="appid";
@@ -41,37 +41,37 @@ public class Constants {
 	protected final static String APP_CATEGORY="category"; 
 	protected final static String APP_DESCRIPTION="description"; 
 	protected final static String APP_REQUIREMENTID="requirementid"; 
-	
+
 	/** binaryfile(appid, file) */
 	protected final static String BINARYFILES_TABLE = "binaryfiles";
 	protected final static String BINARYFILES_ID = "binaryfileid";
 	protected final static String BINARYFILES_APPID = "appid";
 	protected final static String BINARYFILES_FILE = "file";
-	
+
 	/** developer(developerid, name, website) */
 	protected final static String DEVELOPER_TABLE="developer";
 	protected final static String DEVELOPER_ID="developerid";
 	protected final static String DEVELOPER_NAME="name";
 	protected final static String DEVELOPER_WEBSITE="website";
-	
+
 	/** pictures(pictureid, appid, fileURL) */
 	protected final static String PICTURES_TABLE="pictures";
 	protected final static String PICTURES_ID="pictureid";
 	protected final static String PICTURES_APPID="appid";
 	protected final static String PICTURES_FILEURL="fileURL";
-	
+
 	/** requirement(requirement, name, description) */
 	protected final static String REQUIREMENTS_TABLE="requirements";
 	protected final static String REQUIREMENTS_ID="requirementid";
 	protected final static String REQUIREMENTS_NAME="name";
 	protected final static String REQUIREMENTS_DESCRIPTION="description";
 	protected final static String REQUIREMENTS_COMPATIBLE="compatible";
-	
+
 	/** appusespins(appid, requirementid) */
 	protected final static String APPUSESPINS_TABLE="appusespins";
 	protected final static String APPUSESPINS_APPID="appid";
 	protected final static String APPUSESPINS_REQUIREMENTID="requirementid";
-	
+
 	/**	Database app creation sql statement */
 	protected static final String DATABASE_CREATE_APP = 
 			"CREATE TABLE IF NOT EXISTS app (" +
@@ -89,21 +89,21 @@ public class Constants {
 					"binaryfileid integer primary key autoincrement, " + 
 					"appid int(10), " +
 					"file BLOB(1000000) )";	//FIXME:working?
-	
+
 	/** Database developer creation sql statement */
 	protected static final String DATABASE_CREATE_DEVELOPER = 
 			"CREATE TABLE developer (" +
 					"developerid integer primary key autoincrement, " +
 					"name varchar(160), " +
 					"website varchar(200))";
-	
+
 	/** Database pictures creation sql statement */
 	protected static final String DATABASE_CREATE_PICTURES = 
 			"CREATE TABLE pictures (" +
 					"pictureid integer primary key autoincrement, " +
 					"appid int(10), " +
 					"fileURL varchar(200))";
-	
+
 	/** Database requirement creation sql statement */
 	protected static final String DATABASE_CREATE_REQUIREMENTS = 
 			"CREATE TABLE requirements (" +
@@ -111,14 +111,14 @@ public class Constants {
 					"name varchar(160), " +
 					"description varchar(200)," +
 					"compatible varchar(10))";
-	
+
 	/** Database appUsesPins creation sql statement */
 	protected static final String DATABASE_CREATE_APPUSESPINS = 
-				"CREATE TABLE appUsesPins (" +
-						"appid int(10) , " +
-						"requirementid int(10)" +
-						"FOREIGN KEY (appid) REFERENCES app(appid)," +
-						"FOREIGN KEY (requirementid) REFERENCES requirements(requirementid))";
+			"CREATE TABLE appUsesPins (" +
+					"appid int(10) , " +
+					"requirementid int(10)" +
+					"FOREIGN KEY (appid) REFERENCES app(appid)," +
+					"FOREIGN KEY (requirementid) REFERENCES requirements(requirementid))";
 
 	/**
 	 * Populates the database with some hardcoded examples
@@ -126,64 +126,74 @@ public class Constants {
 	 * @param useContentProvider - if you want to use content provider or not
 	 */
 	public static void populateDatabase(Save save) {
-			//App(name, rating, developerid, category, description, requirementid)
-			save.insertApp(new App("FunGame", 3, 1, "Games", "This describes this amazing, life changing app. yey!", 1));			//1
-			save.insertApp(new App("Game", 4, 2, "Games", "This describes this amazing, life changing app. yey!", 2));				//2
-			save.insertApp(new App("PlayTime", 2, 5, "Games", "This describes this amazing, life changing app. yey!", 2));			//3
-			save.insertApp(new App("FunTime", 4, 4, "Games", "This describes this amazing, life changing app. yey!", 3));			//4
-			save.insertApp(new App("PlayWithPlayers", 1, 2, "Games", "This describes this amazing, life changing app. yey!", 3));	//5
 
-			save.insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!", 2));			//6
-			save.insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!", 3));			//7
-			save.insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!", 1));			//8
-			
-			save.insertApp(new App("Tool", 5, 5, "Tools", "This describes this amazing, life changing app. yey!", 2));				//9
-			save.insertApp(new App("ToolBox", 5, 3, "Tools", "This describes this amazing, life changing app. yey!", 3));			//10
-			save.insertApp(new App("BoxTooler", 2, 1, "Tools", "This describes this amazing, life changing app. yey!", 3));			//11
-			save.insertApp(new App("ToolTooler", 3, 1, "Tools", "This describes this amazing, life changing app. yey!", 1));		//12
-			save.insertApp(new App("ScrewDriver", 4, 1, "Tools", "This describes this amazing, life changing app. yey!", 2));		//13
-			
-			save.insertApp(new App("Player", 4, 5, "Media", "This describes this amazing, life changing app. yey!", 1));			//14
-			save.insertApp(new App("MusicP", 2, 2, "Media", "This describes this amazing, life changing app. yey!", 3));			//15
-			
-			save.insertDeveloper(new Developer("Wilhelm", "www.lol.com"));	//developer 1
-			save.insertDeveloper(new Developer("Robin", "www.haha.com"));	//2
-			save.insertDeveloper(new Developer("Jeppe", "www.hehe.com"));	//3
-			save.insertDeveloper(new Developer("Bj�rn", "www.hoho.com"));	//4
-			save.insertDeveloper(new Developer("St�le", "www.rofl.com"));	//5
-			save.insertDeveloper(new Developer("Nina", "www.kake.com"));	//6
-			
-			save.insertRequirements(new Requirements("name", "description", true));	//compatible
-			save.insertRequirements(new Requirements("name", "desc..", true));		//compatible
-			save.insertRequirements(new Requirements("name", "desc..", false));		//not compatible
-			
-			//games: LED
-			save.insertBinaryFile(new BinaryFile(1, Constants.getByteExample(1)));
-			save.insertBinaryFile(new BinaryFile(2, Constants.getByteExample(1)));
-			save.insertBinaryFile(new BinaryFile(3, Constants.getByteExample(1)));
-			save.insertBinaryFile(new BinaryFile(4, Constants.getByteExample(1)));
-			save.insertBinaryFile(new BinaryFile(5, Constants.getByteExample(1)));
-			
-			//medical: mario
-			save.insertBinaryFile(new BinaryFile(6, Constants.getByteExample(2)));
-			save.insertBinaryFile(new BinaryFile(7, Constants.getByteExample(2)));
-			save.insertBinaryFile(new BinaryFile(8, Constants.getByteExample(2)));
+		//Create sample developers
+		save.insertDeveloper(new Developer("Wilhelm", "www.lol.com"));	//developer 1
+		save.insertDeveloper(new Developer("Robin", "www.haha.com"));	//2
+		save.insertDeveloper(new Developer("Jeppe", "www.hehe.com"));	//3
+		save.insertDeveloper(new Developer("Bj�rn", "www.hoho.com"));	//4
+		save.insertDeveloper(new Developer("St�le", "www.rofl.com"));	//5
+		save.insertDeveloper(new Developer("Nina", "www.kake.com"));	//6
 
-			//tool: alternative LED
-			save.insertBinaryFile(new BinaryFile(9, Constants.getByteExample(3)));
-			save.insertBinaryFile(new BinaryFile(10, Constants.getByteExample(3)));
-			save.insertBinaryFile(new BinaryFile(11, Constants.getByteExample(3)));
-			save.insertBinaryFile(new BinaryFile(12, Constants.getByteExample(3)));
-			save.insertBinaryFile(new BinaryFile(13, Constants.getByteExample(3)));
-			
-			//media: testapplication (temperature)			
-			save.insertBinaryFile(new BinaryFile(14, Constants.getByteExample(4)));
-			save.insertBinaryFile(new BinaryFile(15, Constants.getByteExample(4)));
-	}
-	
-	/** returns a example binary file */
-	public static byte[] getByteExample(int type){
+		//Create sample requirements
+		save.insertRequirements(new Requirements("name", "description", true));	//compatible
+		save.insertRequirements(new Requirements("name", "desc..", true));		//compatible
+		save.insertRequirements(new Requirements("name", "desc..", false));		//not compatible
+
+		//GAMES:
+		save.insertApp(new App("FunGame", 3, 1, "Games", "This describes this amazing, life changing app. yey!", 1));			//1
+		save.insertApp(new App("Game", 4, 2, "Games", "This describes this amazing, life changing app. yey!", 2));				//2
+		save.insertApp(new App("PlayTime", 2, 5, "Games", "This describes this amazing, life changing app. yey!", 2));			//3
+		save.insertApp(new App("FunTime", 4, 4, "Games", "This describes this amazing, life changing app. yey!", 3));			//4
+		save.insertApp(new App("PlayWithPlayers", 1, 2, "Games", "This describes this amazing, life changing app. yey!", 3));	//5
 		
+		//GAMES: LED hex program
+		save.insertBinaryFile(new BinaryFile(1, Constants.getByteExample(1)));
+		save.insertBinaryFile(new BinaryFile(2, Constants.getByteExample(1)));
+		save.insertBinaryFile(new BinaryFile(3, Constants.getByteExample(1)));
+		save.insertBinaryFile(new BinaryFile(4, Constants.getByteExample(1)));
+		save.insertBinaryFile(new BinaryFile(5, Constants.getByteExample(1)));
+		
+		//MEDICAL
+		save.insertApp(new App("Medic", 1, 1, "Medical", "This describes this amazing, life changing app. yey!", 2));			//6
+		save.insertApp(new App("Medical", 6, 3, "Medical", "This describes this amazing, life changing app. yey!", 3));			//7
+		save.insertApp(new App("Helper", 4, 5, "Medical", "This describes this amazing, life changing app. yey!", 1));			//8
+
+		//MEDICAL: mario hex program
+		save.insertBinaryFile(new BinaryFile(6, Constants.getByteExample(2)));
+		save.insertBinaryFile(new BinaryFile(7, Constants.getByteExample(2)));
+		save.insertBinaryFile(new BinaryFile(8, Constants.getByteExample(2)));
+		
+		//TOOLS
+		save.insertApp(new App("Tool", 5, 5, "Tools", "This describes this amazing, life changing app. yey!", 2));				//9
+		save.insertApp(new App("ToolBox", 5, 3, "Tools", "This describes this amazing, life changing app. yey!", 3));			//10
+		save.insertApp(new App("BoxTooler", 2, 1, "Tools", "This describes this amazing, life changing app. yey!", 3));			//11
+		save.insertApp(new App("ToolTooler", 3, 1, "Tools", "This describes this amazing, life changing app. yey!", 1));		//12
+		save.insertApp(new App("ScrewDriver", 4, 1, "Tools", "This describes this amazing, life changing app. yey!", 2));		//13
+
+		//TOOLS: alternative LED hex program
+		save.insertBinaryFile(new BinaryFile(9, Constants.getByteExample(3)));
+		save.insertBinaryFile(new BinaryFile(10, Constants.getByteExample(3)));
+		save.insertBinaryFile(new BinaryFile(11, Constants.getByteExample(3)));
+		save.insertBinaryFile(new BinaryFile(12, Constants.getByteExample(3)));
+		save.insertBinaryFile(new BinaryFile(13, Constants.getByteExample(3)));
+
+		//MEDIA
+		save.insertApp(new App("Player", 4, 5, "Media", "This describes this amazing, life changing app. yey!", 1));			//14
+		save.insertApp(new App("MusicP", 2, 2, "Media", "This describes this amazing, life changing app. yey!", 3));			//15
+		
+		//MEDIA: testapplication (temperature) hex program	
+		save.insertBinaryFile(new BinaryFile(14, Constants.getByteExample(4)));
+		save.insertBinaryFile(new BinaryFile(15, Constants.getByteExample(4)));
+	}
+
+	/**
+	 * returns a example binary file
+	 * @param type - int that is 1, 2, 3 or 4
+	 * @return - a hex program that is associated with the input int
+	 */
+	public static byte[] getByteExample(int type){
+
 		String s = "";
 		//If it is a game
 		if(type == 1){
@@ -2457,7 +2467,7 @@ public class Constants {
 					"3A0C25DE004B0CF00CE10B120CF20B3B0C50" +
 					"3A00000001FF";
 		}
-		
+
 		byte[] bytes = s.getBytes();
 		return bytes;
 	}

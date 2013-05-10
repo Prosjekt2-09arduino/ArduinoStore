@@ -56,10 +56,13 @@ public class All extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+		//Put the view inside the parent fragment xml
 		view = inflater.inflate(R.layout.main, container,false);
 
+		//Update this view's content
 		update();
 
+		//Return this view to the adapter
 		return view;
 	}
 	

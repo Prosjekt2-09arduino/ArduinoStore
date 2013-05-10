@@ -37,29 +37,24 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class Categories extends Fragment{
 
-//	private int mCurrentPage;
 	private ListView list;
 	private ListAdapterCategory adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		/** Getting the arguments to the Bundle object */
-//		Bundle data = getArguments();
-
-		/** Getting integer data of the key current_page from the bundle */
-//		mCurrentPage = data.getInt("current_page", 1);
-		
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+		//Put the view inside the owner (parent view)
 		final View v = inflater.inflate(R.layout.main, container,false);
 
+		//Arraylist of categories
 		ArrayList<HashMap<String, String>> category_list = new ArrayList<HashMap<String, String>>();
 
+		//Put category GAMES with its data inside a HashMap
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "1");
 		map.put(ListAdapterCategory.APP_NAME, "Games");
@@ -67,6 +62,7 @@ public class Categories extends Fragment{
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 
+		//Put category MEDICAL with its data inside a HashMap
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "2");
 		map.put(ListAdapterCategory.APP_NAME, "Medical");
@@ -74,6 +70,7 @@ public class Categories extends Fragment{
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 
+		//Put category TOOLS with its data inside a HashMap
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "3");
 		map.put(ListAdapterCategory.APP_NAME, "Tools");
@@ -81,6 +78,7 @@ public class Categories extends Fragment{
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 
+		//Put category MEDIA with its data inside a HashMap
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "4");
 		map.put(ListAdapterCategory.APP_NAME, "Media");
@@ -88,7 +86,7 @@ public class Categories extends Fragment{
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 
-		
+		//Put category ALL with its data inside a HashMap
 		map = new HashMap<String, String>();
 		map.put(ListAdapterCategory.KEY_ID, "5");
 		map.put(ListAdapterCategory.APP_NAME, "All");
@@ -96,11 +94,13 @@ public class Categories extends Fragment{
 		map.put(ListAdapterCategory.RATING, "");
 		category_list.add(map);
 
-	
+		//Get the category list view from the xml
 		list = (ListView)v.findViewById(R.id.list);
 
 		// Getting adapter by passing xml data ArrayList
-		adapter = new ListAdapterCategory(v.getContext(), category_list);        
+		adapter = new ListAdapterCategory(v.getContext(), category_list);   
+		
+		//Set the adapter to the category list
 		list.setAdapter(adapter);
 
 		// Click event for single list row
@@ -120,9 +120,6 @@ public class Categories extends Fragment{
 
 				//Update the content on the #2 tab
 				pageAdapter.all.update();
-
-				//Update the content on the #3 tab
-				//pageAdapter.topHits.update();	//this doesnt work because the last tab is not created yet
 
 				//Notify the page adapter that there have been some changes
 				pageAdapter.notifyDataSetChanged();

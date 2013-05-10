@@ -7,12 +7,23 @@ public class Developer {
 	private int id;
 	private String name, website;
 	
+	/**
+	 * Constructor to developer
+	 * @param id - developerid from database
+	 * @param name - name of developer
+	 * @param website - website of developer
+	 */
 	public Developer(int id, String name, String website){
 		this.id = id;
 		this.name = name;
 		this.website = website;
 	}
 	
+	/**
+	 * Constructor to developer when its not fetched from the database
+	 * @param name
+	 * @param website
+	 */
 	public Developer(String name, String website){
 		this.name = name;
 		this.website = website;

@@ -36,8 +36,13 @@ import android.widget.TextView;
  */
 public class ListAdapter extends BaseAdapter {
 
+	/** The context */
 	private Context context;
+
+	/** List of HashMap with applications */
 	private ArrayList<HashMap<String, String>> data;
+
+	/** Layout inflater */
 	private static LayoutInflater inflater=null;
 
 	public static final String KEY_ID = "id";
@@ -47,6 +52,11 @@ public class ListAdapter extends BaseAdapter {
 	public static final String IMAGE = "image";
 	public static final String CATEGORY = "category";
 
+	/**
+	 * Constructor for the list adapter for a fragment
+	 * @param a - context of the activity owne
+	 * @param d - arraylist of application data
+	 */
 	public ListAdapter(Context a, ArrayList<HashMap<String, String>> d) {
 		context = a;
 		data = d;
@@ -70,16 +80,24 @@ public class ListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+
+		//Get the current view
 		View vi=convertView;
+
+		//Convert the view by putting its xml inside the parent xml if its not null
 		if(convertView==null)
 			vi = inflater.inflate(R.layout.list_row, null);
 
+		//Get all the xml components
 		TextView appName = (TextView)vi.findViewById(R.id.app_name);
 		TextView distributor = (TextView)vi.findViewById(R.id.distributor);
 		RatingBar getRatingBar = (RatingBar) vi.findViewById(R.id.ratingBarIndicator);;
 		ImageView thumb_image = (ImageView)vi.findViewById(R.id.list_image);
 
+		//HashMap of current element
 		HashMap<String, String> listItem = new HashMap<String, String>();
+
+		//Fetch the data from current clicked element from the list of application
 		listItem = data.get(position);
 
 		// Setting all values in listview
@@ -87,28 +105,34 @@ public class ListAdapter extends BaseAdapter {
 		distributor.setText(listItem.get(DISTRIBUTOR));
 		getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
 
-//		if(listItem.get(CATEGORY) != null){
+		//Set the correct image to its corresponding category
+		if(listItem.get(CATEGORY).equals("Games")){
+			thumb_image.setImageResource(R.drawable.games);
+		}
 
-			if(listItem.get(CATEGORY).equals("Games")){
-				thumb_image.setImageResource(R.drawable.games);
-			}
+		//Set the correct image to its corresponding category
+		else if(listItem.get(CATEGORY).equals("Medical")){
+			thumb_image.setImageResource(R.drawable.medical);
+		}
 
-			else if(listItem.get(CATEGORY).equals("Medical")){
-				thumb_image.setImageResource(R.drawable.medical);
-			}
+		//Set the correct image to its corresponding category
+		else if(listItem.get(CATEGORY).equals("Tools")){
+			thumb_image.setImageResource(R.drawable.tools);
+		}
 
-			else if(listItem.get(CATEGORY).equals("Tools")){
-				thumb_image.setImageResource(R.drawable.tools);
-			}
-
-			else if(listItem.get(CATEGORY).equals("Media")){
-				thumb_image.setImageResource(R.drawable.media);
-			}
-//		}
+		//Set the correct image to its corresponding category
+		else if(listItem.get(CATEGORY).equals("Media")){
+			thumb_image.setImageResource(R.drawable.media);
+		}
 
 		return vi;
 	}
 
+	/**
+	 * 
+	 * @param position - the item position from the list
+	 * @return - the database id to the current application
+	 */
 	public String getID(int position){
 		return data.get(position).get(KEY_ID);
 	}

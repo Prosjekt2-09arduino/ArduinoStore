@@ -34,78 +34,104 @@ import android.widget.TextView;
  * Adapter for the list of categories
  */
 public class ListAdapterCategory extends BaseAdapter {
-    
-    private Context context;
-    private ArrayList<HashMap<String, String>> data;
-    private static LayoutInflater inflater=null;
-    
+
+	/** The context */
+	private Context context;
+
+	/** Arraylist of categories */
+	private ArrayList<HashMap<String, String>> data;
+
+	/** inflater of the layout */
+	private static LayoutInflater inflater=null;
+
 	protected static final String KEY_ID = "id";
 	protected static final String APP_NAME = "title";
 	protected static final String DISTRIBUTOR = "distributor";
 	protected static final String RATING = "rating";
-    
-    public ListAdapterCategory(Context a, ArrayList<HashMap<String, String>> d) {
-        context = a;
-        data = d;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
 
-    @Override
-    /**
-     * Get number of apps
-     */
+	/**
+	 * 
+	 * @param a - the context to current activity
+	 * @param d - arraylist of HashMaps with categories
+	 */
+	public ListAdapterCategory(Context a, ArrayList<HashMap<String, String>> d) {
+		context = a;
+		data = d;
+		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
+	@Override
+	/**
+	 * Get number of categories
+	 */
 	public int getCount() {
-        return data.size();
-    }
+		return data.size();
+	}
 
-    @Override
+	@Override
 	public Object getItem(int position) {
-        return position;
-    }
+		return position;
+	}
 
-    @Override
+	@Override
 	public long getItemId(int position) {
-        return position;
-    }
-    
-    @Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-        View vi=convertView;
-        if(convertView==null)
-            vi = inflater.inflate(R.layout.list_row_categories, null);
+		return position;
+	}
 
-        TextView appName = (TextView)vi.findViewById(R.id.app_name);
-        ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image);
-        
-        HashMap<String, String> listItem = new HashMap<String, String>();
-        listItem = data.get(position);
-        
-        // Setting all values in listview
-        appName.setText(listItem.get(APP_NAME));
-        
-        if(listItem.get(APP_NAME).equals("Games")){
-        	thumb_image.setImageResource(R.drawable.games);
-        }
-        
-        else if(listItem.get(APP_NAME).equals("Medical")){
-        	thumb_image.setImageResource(R.drawable.medical);
-        }
-        
-        else if(listItem.get(APP_NAME).equals("Tools")){
-        	thumb_image.setImageResource(R.drawable.tools);
-        }
-        
-        else if(listItem.get(APP_NAME).equals("Media")){
-        	thumb_image.setImageResource(R.drawable.media);
-        }
-        else if(listItem.get(APP_NAME).equals("All")){
-        	thumb_image.setImageResource(R.drawable.ic_launcher);
-        }
-        
-        
-        return vi;
-    }
-    
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+
+		//Get the current view
+		View vi=convertView;
+
+		//If the view is not null, put the list inside the fragment view
+		if(convertView==null)
+			vi = inflater.inflate(R.layout.list_row_categories, null);
+
+		//Category name
+		TextView categoryName = (TextView)vi.findViewById(R.id.app_name);
+
+		//Category image
+		ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image);
+
+		//Map of categories
+		HashMap<String, String> listItem = new HashMap<String, String>();
+
+		//Get item at clicked position in list
+		listItem = data.get(position);
+
+		// Setting all values in listview
+		categoryName.setText(listItem.get(APP_NAME));
+
+		//Change image to right category img
+		if(listItem.get(APP_NAME).equals("Games")){
+			thumb_image.setImageResource(R.drawable.games);
+		}
+
+		//Change image to right category img
+		else if(listItem.get(APP_NAME).equals("Medical")){
+			thumb_image.setImageResource(R.drawable.medical);
+		}
+
+		//Change image to right category img
+		else if(listItem.get(APP_NAME).equals("Tools")){
+			thumb_image.setImageResource(R.drawable.tools);
+		}
+
+		//Change image to right category img
+		else if(listItem.get(APP_NAME).equals("Media")){
+			thumb_image.setImageResource(R.drawable.media);
+		}
+
+		//Change image to right category img
+		else if(listItem.get(APP_NAME).equals("All")){
+			thumb_image.setImageResource(R.drawable.ic_launcher);
+		}
+
+		return vi;
+	}
+
+	/** Get the category name by its position */
 	public String getName(int id){
 		return data.get(id).get(APP_NAME);
 	}

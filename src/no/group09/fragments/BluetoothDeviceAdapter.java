@@ -40,10 +40,20 @@ import android.widget.TextView;
  */
 public class BluetoothDeviceAdapter extends BaseAdapter{
 
+	/** The context */
 	private Context context;
+	
+	/** List of elements */
 	private ArrayList<HashMap<String, String>> data;
+	
+	/** Layout inflater */
 	private static LayoutInflater inflater = null;
 
+	/**
+	 * Constructor to Bluetooth device elements
+	 * @param a - context to the owner activity
+	 * @param d - list of HashMaps with information about the Bluetooth device
+	 */
 	public BluetoothDeviceAdapter(Context a, ArrayList<HashMap<String, String>> d) {
 		super();
 		
@@ -70,16 +80,19 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
+		//Get the view
 		View vi = convertView;
 
+		//Put this view inside the fragment xml
 		if(convertView == null){
 			vi = LayoutInflater.from(context).inflate(R.layout.bluetooth_device_list_row, null);
 		}
-			
+
+		//Get the components from the xml
 		TextView deviceName = (TextView)vi.findViewById(R.id.bluetooth_device_name);
-		
 		TextView deviceMac = (TextView)vi.findViewById(R.id.bluetooth_device_mac);
 
+		//Get the current HashMap with infroamtion about current BT device
 		HashMap<String, String> listItem = new HashMap<String, String>();
 		listItem = data.get(position);
 
@@ -87,15 +100,18 @@ public class BluetoothDeviceAdapter extends BaseAdapter{
 		deviceName.setText(listItem.get("name"));
 		deviceMac.setText(listItem.get("mac"));
 		
+		//Get the preferences for the last connected device name and mac address
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String savedDeviceName = sharedPrefs.getString("connected_device_name", "null");
 		String savedDeviceMac = sharedPrefs.getString("connected_device_mac", "null");
 
+		//If the device is registred as a pager, change its icon
 		if(!listItem.get("pager").equals("708")){
 			ImageView image = (ImageView)vi.findViewById(R.id.list_image);
 			image.setImageResource(R.drawable.bluetooth);
 		}
 		
+		//If the device was one of the stored devices, change icon to stored icon
 		if(listItem.get("name").equals(savedDeviceName)
 				&& listItem.get("mac").equals(savedDeviceMac)){
 			ImageView image = (ImageView) vi.findViewById(R.id.list_image);

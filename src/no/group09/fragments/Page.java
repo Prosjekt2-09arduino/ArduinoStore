@@ -21,6 +21,12 @@ public enum Page {
 	MEDIA_ALL,
 	MEDIA_MOST_POPULAR;
 	
+	/**
+	 * 
+	 * @param s - the category as string
+	 * @param page - which of the two fragment pages it is
+	 * @return
+	 */
 	public static Page getType(String s, int page){
 		
 		if(s.toUpperCase().equals("GAMES")){

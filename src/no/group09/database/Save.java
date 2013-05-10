@@ -17,12 +17,22 @@ import android.util.Log;
  */
 public class Save{
 
+	/** Tag for log cat */
 	private static final String TAG = "Save";
 
+	/** The SQLite database */
 	public SQLiteDatabase db;
+	
+	/* The handler for the database */
 	private DatabaseHandler dbHelper;
+	
+	/** Map of all the tables from the database */
 	protected HashMap<String, Cursor> tables;
 
+	/**
+	 * Constructor for the save that takes care of the database
+	 * @param context - context of the callers activity
+	 */
 	public Save(Context context){
 		dbHelper = new DatabaseHandler(context);
 	}
@@ -111,13 +121,21 @@ public class Save{
 
 	/** Get the Developer from the local database by its ID */
 	public synchronized Developer getDeveloperByID(int id){
+		
+		//Get the database
 		db = dbHelper.getWritableDatabase();
+		
+		//Prepare the cursor
 		Cursor c = null;
+		
+		//Prepare the developer
 		Developer developer = null;
 
 		try{
+			//Get the developer by its input id
 			c = db.rawQuery(Constants.SELECT_DEVELOPER, new String[] {String.valueOf(id)});
 
+			//Move pointer to first record
 			if(c.moveToFirst()){
 				developer = new Developer(
 						c.getInt(0),		//developerid
@@ -134,12 +152,20 @@ public class Save{
 
 	/** Get the the Application from the local database by its ID */
 	public synchronized App getAppByID(int id) {
+		
+		//Get the database
 		db = dbHelper.getWritableDatabase();
+		
+		//Prepare the cursor
 		Cursor c = null;
+		
+		//Prepare the application
 		App app = null;
 		try {
+			//Try to fetch the application by the input ID
 			c = db.rawQuery(Constants.SELECT_APP, new String[] { String.valueOf(id) });
 
+			//Move cursor to first record
 			if (c.moveToFirst()) {
 				app = new App(
 						c.getInt(0),		//appid
@@ -160,6 +186,8 @@ public class Save{
 
 	/** Inserts an application to the local database */
 	public void insertApp(App app) {
+		
+		//Get the database
 		db = dbHelper.getWritableDatabase();
 
 		try {
@@ -237,10 +265,18 @@ public class Save{
 		return requirements;
 	}
 	
+	/**
+	 * Inserts a requirement to the database
+	 * @param req - requirement object
+	 */
 	public synchronized void insertRequirements(Requirements req){
+		
+		//Get the database
 		db = dbHelper.getWritableDatabase();
 
 		try {
+			
+			//Check if the database is open
 			if (db.isOpen()) {
 				SQLiteStatement insertStmt = db.compileStatement(Constants.INSERT_REQUIREMENTS);
 				insertStmt.clearBindings();
@@ -251,6 +287,6 @@ public class Save{
 			}
 		}
 		catch (SQLiteException e) { Log.e(TAG, e.getMessage()); }
-		finally { db.close(); }
+		finally { db.close(); }	//Close the database
 	}
 }
