@@ -18,8 +18,8 @@ package no.group09.utils;
  * specific language governing permissions and limitations
  * under the License.
  */
-import no.group09.ucsoftwarestore.R;
 
+import no.group09.ucsoftwarestore.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,7 +29,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
@@ -65,7 +64,6 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		//Get the sharedPreference
         sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
 
-		
 		//Used when the 'connected_device_dialog' preference in the preference
 		//screen is clicked
 		ps.findPreference("connected_device_dialog").setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -86,7 +84,6 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		});
 		String deviceName = sharedPref.getString("connected_device_name", "");
 		ps.findPreference("connected_device_dialog").setSummary("Last connected: " + deviceName);
-		
 		
 		//Remove settings saved about the last connected devices from the settings screen
 		Preference connDeviceName = (Preference) findPreference("connected_device_name");

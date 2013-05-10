@@ -18,17 +18,13 @@ package no.group09.utils;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import no.group09.ucsoftwarestore.MainActivity;
 import no.group09.ucsoftwarestore.R;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeoutException;
 import no.group09.connection.BluetoothConnection;
 import no.group09.connection.BluetoothConnection.ConnectionState;
-import no.group09.connection.ConnectionMetadata;
-import no.group09.connection.ConnectionMetadata.DefaultServices;
 import no.group09.fragments.BluetoothDeviceAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -48,7 +44,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -70,7 +65,6 @@ public class Devices extends Activity  {
 
 	/**Should be true if only arduinos is to be showed. False otherwise */
 	private boolean ONLY_SHOW_ARDUINOS = false;
-
 	private SharedPreferences sharedPref;
 	private ProgressDialog progressDialog;
 	private static final String TAG = "DEVICES";
@@ -96,9 +90,6 @@ public class Devices extends Activity  {
 	 * connect was unsuccessful.
 	 */
 	private final static String NEGATIVE_MESSAGE = "The connection was not successfull.\nPlease try again.";
-
-	private boolean secondClick = false;
-
 	private int savedPosition;
 
 	@Override
@@ -206,7 +197,11 @@ public class Devices extends Activity  {
 		});
 	}
 
-	/** Checks wether a service is running or not */
+	/**
+	 * Checks whether a service is running or not
+	 * 
+	 * @return true if the service is running, false if not
+	 */
 	public boolean isMyServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -217,7 +212,11 @@ public class Devices extends Activity  {
 		return false;
 	}
 
-	/** Check if there is a connection, return false if something is null or disconnected */
+	/**
+	 * Check if there is an active connection
+	 * 
+	 * @return true if an active connection is existing, false if not
+	 */
 	public static boolean isConnected(){
 		if(BtArduinoService.getBtService() != null){
 			if(BtArduinoService.getBtService().getBluetoothConnection() != null){
@@ -313,16 +312,9 @@ public class Devices extends Activity  {
 		});
 	}
 
-	//Disse to er en del av en stygg hack, men det funker. Fix senere.
-	private void setContext(Context context) {
-		//TODO: remove if fixed
-		Devices.context = context;
-	}
-
 	public static Context getContext() {
 		return context;
 	}
-
 
 	/**
 	 * Method used to register the broadcast receiver for communicating with
@@ -333,7 +325,8 @@ public class Devices extends Activity  {
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);		//connected devices
+		//Connected devices
+		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
 
 		actionFoundReceiver = new MyBroadcastReceiver();
 		//Registers the BT receiver with the requested filters
@@ -341,8 +334,6 @@ public class Devices extends Activity  {
 		registerReceiver(actionFoundReceiver, filter);
 	}
 
-
-	/** This routine is called when an activity completes.*/
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -357,10 +348,6 @@ public class Devices extends Activity  {
 	}
 
 	@Override
-	/**
-	 * Called when this activity is destroyed. If a discovery is ongoing, it is
-	 * cancelled. The broadcastreceiver is also unregistered.
-	 */
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(actionFoundReceiver);
@@ -369,10 +356,6 @@ public class Devices extends Activity  {
 		}
 	}
 
-	/**
-	 * Called when Devices screen is resumed. Clears the list of visible 
-	 * bluetooth devices and starts a new search.
-	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -395,6 +378,11 @@ public class Devices extends Activity  {
 		checkBTState();
 	}
 
+	/**
+	 * If a valid connection is existing, this method fetches the name and MAC
+	 * address of the connected device from preferences and adds it and selects
+	 * it in the device list.
+	 */
 	private void addToDeviceListAndSelectIt(){
 		if(isConnected()){
 			HashMap<String, String> map = new HashMap<String, String>();
@@ -405,7 +393,7 @@ public class Devices extends Activity  {
 			map.put("mac", deviceMac);
 			map.put("pager", "708");
 
-			//If we are connected but it doesnt appear to be in the device list: add it
+			//If we are connected but it does'nt appear to be in the device list: add it
 			if(!isDeviceWithMacInList(device_list, deviceMac) && !deviceName.equals("null") && !deviceMac.equals("null")){
 				device_list.add(map);
 				deviceList.setItemChecked(0, true);
@@ -413,6 +401,15 @@ public class Devices extends Activity  {
 		}
 	}
 
+	/**
+	 * Method checking if the given MAC address in the device list from before
+	 * to avoid duplicates.
+	 * 
+	 * @param list The current device list
+	 * @param deviceMac The MAC address of the device that is to be added to the
+	 * device list
+	 * @return true if the device is in the device list from before, false if not.
+	 */
 	private boolean isDeviceWithMacInList(ArrayList<HashMap<String, String>> list, String deviceMac){
 
 		for(HashMap<String, String> map : list){
@@ -515,8 +512,6 @@ public class Devices extends Activity  {
 				//If the bluetooth class is named 708 that we made as a 'standard' for recognizing arduinos
 				if(onlyShowArduinos(device) || !btDeviceList.contains(device)){
 
-					//If there is a device in the list with the same mac address
-
 					//Adding found device
 					HashMap<String, String> map = new HashMap<String, String>();
 					map.put("name", device.getName());
@@ -529,8 +524,6 @@ public class Devices extends Activity  {
 						//List of device objects
 						btDeviceList.add(device);
 					}
-
-
 					listAdapter.notifyDataSetChanged();
 				}
 			}
@@ -561,6 +554,12 @@ public class Devices extends Activity  {
 		}
 	}
 
+	/**
+	 * Creates a dialog to the user
+	 * 
+	 * @param message String containing the message to be presented to the user
+	 * @return The created dialog
+	 */
 	public Dialog createDialog(String message) {
 		AlertDialog.Builder responseDialog = new AlertDialog.Builder(this);
 
@@ -576,6 +575,10 @@ public class Devices extends Activity  {
 		return responseDialog.show();
 	}
 
+	/**
+	 * AsyncTask handling the progress bar shown to the user upon connecting
+	 * to a device. 
+	 */
 	private class ProgressDialogTask extends AsyncTask<Void, Void, Boolean> {
 
 		private long timeout;
@@ -634,7 +637,7 @@ public class Devices extends Activity  {
 				message = NEGATIVE_MESSAGE;
 				title = "Devices";
 
-				//Unselect the view in the list
+				//Deselect the view in the list
 				deviceList.setItemChecked(savedPosition, false);
 
 				//Notify the adapter about the changes
@@ -645,113 +648,6 @@ public class Devices extends Activity  {
 			Log.d(TAG, message);
 			setTitle(title);
 			Log.d(TAG, "ConnectionState was: " + connection.getConnectionState());
-		}
-	}
-
-	/** 
-	 * This only shows a dialog box with functions to the arduino 
-	 * TODO: delete me when you dont need me anymore
-	 */
-	private void dialogBoxForTestingPurposes(){
-
-		final BluetoothConnection connection = BtArduinoService.getBtService().getBluetoothConnection();
-
-		if(connection.isConnected()){
-
-
-			// custom dialog
-			final Dialog dialog = new Dialog(Devices.this);
-			dialog.setContentView(R.layout.dialog_box_for_test_purposes);
-
-			Button LED = (Button) dialog.findViewById(R.id.LED);
-			Button VIBRATE = (Button) dialog.findViewById(R.id.VIBRATE);
-			Button SPEAKER = (Button) dialog.findViewById(R.id.SPEAKER);
-			Button LCD = (Button) dialog.findViewById(R.id.LCD);
-
-			ConnectionMetadata meta = connection.getConnectionData();
-			for(String service : meta.getServicesSupported()) {
-				Integer pins[] = meta.getServicePins(service);
-
-				if(pins.length > 0) {
-					if(service.equals(DefaultServices.SERVICE_LED_LAMP.name())){
-						LED.setOnClickListener(new OnClickListener() {
-
-							boolean ledIsToggled;
-							int pinID;
-
-							@Override
-							public void onClick(View v) {
-								ledIsToggled = !ledIsToggled;
-								try {
-									connection.write(pinID, ledIsToggled, false);
-								} catch (TimeoutException e) {}
-							}
-						});
-					}
-					if(service.equals(DefaultServices.SERVICE_VIBRATION.name())){
-						VIBRATE.setOnClickListener(new OnClickListener() {
-
-							Timer timer = new Timer();
-							int pin;
-
-							@Override
-							public void onClick(View v) {
-								timer.schedule(new TimerTask(){
-									@Override
-									public void run(){
-										try {
-
-											//Vibrate mobile
-											Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-											vib.vibrate(2000);
-
-											//Vibrate remote module
-											connection.write(pin, true, false);
-											Thread.sleep(2000);
-											connection.write(pin, false, false);
-
-										} 
-										catch (Exception e) {
-										}
-									}
-								}, 0);
-							}
-						});
-					}
-					if(service.equals(DefaultServices.SERVICE_SPEAKER.name())){
-						SPEAKER.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								try {
-									connection.data(new byte[]{100, 75, 52, 15}, false);
-								} catch (TimeoutException e) {}
-							}
-						});
-					}
-				}
-
-				else if(service.equals(DefaultServices.SERVICE_LCD_SCREEN.name())){
-					LCD.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							try {
-								if(secondClick){
-									connection.print("hallo gruppe09", false);
-									secondClick = false;
-								}
-								else{
-									connection.print(connection.getConnectionState().toString(), false);
-									secondClick = true;
-								}
-							} catch (TimeoutException e) {}
-						}
-					});
-				}
-			}
-
-			dialog.show();
 		}
 	}
 
@@ -792,12 +688,11 @@ public class Devices extends Activity  {
 							//Update the Activity's title
 							setActivityTitle();
 
-							//Unselect the view in the list
+							//Deselect the view in the list
 							deviceList.setItemChecked(position, false);
 
 							//Notify the adapter about the changes
 							listAdapter.notifyDataSetInvalidated();
-
 
 							//Close the dialog box
 							dialog.cancel();
@@ -816,7 +711,7 @@ public class Devices extends Activity  {
 	}
 
 	/**
-	 * Creates options menus
+	 * Creates options menu
 	 */
 	@Override
 	@SuppressLint("NewApi")
