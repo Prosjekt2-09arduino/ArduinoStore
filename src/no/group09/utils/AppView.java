@@ -67,7 +67,7 @@ public class AppView extends Activity {
 	private byte[] byteArray;
 	private AlertDialog.Builder responseDialog;
 	private Activity activityRef;
-	private TextView appName, appDeveloper, appDescription;
+	private TextView appName, appDeveloper, appDescription, requirements;
 	private RatingBar rating;
 	private ImageView thumb_image;
 	private App app;
@@ -102,6 +102,8 @@ public class AppView extends Activity {
 		rating = (RatingBar) findViewById(R.id.ratingBarIndicator);
 		appDescription = (TextView) findViewById(R.id.app_view_description);
 		thumb_image = (ImageView) findViewById(R.id.app_profile_pic);
+		requirements = (TextView) findViewById(R.id.requiredHardwareText);
+		
 
 		//Set the information on the UI that we fetched from the database-objects
 		appName.setText(app.getName());
@@ -126,33 +128,41 @@ public class AppView extends Activity {
 	 * with an image when the app view of the selected app is entered. 
 	 */
 	public void initializeElements() {
+		
 		if(app.getCategory().equals("Games")){
 			if (appName.getText().equals("Super Mario Tune")) {
 				thumb_image.setImageResource(R.drawable.supermario);
+				requirements.setText(R.string.supermario);
 				return;
 			}
 			thumb_image.setImageResource(R.drawable.games);
+			requirements.setText(R.string.no_requirements);
 		}
 		else if(app.getCategory().equals("Medical")){
 			thumb_image.setImageResource(R.drawable.medical);
+			requirements.setText(R.string.no_requirements);
 		}
 
 		else if(app.getCategory().equals("Tools")){
 			if (appName.getText().equals("Thermometer Celsius") || 
 					appName.getText().equals("Thermometer Fahrenheit")) {
 				thumb_image.setImageResource(R.drawable.thermometer);
+				requirements.setText(R.string.celcius);
 				return;
 			}
 			thumb_image.setImageResource(R.drawable.tools);
+			requirements.setText(R.string.no_requirements);
 		}
 
 		else if(app.getCategory().equals("Media")){
 			if (appName.getText().equals("Flashing LEDs sequential") || 
 					appName.getText().equals("Flashing LEDs alternative")) {
 				thumb_image.setImageResource(R.drawable.led);
+				requirements.setText(R.string.sequential);
 				return;
 			}
 			thumb_image.setImageResource(R.drawable.media);
+			requirements.setText(R.string.no_requirements);
 		} 
 	}
 
