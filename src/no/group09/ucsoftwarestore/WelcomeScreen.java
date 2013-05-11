@@ -19,6 +19,7 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
+import no.group09.database.Save;
 import no.group09.utils.Devices;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,6 +55,10 @@ public class WelcomeScreen extends Activity {
 		setContentView(R.layout.intro_screen);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		ctxt = getBaseContext();
+		
+		//Populate the database with example apps if its empty
+		Save save = new Save(ctxt);
+		save.populateDatabase();
 
 		//Progressdialog used to indicate that the program is connecting to a BT device
 		progressDialog = new ProgressDialog(this);

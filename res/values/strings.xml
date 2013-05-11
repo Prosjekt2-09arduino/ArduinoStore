@@ -100,5 +100,13 @@
     <string name="title_activity_welcome_screen">Welcome Screen</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    
+    <!-- Required Hardware -->
+    <string name="supermario">Arduino Uno\nBluetooth Module\nSpeaker</string>
+    <string name="celcius">Arduino Uno\nBluetooth Module\nLCD Screen\nThermometer\nPotentiometer</string>
+    <string name="fahrenheit">Arduino Uno\nBluetooth Module\nLCD Screen\nThermometer\nPotentiometer</string>
+    <string name="sequential">Arduino Uno\nBluetooth Module\n3x LED Lamp</string>
+    <string name="alternative">Arduino Uno\nBluetooth Module\n3x LED Lamp</string>
+    <string name="no_requirements">No requirements found</string>
 
 </resources>

@@ -105,25 +105,8 @@ public class ListAdapter extends BaseAdapter {
 		distributor.setText(listItem.get(DISTRIBUTOR));
 		getRatingBar.setRating(Integer.parseInt(listItem.get(RATING)));
 
-		//Set the correct image to its corresponding category
-		if(listItem.get(CATEGORY).equals("Games")){
-			thumb_image.setImageResource(R.drawable.games);
-		}
-
-		//Set the correct image to its corresponding category
-		else if(listItem.get(CATEGORY).equals("Medical")){
-			thumb_image.setImageResource(R.drawable.medical);
-		}
-
-		//Set the correct image to its corresponding category
-		else if(listItem.get(CATEGORY).equals("Tools")){
-			thumb_image.setImageResource(R.drawable.tools);
-		}
-
-		//Set the correct image to its corresponding category
-		else if(listItem.get(CATEGORY).equals("Media")){
-			thumb_image.setImageResource(R.drawable.media);
-		}
+		//Set the image to the application
+		setThumbImage(listItem, thumb_image, appName);
 
 		return vi;
 	}
@@ -135,5 +118,43 @@ public class ListAdapter extends BaseAdapter {
 	 */
 	public String getID(int position){
 		return data.get(position).get(KEY_ID);
+	}
+	
+	/**
+	 * Method for illustration purposes. This method initializes each element
+	 * with an image when the app view of the selected app is entered. 
+	 */
+	public void setThumbImage(HashMap<String, String> listItem, ImageView thumb_image, TextView appName) {
+		
+		//Set the correct image to its corresponding category
+		if(listItem.get(CATEGORY).equals("Games")){
+			if (appName.getText().equals("Super Mario Tune")) 
+				thumb_image.setImageResource(R.drawable.supermario);
+			else
+				thumb_image.setImageResource(R.drawable.games);
+		}
+
+		//Set the correct image to its corresponding category
+		else if(listItem.get(CATEGORY).equals("Medical")){
+			thumb_image.setImageResource(R.drawable.medical);
+		}
+
+		//Set the correct image to its corresponding category
+		else if(listItem.get(CATEGORY).equals("Tools")){
+			if (appName.getText().equals("Thermometer Celsius") 
+					|| appName.getText().equals("Thermometer Fahrenheit"))
+				thumb_image.setImageResource(R.drawable.thermometer);
+			else
+				thumb_image.setImageResource(R.drawable.tools);
+		}
+
+		//Set the correct image to its corresponding category
+		else if(listItem.get(CATEGORY).equals("Media")){
+			if (appName.getText().equals("Flashing LEDs sequential") 
+					|| appName.getText().equals("Flashing LEDs alternative"))
+				thumb_image.setImageResource(R.drawable.led);
+			else
+				thumb_image.setImageResource(R.drawable.media);
+		}
 	}
 }

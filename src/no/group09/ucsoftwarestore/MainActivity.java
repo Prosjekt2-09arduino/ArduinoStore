@@ -179,13 +179,13 @@ public class MainActivity extends FragmentActivity {
 			startActivity(intent);
 			return true;
 
-		case R.id.populateDatabase:
-			Save save = new Save(getBaseContext());
-			save.populateDatabase();
-
-			pagerAdapter.all.update();
-			pagerAdapter.topHits.update();
-			pagerAdapter.notifyDataSetChanged();
+//		case R.id.populateDatabase:
+//			Save save = new Save(getBaseContext());
+//			save.populateDatabase();
+//
+//			pagerAdapter.all.update();
+//			pagerAdapter.topHits.update();
+//			pagerAdapter.notifyDataSetChanged();
 
 		default : return false;
 		}
