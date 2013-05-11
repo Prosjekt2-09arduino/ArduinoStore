@@ -82,7 +82,7 @@
     <string name="images">Images:</string>
     <string name="required_hw">Required Hardware:</string>
     
-    <string name="required_hw_filler">Du trenger: Arduino \nBluetooth \nScreen</string>
+    <string name="required_hw_filler"></string>
     
     <string name="reviews_header">Reviews:</string>
     <string name="review_button">Add Review</string>

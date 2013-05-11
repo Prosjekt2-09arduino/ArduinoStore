@@ -17,7 +17,7 @@ public class DatabaseHandler extends SQLiteOpenHelper  {
 	public static final String DATABASE_PATH = "/data/data/no.group09.ucsoftwarestore/databases/";
 	
 	/** Version of the database */
-	public static final int DATABASE_VERSION = 21;	//If you change the database, increase this
+	public static final int DATABASE_VERSION = 22;	//If you change the database, increase this
 
 	/**
 	 * Constructor to database handler
