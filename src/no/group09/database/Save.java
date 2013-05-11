@@ -42,7 +42,37 @@ public class Save{
 	 * @param useContentProvider - if you want to use content provider or not
 	 */
 	public synchronized void populateDatabase(){
-		Constants.populateDatabase(this);
+		
+		//If the database is empty, populate it with example apps
+		if(!checkIfDatabaseHasElements()){
+			Log.d("SAVE", "Populating the database");
+			Constants.populateDatabase(this);
+		}
+	}
+	
+	private boolean checkIfDatabaseHasElements(){
+		db = dbHelper.getWritableDatabase();
+		
+		Cursor c = null;
+		int numberOfRecords = 0;
+		
+		try{
+			
+			c = db.rawQuery("SELECT COUNT(*) from app", null);
+			//Move pointer to first record
+			if(c.moveToFirst()){
+				numberOfRecords = c.getInt(0);
+				Log.d("SAVE", "number of records is: " + numberOfRecords);
+			}
+		}
+		catch (SQLiteException e){ Log.e(TAG, e.getMessage());}
+		catch (IllegalStateException e){ Log.e(TAG, e.getMessage());}
+		finally { db.close(); if (c != null) c.close();}
+		
+		if(numberOfRecords > 0){
+			return true;
+		}
+		return false;
 	}
 
 	/**

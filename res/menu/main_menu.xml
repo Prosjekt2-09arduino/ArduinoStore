@@ -31,12 +31,13 @@
         android:orderInCategory="70"
         android:showAsAction="never"
         android:title="@string/menu_settings3"/>
-	
+	<!-- 
 	<item
         android:id="@+id/populateDatabase"
         android:orderInCategory="90"
         android:showAsAction="never"
         android:title="@string/menu_settings4"/>
+	 -->
 	
   <item android:id="@+id/menu_search"
           android:title="@string/menu_search"
