@@ -18,6 +18,7 @@
  */
 package no.group09.fragments;
 
+import no.group09.ucsoftwarestore.MainFragmentActivity;
 import no.group09.ucsoftwarestore.R;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,8 +84,8 @@ public class TopHits extends Fragment{
 
 			//If the application is under category games
 			if(app.getCategory().equals("Games") 
-					&& MainActivity.pagerAdapter.page2 == Page.GAMES_MOST_POPULAR 
-					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+					&& MainFragmentActivity.pagerAdapter.page2 == Page.GAMES_MOST_POPULAR 
+					|| MainFragmentActivity.pagerAdapter.page2 == Page.TOPHITS){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
@@ -106,8 +107,8 @@ public class TopHits extends Fragment{
 			
 			//If the application is under category medical
 			else if(app.getCategory().equals("Medical") 
-					&& MainActivity.pagerAdapter.page2 == Page.MEDICAL_MOST_POPULAR 
-					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+					&& MainFragmentActivity.pagerAdapter.page2 == Page.MEDICAL_MOST_POPULAR 
+					|| MainFragmentActivity.pagerAdapter.page2 == Page.TOPHITS){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
@@ -129,8 +130,8 @@ public class TopHits extends Fragment{
 			
 			//If the application is under category tools
 			else if(app.getCategory().equals("Tools") 
-					&& MainActivity.pagerAdapter.page2 == Page.TOOLS_MOST_POPULAR 
-					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+					&& MainFragmentActivity.pagerAdapter.page2 == Page.TOOLS_MOST_POPULAR 
+					|| MainFragmentActivity.pagerAdapter.page2 == Page.TOPHITS){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
@@ -152,8 +153,8 @@ public class TopHits extends Fragment{
 			
 			//If the application is under category media
 			else if(app.getCategory().equals("Media") 
-					&& MainActivity.pagerAdapter.page2 == Page.MEDIA_MOST_POPULAR 
-					|| MainActivity.pagerAdapter.page2 == Page.TOPHITS){
+					&& MainFragmentActivity.pagerAdapter.page2 == Page.MEDIA_MOST_POPULAR 
+					|| MainFragmentActivity.pagerAdapter.page2 == Page.TOPHITS){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import no.group09.database.Save;
 import no.group09.database.entity.App;
 import no.group09.ucsoftwarestore.MainActivity;
+import no.group09.ucsoftwarestore.MainFragmentActivity;
 import no.group09.ucsoftwarestore.R;
 import no.group09.utils.AppView;
 import android.content.Intent;
@@ -84,8 +85,8 @@ public class All extends Fragment {
 
 			//Check if apps with category games shall be listed
 			if(app.getCategory().equals("Games") 
-					&& MainActivity.pagerAdapter.page1 == Page.GAMES_ALL 
-					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+					&& MainFragmentActivity.pagerAdapter.page1 == Page.GAMES_ALL 
+					|| MainFragmentActivity.pagerAdapter.page1 == Page.ALL){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible()||!hideIncompatible){
@@ -103,8 +104,8 @@ public class All extends Fragment {
 
 			//Check if apps with category Medical shall be listed
 			else if(app.getCategory().equals("Medical") 
-					&& MainActivity.pagerAdapter.page1 == Page.MEDICAL_ALL 
-					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+					&& MainFragmentActivity.pagerAdapter.page1 == Page.MEDICAL_ALL 
+					|| MainFragmentActivity.pagerAdapter.page1 == Page.ALL){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
@@ -123,8 +124,8 @@ public class All extends Fragment {
 
 			//Check if apps with category Tools shall be listed
 			else if(app.getCategory().equals("Tools") 
-					&& MainActivity.pagerAdapter.page1 == Page.TOOLS_ALL 
-					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+					&& MainFragmentActivity.pagerAdapter.page1 == Page.TOOLS_ALL 
+					|| MainFragmentActivity.pagerAdapter.page1 == Page.ALL){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){
@@ -143,8 +144,8 @@ public class All extends Fragment {
 
 			//Check if apps with category Media shall be listed
 			else if(app.getCategory().equals("Media") 
-					&& MainActivity.pagerAdapter.page1 == Page.MEDIA_ALL 
-					|| MainActivity.pagerAdapter.page1 == Page.ALL){
+					&& MainFragmentActivity.pagerAdapter.page1 == Page.MEDIA_ALL 
+					|| MainFragmentActivity.pagerAdapter.page1 == Page.ALL){
 
 				//The app should not be shown if the user has hide_incompatible = true and the app is not compatible
 				if(save.getRequirementsByID(app.getRequirementID()).isCompatible() || !hideIncompatible){

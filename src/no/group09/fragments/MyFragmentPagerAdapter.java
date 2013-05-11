@@ -20,6 +20,7 @@ package no.group09.fragments;
  */
 
 import no.group09.ucsoftwarestore.MainActivity;
+import no.group09.ucsoftwarestore.MainFragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,7 +30,7 @@ import android.support.v4.app.FragmentPagerAdapter;
   */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
  
-	private final int PAGE_COUNT = 3;
+	private final int PAGE_COUNT = 2;
 	
 	/** This is how we make the second tab unique for the chosen category 
 	 * (Switch database content in relation to enum type on page 1) */
@@ -45,13 +46,10 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 	/** The third tab. This is needed for editing the content on selected category */
 	public TopHits topHits;
 	
-	/** Category fragment */
-	public Categories categories;
-	
-	MainActivity main;
+	MainFragmentActivity main;
 
 	/** Constructor of the class */
-	public MyFragmentPagerAdapter(FragmentManager fm, MainActivity main) {
+	public MyFragmentPagerAdapter(FragmentManager fm, MainFragmentActivity main) {
 		super(fm);
 		this.main = main;
 	}
@@ -65,15 +63,11 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
 		//For each page, create a fragment
 		switch(page){
-		case 0: fragment = new Categories(); 
-				categories = (Categories) fragment;
-				break;
-		
-		case 1: fragment = new All(); 
+		case 0: fragment = new All(); 
 				all = (All) fragment; 
 				break;
 				
-		case 2: fragment = new TopHits(); 
+		case 1: fragment = new TopHits(); 
 				topHits = (TopHits) fragment;
 				break;
 		}
@@ -99,9 +93,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
 
 		//Set the title on the fragment by which potition it is at
 		switch(position){
-		case 0: tab = "CATEGORIES"; break;
-		case 1: tab = getTitleForPage1(); break;
-		case 2: tab = getTitleForPage2(); break;
+		case 0: tab = getTitleForPage1(); break;
+		case 1: tab = getTitleForPage2(); break;
 		default: tab = "";
 		}
 		

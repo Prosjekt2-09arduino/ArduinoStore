@@ -19,18 +19,13 @@ package no.group09.ucsoftwarestore;
  * under the License.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import no.group09.database.Save;
-import no.group09.fragments.ListAdapterCategory;
 import no.group09.fragments.MyFragmentPagerAdapter;
 import no.group09.fragments.Page;
 import no.group09.utils.Devices;
 import no.group09.utils.Preferences;
 import no.group09.ucsoftwarestore.R;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -43,27 +38,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * The main store activity for the app.
  */
-public class MainActivity extends Activity {
+public class MainFragmentActivity extends FragmentActivity {
+
+	/** The fragment adapter for the tabs */
+	public static MyFragmentPagerAdapter pagerAdapter;
+
+	/** The ViewPager from xml */
+	public ViewPager pager;
 
 	/** Name of the preference file */
 	public static final String PREFS_NAME = "PreferenceFile";
 
 	/** The shared preference object */
 	private SharedPreferences sharedPref = null;
-	
-	private ListView list;
-	private ListAdapterCategory adapter;
-	
-	private Context ctxt;
 
 	/**
 	 * Takes state and creates the application view
@@ -71,76 +63,34 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_main);
+
+		Intent intent = getIntent();
 		
-		ctxt = getApplicationContext();
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(ctxt);
+		Bundle bundle = intent.getExtras();
 		
-		//Arraylist of categories
-		ArrayList<HashMap<String, String>> category_list = new ArrayList<HashMap<String, String>>();
-
-		//Put category GAMES with its data inside a HashMap
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put(ListAdapterCategory.KEY_ID, "1");
-		map.put(ListAdapterCategory.APP_NAME, "Games");
-		map.put(ListAdapterCategory.DISTRIBUTOR, "");
-		map.put(ListAdapterCategory.RATING, "");
-		category_list.add(map);
-
-		//Put category MEDICAL with its data inside a HashMap
-		map = new HashMap<String, String>();
-		map.put(ListAdapterCategory.KEY_ID, "2");
-		map.put(ListAdapterCategory.APP_NAME, "Medical");
-		map.put(ListAdapterCategory.DISTRIBUTOR, "");
-		map.put(ListAdapterCategory.RATING, "");
-		category_list.add(map);
-
-		//Put category TOOLS with its data inside a HashMap
-		map = new HashMap<String, String>();
-		map.put(ListAdapterCategory.KEY_ID, "3");
-		map.put(ListAdapterCategory.APP_NAME, "Tools");
-		map.put(ListAdapterCategory.DISTRIBUTOR, "");
-		map.put(ListAdapterCategory.RATING, "");
-		category_list.add(map);
-
-		//Put category MEDIA with its data inside a HashMap
-		map = new HashMap<String, String>();
-		map.put(ListAdapterCategory.KEY_ID, "4");
-		map.put(ListAdapterCategory.APP_NAME, "Media");
-		map.put(ListAdapterCategory.DISTRIBUTOR, "");
-		map.put(ListAdapterCategory.RATING, "");
-		category_list.add(map);
-
-		//Put category ALL with its data inside a HashMap
-		map = new HashMap<String, String>();
-		map.put(ListAdapterCategory.KEY_ID, "5");
-		map.put(ListAdapterCategory.APP_NAME, "All");
-		map.put(ListAdapterCategory.DISTRIBUTOR, "");
-		map.put(ListAdapterCategory.RATING, "");
-		category_list.add(map);
-
-		//Get the category list view from the xml
-		list = (ListView) findViewById(R.id.list);
-
-		// Getting adapter by passing xml data ArrayList
-		adapter = new ListAdapterCategory(getBaseContext(), category_list);   
+		String category = bundle.getString("category");
 		
-		//Set the adapter to the category list
-		list.setAdapter(adapter);
+		//Getting a reference to the ViewPager defined the layout file
+		pager = (ViewPager) findViewById(R.id.pager);
 
-		// Click event for single list row
-		list.setOnItemClickListener(new OnItemClickListener() {
+		//Initializing the settings for the application
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		//Initializing the shared preferences
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-				Intent intent = new Intent(MainActivity.this, MainFragmentActivity.class);
-				intent.putExtra("category", adapter.getName(position));
-				startActivity(intent);
-			}
-		});	
+		//Getting fragment manager
+		FragmentManager fm = getSupportFragmentManager();
 
+		//Instantiating FragmentPagerAdapter
+		pagerAdapter = new MyFragmentPagerAdapter(fm, this);
+
+		//Setting the pagerAdapter to the pager object
+		pager.setAdapter(pagerAdapter);
 		
+		pagerAdapter.page1 = Page.getType(category, 1);
+		pagerAdapter.page2 = Page.getType(category, 2);
 	}
 
 	/**
@@ -219,9 +169,9 @@ public class MainActivity extends Activity {
 				item.setTitle("Show incompatible");
 			}
 
-//			pagerAdapter.all.update();
-//			pagerAdapter.topHits.update();
-//			pagerAdapter.notifyDataSetChanged();
+			pagerAdapter.all.update();
+			pagerAdapter.topHits.update();
+			pagerAdapter.notifyDataSetChanged();
 
 			return true;
 
@@ -248,12 +198,15 @@ public class MainActivity extends Activity {
 	 */
 	public void setActivityTitle(){
 		String deviceName = sharedPref.getString("connected_device_name", "null");
-		
+
+		//Get the name of the selected category
+		String category = Page.getCategoryFromType(pagerAdapter.page1);
+
 		if(Devices.isConnected() && !deviceName.equals("null")){
-			setTitle("Categories" + " - " + deviceName);
+			setTitle(category + " - " + deviceName);
 		}
 		else{
-			setTitle("Categories");
+			setTitle(category);
 		}
 	}
 
