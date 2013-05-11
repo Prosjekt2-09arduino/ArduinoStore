@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
 
 		//When the menu is created, check the preferences and set the correct text
 		if(sharedPref.getBoolean("hide_incompatible", false)){
-			menu.getItem(1).setTitle("Show incompatible");
+			menu.getItem(1).setTitle("Hide incompatible");
 		}
 		else{
 			menu.getItem(1).setTitle("Hide incompatible");
@@ -216,7 +216,7 @@ public class MainActivity extends Activity {
 				item.setChecked(true);
 
 				//Set new text when item is clicked
-				item.setTitle("Show incompatible");
+				item.setTitle("Hide incompatible");
 			}
 
 //			pagerAdapter.all.update();

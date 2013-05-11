@@ -65,8 +65,6 @@ public class MainFragmentActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-
-
 		//Getting a reference to the ViewPager defined the layout file
 		pager = (ViewPager) findViewById(R.id.pager);
 
@@ -88,6 +86,7 @@ public class MainFragmentActivity extends FragmentActivity {
 
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
+		
 		if(bundle != null){
 			String category = bundle.getString("category");
 			pagerAdapter.page1 = Page.getType(category, 1);
@@ -113,7 +112,7 @@ public class MainFragmentActivity extends FragmentActivity {
 
 		//When the menu is created, check the preferences and set the correct text
 		if(sharedPref.getBoolean("hide_incompatible", false)){
-			menu.getItem(1).setTitle("Show incompatible");
+			menu.getItem(1).setTitle("Hide incompatible");
 		}
 		else{
 			menu.getItem(1).setTitle("Hide incompatible");
@@ -168,7 +167,7 @@ public class MainFragmentActivity extends FragmentActivity {
 				item.setChecked(true);
 
 				//Set new text when item is clicked
-				item.setTitle("Show incompatible");
+				item.setTitle("Hide incompatible");
 			}
 
 			pagerAdapter.all.update();
