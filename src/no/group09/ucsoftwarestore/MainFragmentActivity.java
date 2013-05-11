@@ -65,12 +65,8 @@ public class MainFragmentActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Intent intent = getIntent();
-		
-		Bundle bundle = intent.getExtras();
-		
-		String category = bundle.getString("category");
-		
+
+
 		//Getting a reference to the ViewPager defined the layout file
 		pager = (ViewPager) findViewById(R.id.pager);
 
@@ -88,9 +84,15 @@ public class MainFragmentActivity extends FragmentActivity {
 
 		//Setting the pagerAdapter to the pager object
 		pager.setAdapter(pagerAdapter);
-		
-		pagerAdapter.page1 = Page.getType(category, 1);
-		pagerAdapter.page2 = Page.getType(category, 2);
+
+
+		Intent intent = getIntent();
+		Bundle bundle = intent.getExtras();
+		if(bundle != null){
+			String category = bundle.getString("category");
+			pagerAdapter.page1 = Page.getType(category, 1);
+			pagerAdapter.page2 = Page.getType(category, 2);
+		}
 	}
 
 	/**
@@ -191,7 +193,7 @@ public class MainFragmentActivity extends FragmentActivity {
 		default : return false;
 		}
 	}
-	
+
 	/**
 	 * Add the connected device name to the title. If no device is stored in the
 	 * preferences no only the category name will be shown.

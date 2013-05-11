@@ -63,7 +63,7 @@
         <activity
             android:name="no.group09.ucsoftwarestore.MainFragmentActivity"
             android:label="@string/app_name"
-            android:parentActivityName="no.group09.ucsoftwarestore.MainFragmentActivity"
+            android:parentActivityName="no.group09.ucsoftwarestore.MainActivity"
             android:screenOrientation="portrait" >
 
             <meta-data
@@ -104,13 +104,13 @@
         <activity
             android:name="no.group09.utils.AppView"
             android:label="@string/app_view_title"
-            android:parentActivityName="no.group09.ucsoftwarestore.MainActivity"
+            android:parentActivityName="no.group09.ucsoftwarestore.MainFragmentActivity"
             android:screenOrientation="portrait"
             android:theme="@color/black" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="no.group09.ucsoftwarestore.MainActivity" />
-   		
+                android:value="no.group09.ucsoftwarestore.MainFragmentActivity" />
+
         </activity>
         <activity
             android:name="no.group09.utils.SearchResults"
