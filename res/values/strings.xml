@@ -28,6 +28,7 @@
     <string name="menu_settings3">Settings</string>
     <string name="menu_settings4">Populate Database</string>
     <string name="menu_settings5">Only show Arduinos</string>
+    <string name="menu_settings6">Go to device list</string>
     
     <!-- This is just for testing purposes. Remove when done. -->
     <string name="title_activity_main">Main</string>

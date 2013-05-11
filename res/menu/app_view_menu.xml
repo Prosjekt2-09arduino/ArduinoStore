@@ -18,17 +18,16 @@
 -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	
-		<item
+
+	<item
         android:id="@+id/settings"
         android:orderInCategory="90"
         android:showAsAction="never"
         android:title="@string/menu_settings3"/>
-	
-		<item 
-	    android:id="@+id/hide_non_arduino"
-	    android:orderInCategory="80"
-	    android:showAsAction="never"
-	    android:title="@string/menu_settings5"
-	    android:checkable="true"/>
+		
+	<item 
+	    android:id="@+id/goto_devices"
+		android:orderInCategory="70"
+        android:showAsAction="never"
+        android:title="@string/menu_settings6"/>
 </menu>

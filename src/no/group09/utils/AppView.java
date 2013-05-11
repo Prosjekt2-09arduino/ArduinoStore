@@ -357,7 +357,7 @@ public class AppView extends Activity {
 	@Override
 	@SuppressLint("NewApi")
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.device_menu, menu);
+		getMenuInflater().inflate(R.menu.app_view_menu, menu);
 		return true;
 	}
 
@@ -375,6 +375,11 @@ public class AppView extends Activity {
 			this.startActivity(myIntent);
 			return true;
 
+		case R.id.goto_devices:
+			Intent myIntent2 = new Intent(getApplicationContext(), Devices.class);
+			this.startActivity(myIntent2);
+			return true;
+			
 		default : return false;
 		}
 	}
