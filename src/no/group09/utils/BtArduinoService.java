@@ -123,48 +123,55 @@ public class BtArduinoService extends Service {
 			switch(newState) {
 			case CONNECTING:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("Trying to connect...", false);
+					stateUpdateProgressBar("Trying to connect...", 
+							ProgressbarHandler.DO_NOT_DISMISS);
 					oldState = newState;
 				}
 				break;
 			case ERROR_CONNECT:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("An error was encountered while connecting", true);
+					stateUpdateProgressBar("An error was encountered while connecting", 
+							ProgressbarHandler.DISMISS_ERROR);
 					oldState = newState;
 				}
 				checkState = false;
 				break;
 			case ERROR_PARSE_HEX:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("Downloaded program was corrupted", true);
+					stateUpdateProgressBar("Downloaded program was corrupted", 
+							ProgressbarHandler.DISMISS_ERROR);
 					oldState = newState;
 				}
 				checkState = false;
 				break;
 			case ERROR_READ:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("Error while verifying program", true);
+					stateUpdateProgressBar("Error while verifying program", 
+							ProgressbarHandler.DISMISS_ERROR);
 					oldState = newState;
 				}
 				checkState = false;
 				break;
 			case ERROR_WRITE:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("Error while programming device", true);
+					stateUpdateProgressBar("Error while programming device", 
+							ProgressbarHandler.DISMISS_ERROR);
 					oldState = newState;
 				}
 				checkState = false;
 				break;
 			case FINISHED:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("Finished programming", true);
+					stateUpdateProgressBar("Finished programming", 
+							ProgressbarHandler.DISMISS_SUCCESS);
 					oldState = newState;
 				}
 				checkState = false;
 				break;
 			case INITIALIZING:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("Initializing programmer", false);
+					stateUpdateProgressBar("Initializing programmer", 
+							ProgressbarHandler.DO_NOT_DISMISS);
 					oldState = newState;
 				}
 				break;
@@ -184,7 +191,8 @@ public class BtArduinoService extends Service {
 				break;
 			case READY:
 				if (updateProgressBar) {
-					stateUpdateProgressBar("Programmer ready", false);
+					stateUpdateProgressBar("Programmer ready", 
+							ProgressbarHandler.DO_NOT_DISMISS);
 					oldState = newState;
 				}
 				break;
@@ -209,7 +217,7 @@ public class BtArduinoService extends Service {
 	 * @param progress The new progress number
 	 */
 	private void stateUpdateProgressBarProgress(String message, int progress) {
-		Message msg = Message.obtain(handler, 0, 1, progress, message);
+		Message msg = Message.obtain(handler, ProgressbarHandler.DO_NOT_DISMISS, 0, progress, message);
 		msg.sendToTarget();
 	}
 	
@@ -224,11 +232,9 @@ public class BtArduinoService extends Service {
 	 * be dismissed, false if only the message should be updated and the windwow
 	 * should persist.
 	 */
-	private void stateUpdateProgressBar(String message, boolean hide) {
-		int hideWindow;
-		if (hide) hideWindow = 0;
-		else hideWindow = 1;
-		Message msg = Message.obtain(handler, 0, hideWindow, newProgress, message);
+	private void stateUpdateProgressBar(String message, int dismissReason) {
+		
+		Message msg = Message.obtain(handler, dismissReason, 0, newProgress, message);
 		msg.sendToTarget();
 	}
 

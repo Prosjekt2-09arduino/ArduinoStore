@@ -301,6 +301,10 @@ public class AppView extends Activity {
 	 */
 	@SuppressLint("HandlerLeak")
 	class ProgressbarHandler extends Handler {
+		
+		public static final int DISMISS_ERROR = 0;
+		public static final int DISMISS_SUCCESS = 1;
+		public static final int DO_NOT_DISMISS = 2;
 
 		@Override
 		public void handleMessage(Message message) {
@@ -315,8 +319,8 @@ public class AppView extends Activity {
 			}
 			progressBar.setMessage(text);
 
-			int hideOrShow = message.arg1;
-			if (hideOrShow == 0) {
+			//The progress bar should be updated and dismissed
+			if (message.what == DISMISS_ERROR || message.what == DISMISS_SUCCESS) {
 				//hide it the progress bar
 				progressBar.dismiss();
 				//Make the thread sleep for a short interval to show the message
@@ -324,12 +328,16 @@ public class AppView extends Activity {
 				try { Thread.sleep(1500);
 				} catch (Exception e) {}
 
-				runOnUiThread(new ShowInformationBox(false));
-			} 
+				if (message.what == DISMISS_ERROR) runOnUiThread(new ShowInformationBox(true));
+				else if (message.what == DISMISS_SUCCESS) runOnUiThread(new ShowInformationBox(false));
+			}
+			//The progress bar should not be dismissed, only updated
+			else if (message.what == DO_NOT_DISMISS) {
+				int progress = message.arg2;
+				//Update progress
+				progressBar.setProgress(progress);
+			}
 
-			int progress = message.arg2;
-			//Update progress
-			progressBar.setProgress(progress);
 		}
 	}
 
