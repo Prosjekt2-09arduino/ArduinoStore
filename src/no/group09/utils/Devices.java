@@ -275,12 +275,12 @@ public class Devices extends Activity  {
 				if(BtArduinoService.getBtService() != null){
 					if(BtArduinoService.getBtService().getBluetoothConnection() != null){
 						if(!BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
-							
+
 							//We are not connected to anything, update the title
 							setTitle("Devices");
 						}
 						else{
-							
+
 							//We are connected to a device, update the title
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("name", sharedPref.getString("connected_device_name", "null"));
@@ -484,10 +484,10 @@ public class Devices extends Activity  {
 	 * @return true if the device is valid, false if not
 	 */
 	private boolean onlyShowArduinos(BluetoothDevice device){
-		
+
 		//This is true if you want to hide other devices than arduinos
 		if(sharedPref.getBoolean("bluetooth_type", false)){
-			
+
 			//Check if the device is an arduino
 			if((device.getBluetoothClass().toString()).equals("708")){
 				return true;
@@ -496,7 +496,7 @@ public class Devices extends Activity  {
 			//The device was not a pager
 			else return false;
 		}
-		
+
 		//Show the device
 		return true;
 	}
@@ -521,7 +521,7 @@ public class Devices extends Activity  {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
 				//If the bluetooth class is named 708 that we made as a 'standard' for recognizing arduinos
-				if(onlyShowArduinos(device) || !btDeviceList.contains(device)){
+				if(onlyShowArduinos(device) && !btDeviceList.contains(device)){
 
 					//Adding found device
 					HashMap<String, String> map = new HashMap<String, String>();
@@ -728,6 +728,7 @@ public class Devices extends Activity  {
 	@SuppressLint("NewApi")
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.device_menu, menu);
+
 		return true;
 	}
 
@@ -745,7 +746,33 @@ public class Devices extends Activity  {
 			this.startActivity(myIntent);
 			return true;
 
-		default : return false;
+		case R.id.hide_non_arduino:
+			//Prepare to edit the setting
+			Editor edit = sharedPref.edit();
+
+			//Fetches the current value of the 'hide incompatible' option in the preference file
+			boolean hideIncompatible = sharedPref.getBoolean("bluetooth_type", false);
+
+			if(hideIncompatible == true){
+
+				//Changes the value and commits the changes
+				edit.putBoolean("bluetooth_type", false);
+				edit.commit();
+
+				item.setChecked(false);
+			}
+
+			else{
+				//Changes the value and commits the changes
+				edit.putBoolean("bluetooth_type", true);
+				edit.commit();
+
+				item.setChecked(true);
+			}
+			return true;
+
+		default: 
+			return false;
 		}
 	}
 }

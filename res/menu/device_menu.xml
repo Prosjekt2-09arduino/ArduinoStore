@@ -24,4 +24,11 @@
         android:orderInCategory="70"
         android:showAsAction="never"
         android:title="@string/menu_settings3"/>
+	
+		<item 
+	    android:id="@+id/hide_non_arduino"
+	    android:orderInCategory="90"
+	    android:showAsAction="never"
+	    android:title="@string/menu_settings5"
+	    android:checkable="true"/>
 </menu>

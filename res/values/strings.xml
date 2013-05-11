@@ -27,8 +27,9 @@
     <string name="menu_settings2">Device List</string>
     <string name="menu_settings3">Settings</string>
     <string name="menu_settings4">Populate Database</string>
+    <string name="menu_settings5">Only show Arduinos</string>
+    
     <!-- This is just for testing purposes. Remove when done. -->
-    <string name="menu_settings5">Application view</string>
     <string name="title_activity_main">Main</string>
     <string name="layout.activity_main">Main</string>
     <string name="search_hint">Search Apps by Name</string>
