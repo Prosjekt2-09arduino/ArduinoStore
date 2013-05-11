@@ -62,6 +62,9 @@
     <string name="reconnect_check_box_title">Automatically reconnect</string>
     <string name="reconnect_check_box_summary">Automatically try to reconnect to
          last connected device when application is started</string>
+         
+    <string name="bluetooth_type_summary">Hide devices that is not recognized as Arduinos (708)</string>
+    <string name="bluetooth_type_title">Hide other devices</string>
 
     <!-- Add device screen -->
     <string name="add_device_screen_title">Add device</string>

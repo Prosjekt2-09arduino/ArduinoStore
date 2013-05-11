@@ -271,12 +271,17 @@ public class Devices extends Activity  {
 				//Notify the adapter that the list is now empty
 				listAdapter.notifyDataSetChanged();
 
+				//Check if we are connected to a device
 				if(BtArduinoService.getBtService() != null){
 					if(BtArduinoService.getBtService().getBluetoothConnection() != null){
 						if(!BtArduinoService.getBtService().getBluetoothConnection().isConnected()){
+							
+							//We are not connected to anything, update the title
 							setTitle("Devices");
 						}
 						else{
+							
+							//We are connected to a device, update the title
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("name", sharedPref.getString("connected_device_name", "null"));
 							map.put("mac", sharedPref.getString("connected_device_mac", "null"));
@@ -479,14 +484,20 @@ public class Devices extends Activity  {
 	 * @return true if the device is valid, false if not
 	 */
 	private boolean onlyShowArduinos(BluetoothDevice device){
-		if(ONLY_SHOW_ARDUINOS){
+		
+		//This is true if you want to hide other devices than arduinos
+		if(sharedPref.getBoolean("bluetooth_type", false)){
+			
+			//Check if the device is an arduino
 			if((device.getBluetoothClass().toString()).equals("708")){
 				return true;
 			}
 
-			//Only return false if we only should show pagers, and that the device is not a pager
+			//The device was not a pager
 			else return false;
 		}
+		
+		//Show the device
 		return true;
 	}
 

@@ -104,5 +104,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		if (key.equals("hide_incompatible")) {
 			Log.d(TAG, "'onSharedPreferenceChanged' in Preferences.java has been called");
 		}
+		
+		else if(key.equals("bluetooth_type")){
+			Log.d(TAG, "'onSharedPreferenceChanged' in Preferences.java has been called");
+		}
 	}
 }

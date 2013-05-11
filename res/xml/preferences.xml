@@ -38,6 +38,11 @@
             android:key="reconnect_check_box"
             android:summary="@string/reconnect_check_box_summary"
             android:title="@string/reconnect_check_box_title" />
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="bluetooth_type"
+            android:summary="@string/bluetooth_type_summary"
+            android:title="@string/bluetooth_type_title"/>
         
     </PreferenceCategory>
     <!--
