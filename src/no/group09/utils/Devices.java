@@ -729,6 +729,17 @@ public class Devices extends Activity  {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.device_menu, menu);
 
+		boolean showArduinoOnly = sharedPref.getBoolean("bluetooth_type", false);
+		
+		if(showArduinoOnly){
+//			menu.getItem(1).setChecked(true);
+			menu.findItem(R.id.hide_non_arduino).setChecked(true);
+		}
+		else{
+//			menu.getItem(1).setChecked(false);
+			menu.findItem(R.id.hide_non_arduino).setChecked(false);
+		}
+		
 		return true;
 	}
 
@@ -737,6 +748,7 @@ public class Devices extends Activity  {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
 		switch (item.getItemId()) {
 
 		//Start the preferences class
@@ -751,9 +763,9 @@ public class Devices extends Activity  {
 			Editor edit = sharedPref.edit();
 
 			//Fetches the current value of the 'hide incompatible' option in the preference file
-			boolean hideIncompatible = sharedPref.getBoolean("bluetooth_type", false);
+			boolean showArduinoOnly = sharedPref.getBoolean("bluetooth_type", false);
 
-			if(hideIncompatible == true){
+			if(showArduinoOnly){
 
 				//Changes the value and commits the changes
 				edit.putBoolean("bluetooth_type", false);
