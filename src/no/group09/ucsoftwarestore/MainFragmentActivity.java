@@ -154,9 +154,6 @@ public class MainFragmentActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(false);
-
-				//Set new text when item is clicked
-				item.setTitle("Hide incompatible");
 			}
 
 			else{
@@ -165,11 +162,9 @@ public class MainFragmentActivity extends FragmentActivity {
 				edit.commit();
 
 				item.setChecked(true);
-
-				//Set new text when item is clicked
-				item.setTitle("Hide incompatible");
 			}
 
+			
 			pagerAdapter.all.update();
 			pagerAdapter.topHits.update();
 			pagerAdapter.notifyDataSetChanged();

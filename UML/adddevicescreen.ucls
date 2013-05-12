@@ -3,20 +3,20 @@
   associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="no.group09.utils.AddDeviceScreen.ProgressDialogTask" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/utils/AddDeviceScreen.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="407" y="239"/>    
+    <position height="-1" width="-1" x="364" y="145"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="no.group09.utils.AddDeviceScreen" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/utils/AddDeviceScreen.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="113" y="238"/>    
+    <position height="-1" width="-1" x="102" y="144"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <nesting id="3">    

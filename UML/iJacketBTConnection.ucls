@@ -3,71 +3,71 @@
   associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="no.group09.connection.ProtocolInstruction" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/connection/ProtocolInstruction.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="417" y="915"/>    
+    <position height="-1" width="-1" x="647" y="590"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <enumeration id="2" language="java" name="no.group09.connection.Protocol.OpCode" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/connection/Protocol.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="397" y="573"/>    
+    <position height="-1" width="-1" x="353" y="508"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </enumeration>  
   <enumeration id="3" language="java" name="no.group09.connection.Protocol.State" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/connection/Protocol.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="706" y="859"/>    
+    <position height="-1" width="-1" x="890" y="354"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </enumeration>  
   <enumeration id="4" language="java" name="no.group09.connection.ConnectionMetadata.DefaultServices" 
     project="uCSoftwareStore" file="/uCSoftwareStore/src/no/group09/connection/ConnectionMetadata.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="180" y="572"/>    
+    <position height="-1" width="-1" x="146" y="117"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </enumeration>  
   <class id="5" language="java" name="no.group09.connection.Protocol" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/connection/Protocol.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="703" y="378"/>    
+    <position height="-1" width="-1" x="596" y="227"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="false" protected="true" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="6" language="java" name="no.group09.connection.Protocol.Command" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/connection/Protocol.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="977" y="794"/>    
+    <position height="-1" width="-1" x="886" y="81"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="7" language="java" name="no.group09.connection.ConnectionMetadata" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/connection/ConnectionMetadata.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="365" y="235"/>    
+    <position height="-1" width="-1" x="145" y="381"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <interface id="8" language="java" name="no.group09.connection.ConnectionMetadata.Service" project="uCSoftwareStore" 
     file="/uCSoftwareStore/src/no/group09/connection/ConnectionMetadata.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="130" y="362"/>    
+    <position height="-1" width="-1" x="410" y="117"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
@@ -79,88 +79,88 @@
     <end type="TARGET" refId="8"/>  
   </realization>  
   <association id="10">    
+    <bendpoint x="1143" y="1127"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="11" name="connectionMetadata"/>      
+      <attribute id="11" name="tempAckProcessor"/>      
       <multiplicity id="12" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="14" name="currentInstruction"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="16">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="8"/>  
+  </nesting>  
+  <nesting id="17">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </nesting>  
+  <association id="18">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="19" name="connectionMetadata"/>      
+      <multiplicity id="20" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="13">    
-    <bendpoint x="1101" y="1127"/>    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="2"/>  
-  </nesting>  
-  <nesting id="14">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </nesting>  
-  <nesting id="15">    
+  <nesting id="21">    
     <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="8"/>  
+    <end type="TARGET" refId="4"/>  
   </nesting>  
-  <association id="16">    
+  <association id="22">    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="17" name="state"/>      
-      <multiplicity id="18" minimum="0" maximum="1"/>    
+      <attribute id="23" name="state"/>      
+      <multiplicity id="24" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="19">    
+  <association id="25">    
+    <bendpoint x="1122" y="1127"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="20" name="currentCommand"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
+      <attribute id="26" name="waitingForAck"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="28">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="29" name="pendingInstructions"/>      
+      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="31">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="32" name="currentCommand"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="22">    
-    <bendpoint x="1143" y="1127"/>    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="23" name="tempAckProcessor"/>      
-      <multiplicity id="24" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="25">    
+  <nesting id="34">    
+    <bendpoint x="1101" y="1127"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <nesting id="35">    
     <bendpoint x="783" y="1127"/>    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="3"/>  
   </nesting>  
-  <nesting id="26">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="4"/>  
-  </nesting>  
-  <association id="27">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="28" name="pendingInstructions"/>      
-      <multiplicity id="29" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="30">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="31" name="currentInstruction"/>      
-      <multiplicity id="32" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="33">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="34" name="opcode"/>      
-      <multiplicity id="35" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <association id="36">    
-    <bendpoint x="1122" y="1127"/>    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="37" name="waitingForAck"/>      
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="37" name="opcode"/>      
       <multiplicity id="38" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
