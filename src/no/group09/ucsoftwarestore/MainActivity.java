@@ -162,9 +162,12 @@ public class MainActivity extends Activity {
 		//When the menu is created, check the preferences and set the correct text
 		if(sharedPref.getBoolean("hide_incompatible", false)){
 			menu.getItem(1).setTitle("Hide incompatible");
+			menu.getItem(1).setChecked(true);
+			
 		}
 		else{
 			menu.getItem(1).setTitle("Hide incompatible");
+			menu.getItem(1).setChecked(false);
 		}
 
 		//Search bar for versions over API level 11
